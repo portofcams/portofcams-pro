@@ -1,11 +1,1008 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PortOfCams Pro — Live Concert Streaming for Venues</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black: #080808;
+      --deep: #0d0d0d;
+      --surface: #111111;
+      --border: rgba(255,255,255,0.06);
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dim: rgba(201,168,76,0.15);
+      --white: #f5f0e8;
+      --muted: rgba(245,240,232,0.4);
+      --faint: rgba(245,240,232,0.12);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* Typography */
+    .display {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+    }
+
+    .display-italic {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.0;
+    }
+
+    .mono {
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+    }
+
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(20px);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .nav-logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--black) !important;
+      padding: 10px 24px;
+      border-radius: 2px;
+      font-weight: 500 !important;
+      letter-spacing: 0.1em !important;
+    }
+
+    .nav-cta:hover { background: var(--gold-light) !important; color: var(--black) !important; }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 60% 50% at 70% 40%, rgba(201,168,76,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 60%, rgba(201,168,76,0.04) 0%, transparent 60%),
+        linear-gradient(180deg, #080808 0%, #0a0905 100%);
+    }
+
+    .hero-lines {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 80px);
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border-radius: 1px;
+      margin-bottom: 32px;
+      width: fit-content;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero h1 {
+      font-size: clamp(64px, 9vw, 140px);
+      max-width: 900px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .hero h1 em {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .hero-desc {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 440px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--black);
+      padding: 16px 36px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.3s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--white);
+      padding: 16px 36px;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.3s;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Ticker */
+    .ticker {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+      overflow: hidden;
+      background: var(--deep);
+    }
+
+    .ticker-inner {
+      display: flex;
+      gap: 60px;
+      animation: ticker 20s linear infinite;
+      white-space: nowrap;
+    }
+
+    .ticker-item {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .ticker-item span { color: var(--gold); margin-right: 20px; }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* Section base */
+    section {
+      position: relative;
+    }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 48px;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 40px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+
+    /* How it works */
+    .how {
+      border-top: 1px solid var(--border);
+      background: var(--deep);
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 60px;
+    }
+
+    .how-card {
+      background: var(--deep);
+      padding: 48px 40px;
+      position: relative;
+    }
+
+    .how-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 80px;
+      font-weight: 300;
+      color: var(--gold);
+      opacity: 0.15;
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+
+    .how-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .how-card p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* Features */
+    .features {
+      border-top: 1px solid var(--border);
+    }
+
+    .features-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      margin-top: 60px;
+    }
+
+    .features-left h2 {
+      font-size: clamp(40px, 4vw, 64px);
+      margin-bottom: 24px;
+    }
+
+    .features-left p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .feature-item {
+      background: var(--surface);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: background 0.3s;
+    }
+
+    .feature-item:hover { background: var(--deep); }
+
+    .feature-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .feature-text {
+      font-size: 14px;
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    .feature-text span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+      font-weight: 300;
+    }
+
+    /* Stats */
+    .stats {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 60px;
+    }
+
+    .stat {
+      background: var(--surface);
+      padding: 48px 32px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 56px;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* Pricing */
+    .pricing {
+      border-top: 1px solid var(--border);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 60px;
+    }
+
+    .pricing-card {
+      background: var(--surface);
+      padding: 48px 40px;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .pricing-card:hover { background: var(--deep); }
+
+    .pricing-card.featured {
+      background: var(--deep);
+      border: 1px solid var(--gold);
+      margin: -1px;
+      z-index: 1;
+    }
+
+    .pricing-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--gold);
+      padding: 4px 12px;
+      display: inline-block;
+      margin-bottom: 32px;
+    }
+
+    .pricing-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .pricing-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 64px;
+      font-weight: 300;
+      line-height: 1;
+      margin: 24px 0 8px;
+    }
+
+    .pricing-price sup {
+      font-size: 24px;
+      vertical-align: super;
+    }
+
+    .pricing-price sub {
+      font-size: 16px;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .pricing-viewers {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 32px;
+      text-transform: uppercase;
+    }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .pricing-features li {
+      font-size: 14px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pricing-features li::before {
+      content: '—';
+      color: var(--gold);
+      font-size: 12px;
+    }
+
+    /* Contact */
+    .contact {
+      border-top: 1px solid var(--border);
+      background: var(--deep);
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-left h2 {
+      font-size: clamp(40px, 4vw, 64px);
+      margin-bottom: 24px;
+    }
+
+    .contact-left p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .contact-detail span {
+      color: var(--gold);
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form input,
+    .form textarea,
+    .form select {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 14px 18px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form input::placeholder,
+    .form textarea::placeholder { color: rgba(245,240,232,0.2); }
+
+    .form input:focus,
+    .form textarea:focus,
+    .form select:focus { border-color: var(--gold); }
+
+    .form textarea { resize: vertical; min-height: 120px; }
+
+    .form select option { background: var(--deep); }
+
+    .form-submit {
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      padding: 16px 40px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.3s;
+      font-family: 'DM Sans', sans-serif;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .form-submit:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .footer-logo span { color: var(--gold); }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--faint);
+      letter-spacing: 0.1em;
+    }
+
+    /* Animations */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.8s forwards;
+    }
+
+    .fade-up:nth-child(2) { animation-delay: 0.1s; }
+    .fade-up:nth-child(3) { animation-delay: 0.2s; }
+    .fade-up:nth-child(4) { animation-delay: 0.3s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 0 24px 60px; }
+      .section-inner { padding: 80px 24px; }
+      .how-grid, .pricing-grid, .stats-grid { grid-template-columns: 1fr; }
+      .features-layout, .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 24px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-logo">PortOfCams <span>Pro</span></div>
+    <ul class="nav-links">
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact" class="nav-cta">Get Started</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div style="position:relative;">
+      <div class="hero-tag fade-up">Live Concert Streaming</div>
+      <h1 class="display fade-up">
+        Your Stage.<br/>
+        <em>Their Screen.</em><br/>
+        Your Revenue.
+      </h1>
+      <div class="hero-sub fade-up">
+        <p class="hero-desc">
+          Professional multi-angle live streaming, fully managed — built for music venues that want to reach fans beyond the room and turn every performance into a new revenue stream.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">Book a Demo</a>
+          <a href="https://portofcams.com" target="_blank" class="btn-secondary">See Live Example</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker-inner">
+      <div class="ticker-item"><span>✦</span> Live Concert Streaming</div>
+      <div class="ticker-item"><span>✦</span> Pay-Per-View Ticketing</div>
+      <div class="ticker-item"><span>✦</span> Multi-Angle Cameras</div>
+      <div class="ticker-item"><span>✦</span> Fully Managed Service</div>
+      <div class="ticker-item"><span>✦</span> Global Audience Reach</div>
+      <div class="ticker-item"><span>✦</span> Real-Time Analytics</div>
+      <div class="ticker-item"><span>✦</span> Live Concert Streaming</div>
+      <div class="ticker-item"><span>✦</span> Pay-Per-View Ticketing</div>
+      <div class="ticker-item"><span>✦</span> Multi-Angle Cameras</div>
+      <div class="ticker-item"><span>✦</span> Fully Managed Service</div>
+      <div class="ticker-item"><span>✦</span> Global Audience Reach</div>
+      <div class="ticker-item"><span>✦</span> Real-Time Analytics</div>
+    </div>
+  </div>
+
+  <!-- How It Works -->
+  <section class="how" id="how">
+    <div class="section-inner">
+      <div class="section-label">Process</div>
+      <h2 class="display" style="font-size: clamp(40px,4vw,64px); max-width: 600px;">
+        Simple from setup<br/><em class="display-italic" style="color: var(--gold)">to showtime</em>
+      </h2>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-number">01</div>
+          <h3>We Install Everything</h3>
+          <p>Our team sets up professional HD cameras, network infrastructure, and streaming hardware at your venue. Zero technical knowledge required.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-number">02</div>
+          <h3>You Set the Price</h3>
+          <p>For each show, set your pay-per-view price. Fans buy a stream pass and watch live from anywhere in the world — on any device.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-number">03</div>
+          <h3>Revenue Hits Your Account</h3>
+          <p>Ticket revenue goes directly to you via Stripe. We handle the tech, you handle the music. Monthly subscription covers the infrastructure.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="section-inner">
+      <div class="features-layout">
+        <div class="features-left">
+          <div class="section-label">What's Included</div>
+          <h2 class="display">
+            Everything<br/>
+            <em class="display-italic" style="color: var(--gold)">managed</em><br/>
+            for you
+          </h2>
+          <p>We handle the entire technical stack so you can focus entirely on your venue and your artists.</p>
+          <a href="#contact" class="btn-primary">Talk to Us</a>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-icon">📷</div>
+            <div class="feature-text">Multi-angle HD cameras<span>2–8 professional camera angles per stage</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📡</div>
+            <div class="feature-text">Dedicated streaming infrastructure<span>Redundant servers with 99.9% uptime guarantee</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎟️</div>
+            <div class="feature-text">Pay-per-view ticketing built in<span>Stripe-powered ticket sales, revenue direct to you</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🌍</div>
+            <div class="feature-text">Global CDN delivery<span>Fans anywhere stream with zero buffering</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📊</div>
+            <div class="feature-text">Real-time viewer analytics<span>Live counts, geography, peak times, revenue</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔒</div>
+            <div class="feature-text">Access-controlled streams<span>Only paying fans can view — fully protected</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎨</div>
+            <div class="feature-text">Custom branded player<span>Your logo, your colors, your domain</span></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🛠️</div>
+            <div class="feature-text">24/7 show-night support<span>We're on call every time you go live</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="section-inner" style="padding-top: 80px; padding-bottom: 80px;">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-number">4K</div>
+          <div class="stat-label">HD Quality</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">&lt;5s</div>
+          <div class="stat-label">Stream Latency</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Global Reach</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">80%</div>
+          <div class="stat-label">Revenue to You</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing" id="pricing">
+    <div class="section-inner">
+      <div class="section-label">Pricing</div>
+      <h2 class="display" style="font-size: clamp(40px,4vw,64px); max-width: 500px; margin-bottom: 12px;">
+        Scales with<br/><em class="display-italic" style="color: var(--gold)">your audience</em>
+      </h2>
+      <p style="color: var(--muted); font-size: 16px; margin-bottom: 0;">Monthly subscription based on viewers. Ticket revenue goes directly to you.</p>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Starter</h3>
+          <div class="pricing-viewers">Up to 500 viewers / month</div>
+          <div class="pricing-price"><sup>$</sup>299<sub>/mo</sub></div>
+          <ul class="pricing-features">
+            <li>2 camera angles</li>
+            <li>Pay-per-view ticketing</li>
+            <li>Full installation & setup</li>
+            <li>Basic analytics</li>
+            <li>Email support</li>
+          </ul>
+          <a href="#contact" class="btn-secondary" style="display:block; text-align:center; font-size:12px;">Get Started</a>
+        </div>
+        <div class="pricing-card featured">
+          <div class="pricing-badge">Most Popular</div>
+          <h3>Venue</h3>
+          <div class="pricing-viewers">Up to 2,000 viewers / month</div>
+          <div class="pricing-price"><sup>$</sup>599<sub>/mo</sub></div>
+          <ul class="pricing-features">
+            <li>4 camera angles</li>
+            <li>Pay-per-view ticketing</li>
+            <li>Custom branded player</li>
+            <li>Full analytics dashboard</li>
+            <li>Show-night support</li>
+          </ul>
+          <a href="#contact" class="btn-primary" style="display:block; text-align:center; font-size:12px;">Get Started</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Festival</h3>
+          <div class="pricing-viewers">Unlimited viewers</div>
+          <div class="pricing-price" style="font-size:48px;">Custom</div>
+          <ul class="pricing-features">
+            <li>Unlimited cameras</li>
+            <li>Multi-stage support</li>
+            <li>White-label solution</li>
+            <li>Dedicated support team</li>
+            <li>Revenue share options</li>
+          </ul>
+          <a href="#contact" class="btn-secondary" style="display:block; text-align:center; font-size:12px;">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="section-inner">
+      <div class="contact-layout">
+        <div class="contact-left">
+          <div class="section-label">Get In Touch</div>
+          <h2 class="display">
+            Let's bring your<br/>
+            <em class="display-italic" style="color: var(--gold)">venue online</em>
+          </h2>
+          <p>Tell us about your venue and upcoming shows. We'll reach out within 24 hours to discuss setup and get you streaming.</p>
+          <div class="contact-detail">
+            <span>EMAIL</span> pro@portofcams.com
+          </div>
+          <div class="contact-detail">
+            <span>BASED IN</span> Hawaii, USA — serving venues nationwide
+          </div>
+          <div class="contact-detail">
+            <span>RESPONSE</span> Within 24 hours
+          </div>
+        </div>
+        <div class="form">
+          <div class="form-row">
+            <input type="text" placeholder="Venue name" />
+            <input type="text" placeholder="Your name" />
+          </div>
+          <div class="form-row">
+            <input type="email" placeholder="Email address" />
+            <input type="tel" placeholder="Phone number" />
+          </div>
+          <input type="text" placeholder="City, State" />
+          <select>
+            <option value="" disabled selected>How many shows per month?</option>
+            <option>1–4 shows</option>
+            <option>5–10 shows</option>
+            <option>10+ shows</option>
+            <option>Special events only</option>
+          </select>
+          <textarea placeholder="Tell us about your venue — capacity, typical acts, what you're hoping to achieve with streaming"></textarea>
+          <button class="form-submit">Request a Demo</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">PortOfCams <span>Pro</span></div>
+    <ul class="footer-links">
+      <li><a href="https://portofcams.com">PortOfCams.com</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 PortOfCams Pro</div>
+  </footer>
+
+</body>
+</html>
