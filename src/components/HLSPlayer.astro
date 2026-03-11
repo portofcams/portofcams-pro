@@ -1,0 +1,315 @@
+---
+interface Props {
+  hlsUrl: string;
+  cameraName: string;
+}
+
+const { hlsUrl, cameraName } = Astro.props;
+---
+
+<div class="hls-player-wrap" data-hls-url={hlsUrl}>
+  <div class="player-chrome">
+    <div class="player-status">
+      <span class="live-dot"></span>
+      <span class="live-text mono">LIVE</span>
+    </div>
+    <div class="player-controls">
+      <button class="player-btn mute-btn" title="Toggle sound" aria-label="Toggle sound">
+        <svg class="icon-muted" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+        <svg class="icon-unmuted" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+      </button>
+      <button class="player-btn fullscreen-btn" title="Fullscreen" aria-label="Toggle fullscreen">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <video
+    class="hls-video"
+    playsinline
+    muted
+    autoplay
+    poster=""
+  >
+  </video>
+  <div class="player-loading">
+    <div class="loading-spinner"></div>
+    <span class="mono">Connecting to stream...</span>
+  </div>
+  <div class="player-error" style="display:none">
+    <span class="mono">Stream offline or unavailable</span>
+    <button class="retry-btn">Retry</button>
+  </div>
+</div>
+
+<style>
+  .hls-player-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .hls-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .player-chrome {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+    z-index: 10;
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
+
+  .hls-player-wrap:hover .player-chrome {
+    opacity: 1;
+  }
+
+  .player-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    background: #e53e3e;
+    border-radius: 50%;
+    animation: pulse-live 2s infinite;
+  }
+
+  @keyframes pulse-live {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.6); }
+    50% { opacity: 0.8; box-shadow: 0 0 0 4px rgba(229, 62, 62, 0); }
+  }
+
+  .live-text {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #e53e3e;
+    font-weight: 500;
+  }
+
+  .player-controls {
+    display: flex;
+    gap: 8px;
+  }
+
+  .player-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--white);
+    width: 36px;
+    height: 36px;
+    border-radius: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .player-btn:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .player-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: var(--surface);
+    z-index: 5;
+  }
+
+  .player-loading span {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .player-error {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: var(--surface);
+    z-index: 5;
+  }
+
+  .player-error span {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .retry-btn {
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    padding: 8px 20px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .retry-btn:hover {
+    background: rgba(201,168,76,0.25);
+    border-color: var(--gold);
+  }
+</style>
+
+<script>
+  function initPlayers() {
+    document.querySelectorAll<HTMLDivElement>('.hls-player-wrap').forEach((wrap) => {
+      const video = wrap.querySelector<HTMLVideoElement>('.hls-video');
+      const loading = wrap.querySelector<HTMLDivElement>('.player-loading');
+      const errorEl = wrap.querySelector<HTMLDivElement>('.player-error');
+      const muteBtn = wrap.querySelector<HTMLButtonElement>('.mute-btn');
+      const fullscreenBtn = wrap.querySelector<HTMLButtonElement>('.fullscreen-btn');
+      const retryBtn = wrap.querySelector<HTMLButtonElement>('.retry-btn');
+      const iconMuted = wrap.querySelector<SVGElement>('.icon-muted');
+      const iconUnmuted = wrap.querySelector<SVGElement>('.icon-unmuted');
+      const hlsUrl = wrap.dataset.hlsUrl;
+
+      if (!video || !hlsUrl) return;
+
+      const streamUrl = hlsUrl.endsWith('/') ? hlsUrl + 'index.m3u8' : hlsUrl;
+
+      function showError() {
+        if (loading) loading.style.display = 'none';
+        if (errorEl) errorEl.style.display = 'flex';
+      }
+
+      function hideLoading() {
+        if (loading) loading.style.display = 'none';
+        if (errorEl) errorEl.style.display = 'none';
+      }
+
+      function loadStream() {
+        if (loading) loading.style.display = 'flex';
+        if (errorEl) errorEl.style.display = 'none';
+
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          // Native HLS (Safari)
+          video.src = streamUrl;
+          video.addEventListener('loadeddata', hideLoading, { once: true });
+          video.addEventListener('error', showError, { once: true });
+          video.play().catch(() => {});
+        } else if ((window as any).Hls) {
+          const Hls = (window as any).Hls;
+          if (Hls.isSupported()) {
+            const hls = new Hls({
+              enableWorker: true,
+              lowLatencyMode: true,
+              maxBufferLength: 10,
+              maxMaxBufferLength: 20,
+            });
+            hls.loadSource(streamUrl);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+              hideLoading();
+              video.play().catch(() => {});
+            });
+            hls.on(Hls.Events.ERROR, (_: any, data: any) => {
+              if (data.fatal) {
+                showError();
+              }
+            });
+          } else {
+            showError();
+          }
+        } else {
+          // HLS.js not loaded yet — wait and retry
+          const script = document.querySelector('script[src*="hls.js"]');
+          if (script) {
+            script.addEventListener('load', () => loadStream(), { once: true });
+          } else {
+            showError();
+          }
+        }
+      }
+
+      // Toggle mute
+      muteBtn?.addEventListener('click', () => {
+        video.muted = !video.muted;
+        if (iconMuted && iconUnmuted) {
+          iconMuted.style.display = video.muted ? 'block' : 'none';
+          iconUnmuted.style.display = video.muted ? 'none' : 'block';
+        }
+      });
+
+      // Fullscreen
+      fullscreenBtn?.addEventListener('click', () => {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else {
+          wrap.requestFullscreen?.();
+        }
+      });
+
+      // Retry
+      retryBtn?.addEventListener('click', () => loadStream());
+
+      loadStream();
+    });
+  }
+
+  // Run on initial load and on Astro page transitions
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPlayers);
+  } else {
+    initPlayers();
+  }
+  document.addEventListener('astro:page-load', initPlayers);
+</script>

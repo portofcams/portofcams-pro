@@ -1,0 +1,351 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HLSPlayer from '../../components/HLSPlayer.astro';
+import { cameras, getCameraById, getRelatedCameras } from '../../data/cameras';
+
+export function getStaticPaths() {
+  return cameras.map((cam) => ({
+    params: { id: cam.id },
+  }));
+}
+
+const { id } = Astro.params;
+const camera = getCameraById(id!)!;
+const related = getRelatedCameras(id!, 4);
+---
+
+<Layout
+  title={`${camera.name} — Live Camera | PortOfCams`}
+  description={camera.description}
+>
+
+  <!-- Breadcrumb + Camera Header -->
+  <section class="cam-header">
+    <div class="section-inner" style="padding-top: 100px; padding-bottom: 40px;">
+      <nav class="breadcrumb mono fade-up">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/browse">Browse</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{camera.name}</span>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Player Section -->
+  <section class="cam-player-section">
+    <div class="cam-player-inner">
+      <HLSPlayer hlsUrl={camera.hlsUrl} cameraName={camera.name} />
+    </div>
+  </section>
+
+  <!-- Camera Info -->
+  <section class="cam-info-section">
+    <div class="section-inner" style="padding-top: 40px; padding-bottom: 80px;">
+      <div class="cam-info-grid">
+        <div class="cam-info-main">
+          <div class="cam-live-status">
+            <span class="cam-live-dot"></span>
+            <span class="mono cam-live-text">LIVE NOW</span>
+          </div>
+          <h1 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 8px;">
+            {camera.name}
+          </h1>
+          <p class="cam-location">{camera.location}</p>
+          <p class="cam-description">{camera.description}</p>
+          <div class="cam-tags">
+            {camera.tags.map((tag) => (
+              <span class="cam-tag mono">{tag}</span>
+            ))}
+          </div>
+        </div>
+        <div class="cam-info-meta">
+          <div class="meta-card">
+            <div class="meta-label mono">Region</div>
+            <div class="meta-value">{camera.region}</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label mono">Coordinates</div>
+            <div class="meta-value mono" style="font-size: 13px;">
+              {camera.coordinates.lat.toFixed(4)}, {camera.coordinates.lng.toFixed(4)}
+            </div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label mono">Stream</div>
+            <div class="meta-value mono" style="font-size: 13px;">HLS / Adaptive</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label mono">Status</div>
+            <div class="meta-value" style="color: var(--gold);">
+              {camera.isLive ? 'Online' : 'Offline'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Cameras -->
+  {related.length > 0 && (
+    <section class="related-section">
+      <div class="section-inner" style="padding-top: 60px;">
+        <div class="section-label">More Cameras</div>
+        <h2 class="display" style="font-size: clamp(28px, 3vw, 40px); margin-bottom: 40px;">
+          You might also <em class="display-italic" style="color: var(--gold)">enjoy</em>
+        </h2>
+        <div class="related-grid">
+          {related.map((cam) => (
+            <a href={`/camera/${cam.id}`} class="related-card">
+              <div class="related-preview">
+                <div class="related-overlay"></div>
+                <div class="related-live">
+                  <span class="related-live-dot"></span>
+                  <span class="mono">LIVE</span>
+                </div>
+              </div>
+              <div class="related-info">
+                <h3>{cam.name}</h3>
+                <p>{cam.location}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+</Layout>
+
+<style>
+  .cam-header {
+    background: var(--deep);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .breadcrumb {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .breadcrumb a:hover { color: var(--gold); }
+
+  .breadcrumb-sep { color: var(--faint); }
+  .breadcrumb-current { color: var(--white); }
+
+  /* Player */
+  .cam-player-section {
+    background: var(--black);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cam-player-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  /* Info */
+  .cam-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .cam-live-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .cam-live-dot {
+    width: 8px;
+    height: 8px;
+    background: #e53e3e;
+    border-radius: 50%;
+    animation: pulse-cam 2s infinite;
+  }
+
+  @keyframes pulse-cam {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(229,62,62,0.4); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(229,62,62,0); }
+  }
+
+  .cam-live-text {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #e53e3e;
+  }
+
+  .cam-location {
+    font-size: 16px;
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+  }
+
+  .cam-description {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .cam-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .cam-tag {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 1px;
+  }
+
+  /* Meta sidebar */
+  .cam-info-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .meta-card {
+    background: var(--surface);
+    padding: 16px 20px;
+  }
+
+  .meta-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .meta-value {
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  /* Related */
+  .related-section {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .related-card {
+    background: var(--deep);
+    text-decoration: none;
+    color: var(--white);
+    transition: background 0.3s;
+  }
+
+  .related-card:hover { background: var(--surface); }
+
+  .related-preview {
+    aspect-ratio: 16 / 10;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.01) 0px,
+        rgba(255,255,255,0.01) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+  }
+
+  .related-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 50%);
+  }
+
+  .related-live {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(0,0,0,0.6);
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  .related-live-dot {
+    width: 5px;
+    height: 5px;
+    background: #e53e3e;
+    border-radius: 50%;
+    animation: pulse-cam 2s infinite;
+  }
+
+  .related-live span:last-child {
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: #e53e3e;
+  }
+
+  .related-info {
+    padding: 16px 20px;
+  }
+
+  .related-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    transition: color 0.3s;
+  }
+
+  .related-card:hover .related-info h3 {
+    color: var(--gold);
+  }
+
+  .related-info p {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .cam-player-inner { padding: 0 24px; }
+    .cam-info-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .related-grid { grid-template-columns: 1fr; }
+  }
+</style>

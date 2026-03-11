@@ -1,0 +1,400 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { cameras, regions, allTags } from '../data/cameras';
+---
+
+<Layout title="Browse Live Cameras — PortOfCams" activeNav="browse">
+
+  <!-- Page Header -->
+  <section class="browse-header">
+    <div class="section-inner" style="padding-bottom: 60px;">
+      <div class="section-label fade-up">Live Cameras</div>
+      <h1 class="display fade-up" style="font-size: clamp(40px, 5vw, 72px); max-width: 700px; margin-bottom: 20px;">
+        Watch the world<br/><em class="display-italic" style="color: var(--gold)">in real time</em>
+      </h1>
+      <p class="browse-subtitle fade-up">
+        Curated live camera feeds from iconic locations across the globe. All streams are free and always live.
+      </p>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="filters-section">
+    <div class="filters-inner">
+      <div class="filter-group">
+        <span class="filter-label mono">Region</span>
+        <div class="filter-chips" id="region-filters">
+          <button class="filter-chip active" data-region="all">All</button>
+          {regions.map((region) => (
+            <button class="filter-chip" data-region={region}>{region}</button>
+          ))}
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label mono">Type</span>
+        <div class="filter-chips" id="tag-filters">
+          <button class="filter-chip active" data-tag="all">All</button>
+          {allTags.map((tag) => (
+            <button class="filter-chip" data-tag={tag}>{tag}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Camera Grid -->
+  <section class="camera-grid-section">
+    <div class="section-inner" style="padding-top: 40px;">
+      <div class="camera-count mono" id="camera-count">{cameras.length} cameras</div>
+      <div class="camera-grid" id="camera-grid">
+        {cameras.map((cam) => (
+          <a
+            href={`/camera/${cam.id}`}
+            class="camera-card"
+            data-region={cam.region}
+            data-tags={cam.tags.join(',')}
+          >
+            <div class="card-preview">
+              <div class="card-overlay"></div>
+              <div class="card-live-badge">
+                <span class="card-live-dot"></span>
+                <span class="mono">LIVE</span>
+              </div>
+              <div class="card-location-badge mono">{cam.region}</div>
+            </div>
+            <div class="card-info">
+              <h3>{cam.name}</h3>
+              <p class="card-location">{cam.location}</p>
+              <div class="card-tags">
+                {cam.tags.map((tag) => (
+                  <span class="card-tag mono">{tag}</span>
+                ))}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="no-results" id="no-results" style="display:none;">
+        <p class="mono">No cameras match your filters</p>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .browse-header {
+    padding-top: 100px;
+    border-bottom: 1px solid var(--border);
+    background: var(--deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .browse-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 50% 50% at 50% 80%, rgba(201,168,76,0.06) 0%, transparent 70%);
+  }
+
+  .browse-subtitle {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 500px;
+    line-height: 1.7;
+  }
+
+  /* Filters */
+  .filters-section {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 72px;
+    z-index: 50;
+  }
+
+  .filters-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .filter-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .filter-chip {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 14px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .filter-chip:hover {
+    border-color: rgba(255,255,255,0.15);
+    color: var(--white);
+  }
+
+  .filter-chip.active {
+    background: var(--gold-dim);
+    border-color: rgba(201,168,76,0.3);
+    color: var(--gold);
+  }
+
+  /* Camera Grid */
+  .camera-count {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .camera-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .camera-card {
+    background: var(--surface);
+    text-decoration: none;
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    transition: background 0.3s;
+  }
+
+  .camera-card:hover {
+    background: var(--deep);
+  }
+
+  .camera-card.hidden {
+    display: none;
+  }
+
+  .card-preview {
+    aspect-ratio: 16 / 10;
+    background: var(--deep);
+    position: relative;
+    overflow: hidden;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.01) 0px,
+        rgba(255,255,255,0.01) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+  }
+
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.5) 100%);
+  }
+
+  .card-live-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+    padding: 4px 10px;
+    border-radius: 2px;
+    border: 1px solid rgba(229,62,62,0.3);
+  }
+
+  .card-live-dot {
+    width: 6px;
+    height: 6px;
+    background: #e53e3e;
+    border-radius: 50%;
+    animation: pulse-card 2s infinite;
+  }
+
+  @keyframes pulse-card {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .card-live-badge span:last-child {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: #e53e3e;
+  }
+
+  .card-location-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+    padding: 4px 10px;
+    border-radius: 2px;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .card-info {
+    padding: 20px 24px 24px;
+  }
+
+  .card-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    transition: color 0.3s;
+  }
+
+  .camera-card:hover .card-info h3 {
+    color: var(--gold);
+  }
+
+  .card-location {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .card-tag {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 1px;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 80px 0;
+  }
+
+  .no-results p {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .filters-inner { padding: 16px 24px; }
+    .camera-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .camera-grid { grid-template-columns: 1fr; }
+    .filter-group { flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
+</style>
+
+<script>
+  function initFilters() {
+    const grid = document.getElementById('camera-grid');
+    const countEl = document.getElementById('camera-count');
+    const noResults = document.getElementById('no-results');
+    if (!grid) return;
+
+    let activeRegion = 'all';
+    let activeTag = 'all';
+
+    function applyFilters() {
+      const cards = grid.querySelectorAll<HTMLAnchorElement>('.camera-card');
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const region = card.dataset.region || '';
+        const tags = (card.dataset.tags || '').split(',');
+
+        const regionMatch = activeRegion === 'all' || region === activeRegion;
+        const tagMatch = activeTag === 'all' || tags.includes(activeTag);
+
+        if (regionMatch && tagMatch) {
+          card.classList.remove('hidden');
+          visible++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (countEl) countEl.textContent = `${visible} camera${visible !== 1 ? 's' : ''}`;
+      if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
+      if (grid) grid.style.display = visible === 0 ? 'none' : 'grid';
+    }
+
+    // Region filters
+    document.querySelectorAll<HTMLButtonElement>('#region-filters .filter-chip').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#region-filters .filter-chip').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeRegion = btn.dataset.region || 'all';
+        applyFilters();
+      });
+    });
+
+    // Tag filters
+    document.querySelectorAll<HTMLButtonElement>('#tag-filters .filter-chip').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#tag-filters .filter-chip').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeTag = btn.dataset.tag || 'all';
+        applyFilters();
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFilters);
+  } else {
+    initFilters();
+  }
+  document.addEventListener('astro:page-load', initFilters);
+</script>
