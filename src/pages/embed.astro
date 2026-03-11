@@ -1,0 +1,547 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="YouTube Embed Generator — PortOfCams" description="Generate embeddable iframe code for YouTube live streams. Customize width, height, autoplay, and more." activeNav="embed">
+
+  <!-- Hero -->
+  <section class="embed-header">
+    <div class="section-inner" style="padding-bottom: 60px;">
+      <div class="section-label fade-up">Tool</div>
+      <h1 class="display fade-up" style="font-size: clamp(40px, 5vw, 72px); max-width: 800px; margin-bottom: 20px;">
+        YouTube Embed<br/><em class="display-italic" style="color: var(--gold)">Generator</em>
+      </h1>
+      <p class="embed-subtitle fade-up">
+        Paste a YouTube live stream or video URL, customize the embed options, and copy the ready-to-use iframe code.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Tool -->
+  <section class="embed-tool">
+    <div class="section-inner" style="padding-top: 60px; padding-bottom: 60px;">
+
+      <!-- URL Input -->
+      <div class="tool-block fade-up">
+        <label class="tool-label mono" for="yt-url">YouTube URL</label>
+        <div class="url-input-row">
+          <input
+            type="text"
+            id="yt-url"
+            class="tool-input"
+            placeholder="https://www.youtube.com/watch?v=... or youtu.be/..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="btn-primary" id="btn-generate" type="button">Generate</button>
+        </div>
+        <p class="url-hint mono" id="url-error" style="display:none;">Invalid YouTube URL. Try a standard watch, live, or short link.</p>
+      </div>
+
+      <!-- Options -->
+      <div class="tool-block fade-up" id="options-block" style="display:none;">
+        <label class="tool-label mono">Embed Options</label>
+        <div class="options-grid">
+          <div class="option-field">
+            <label class="option-label mono" for="opt-width">Width (px)</label>
+            <input type="number" id="opt-width" class="tool-input tool-input-sm" value="640" min="200" max="3840" />
+          </div>
+          <div class="option-field">
+            <label class="option-label mono" for="opt-height">Height (px)</label>
+            <input type="number" id="opt-height" class="tool-input tool-input-sm" value="360" min="100" max="2160" />
+          </div>
+          <div class="option-toggle">
+            <label class="toggle-wrap">
+              <input type="checkbox" id="opt-autoplay" />
+              <span class="toggle-slider"></span>
+              <span class="toggle-text mono">Autoplay</span>
+            </label>
+          </div>
+          <div class="option-toggle">
+            <label class="toggle-wrap">
+              <input type="checkbox" id="opt-muted" checked />
+              <span class="toggle-slider"></span>
+              <span class="toggle-text mono">Muted</span>
+            </label>
+          </div>
+          <div class="option-toggle">
+            <label class="toggle-wrap">
+              <input type="checkbox" id="opt-controls" checked />
+              <span class="toggle-slider"></span>
+              <span class="toggle-text mono">Controls</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview -->
+      <div class="tool-block fade-up" id="preview-block" style="display:none;">
+        <label class="tool-label mono">Live Preview</label>
+        <div class="preview-wrapper" id="preview-wrapper">
+          <div class="preview-placeholder mono">Embed preview will appear here</div>
+        </div>
+      </div>
+
+      <!-- Code Output -->
+      <div class="tool-block fade-up" id="code-block" style="display:none;">
+        <div class="code-header">
+          <label class="tool-label mono" style="margin-bottom:0;">Embed Code</label>
+          <button class="btn-copy mono" id="btn-copy" type="button">Copy</button>
+        </div>
+        <pre class="code-output"><code id="code-output"></code></pre>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .embed-header {
+    padding-top: 100px;
+    border-bottom: 1px solid var(--border);
+    background: var(--deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .embed-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 50% 50% at 50% 80%, rgba(201,168,76,0.06) 0%, transparent 70%);
+  }
+
+  .embed-subtitle {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+  }
+
+  .embed-tool {
+    background: var(--black);
+  }
+
+  /* Tool blocks */
+  .tool-block {
+    margin-bottom: 48px;
+  }
+
+  .tool-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  /* URL input */
+  .url-input-row {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .tool-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 14px 18px;
+    font-size: 15px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .tool-input::placeholder {
+    color: var(--faint);
+  }
+
+  .tool-input:focus {
+    border-color: rgba(201,168,76,0.4);
+  }
+
+  .tool-input-sm {
+    flex: none;
+    width: 120px;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .url-hint {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: #e53e3e;
+    margin-top: 10px;
+  }
+
+  /* Options grid */
+  .options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .option-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .option-label {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Toggle switches */
+  .option-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  .toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .toggle-wrap input {
+    display: none;
+  }
+
+  .toggle-slider {
+    width: 36px;
+    height: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    position: relative;
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+
+  .toggle-slider::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    background: var(--muted);
+    border-radius: 50%;
+    transition: all 0.3s;
+  }
+
+  .toggle-wrap input:checked + .toggle-slider {
+    background: var(--gold-dim);
+    border-color: rgba(201,168,76,0.3);
+  }
+
+  .toggle-wrap input:checked + .toggle-slider::after {
+    left: 18px;
+    background: var(--gold);
+  }
+
+  .toggle-text {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Preview */
+  .preview-wrapper {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    overflow: hidden;
+  }
+
+  .preview-placeholder {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--faint);
+    text-transform: uppercase;
+  }
+
+  .preview-wrapper iframe {
+    max-width: 100%;
+    border: none;
+    display: block;
+  }
+
+  /* Code output */
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .btn-copy {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 16px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.3s;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .btn-copy:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .btn-copy.copied {
+    background: var(--gold-dim);
+    border-color: rgba(201,168,76,0.3);
+    color: var(--gold);
+  }
+
+  .code-output {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin: 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .url-input-row {
+      flex-direction: column;
+    }
+
+    .options-grid {
+      gap: 16px;
+    }
+
+    .tool-input-sm {
+      width: 100%;
+    }
+
+    .option-field {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  function initEmbedTool() {
+    const urlInput = document.getElementById('yt-url') as HTMLInputElement | null;
+    const btnGenerate = document.getElementById('btn-generate');
+    const urlError = document.getElementById('url-error');
+    const optionsBlock = document.getElementById('options-block');
+    const previewBlock = document.getElementById('preview-block');
+    const codeBlock = document.getElementById('code-block');
+    const previewWrapper = document.getElementById('preview-wrapper');
+    const codeOutput = document.getElementById('code-output');
+    const btnCopy = document.getElementById('btn-copy');
+
+    const optWidth = document.getElementById('opt-width') as HTMLInputElement | null;
+    const optHeight = document.getElementById('opt-height') as HTMLInputElement | null;
+    const optAutoplay = document.getElementById('opt-autoplay') as HTMLInputElement | null;
+    const optMuted = document.getElementById('opt-muted') as HTMLInputElement | null;
+    const optControls = document.getElementById('opt-controls') as HTMLInputElement | null;
+
+    if (!urlInput || !btnGenerate) return;
+
+    let currentVideoId = '';
+
+    function extractVideoId(url: string): string | null {
+      const trimmed = url.trim();
+      if (!trimmed) return null;
+
+      // youtube.com/watch?v=ID
+      let match = trimmed.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+      if (match) return match[1];
+
+      // youtu.be/ID
+      match = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+      if (match) return match[1];
+
+      // youtube.com/embed/ID
+      match = trimmed.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+      if (match) return match[1];
+
+      // youtube.com/live/ID
+      match = trimmed.match(/youtube\.com\/live\/([a-zA-Z0-9_-]{11})/);
+      if (match) return match[1];
+
+      // youtube.com/v/ID
+      match = trimmed.match(/youtube\.com\/v\/([a-zA-Z0-9_-]{11})/);
+      if (match) return match[1];
+
+      // youtube.com/shorts/ID
+      match = trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
+      if (match) return match[1];
+
+      // bare 11-char ID
+      match = trimmed.match(/^([a-zA-Z0-9_-]{11})$/);
+      if (match) return match[1];
+
+      return null;
+    }
+
+    function buildEmbedUrl(videoId: string): string {
+      const params: string[] = [];
+
+      if (optAutoplay?.checked) params.push('autoplay=1');
+      if (optMuted?.checked) params.push('mute=1');
+      if (optControls && !optControls.checked) params.push('controls=0');
+
+      const qs = params.length > 0 ? '?' + params.join('&') : '';
+      return `https://www.youtube.com/embed/${videoId}${qs}`;
+    }
+
+    function buildIframeCode(videoId: string): string {
+      const w = optWidth?.value || '640';
+      const h = optHeight?.value || '360';
+      const src = buildEmbedUrl(videoId);
+
+      const allowParts = ['accelerometer', 'clipboard-write', 'encrypted-media', 'gyroscope', 'picture-in-picture', 'web-share'];
+      if (optAutoplay?.checked) allowParts.unshift('autoplay');
+
+      return `<iframe width="${w}" height="${h}" src="${src}" frameborder="0" allow="${allowParts.join('; ')}" allowfullscreen></iframe>`;
+    }
+
+    function updateOutput() {
+      if (!currentVideoId) return;
+
+      const w = optWidth?.value || '640';
+      const h = optHeight?.value || '360';
+      const src = buildEmbedUrl(currentVideoId);
+      const code = buildIframeCode(currentVideoId);
+
+      // Update preview
+      if (previewWrapper) {
+        const iframe = document.createElement('iframe');
+        iframe.width = w;
+        iframe.height = h;
+        iframe.src = src;
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allowfullscreen', '');
+
+        const allowParts = ['accelerometer', 'clipboard-write', 'encrypted-media', 'gyroscope', 'picture-in-picture', 'web-share'];
+        if (optAutoplay?.checked) allowParts.unshift('autoplay');
+        iframe.setAttribute('allow', allowParts.join('; '));
+
+        previewWrapper.innerHTML = '';
+        previewWrapper.appendChild(iframe);
+      }
+
+      // Update code
+      if (codeOutput) {
+        codeOutput.textContent = code;
+      }
+    }
+
+    function handleGenerate() {
+      const videoId = extractVideoId(urlInput?.value || '');
+
+      if (!videoId) {
+        if (urlError) urlError.style.display = 'block';
+        if (optionsBlock) optionsBlock.style.display = 'none';
+        if (previewBlock) previewBlock.style.display = 'none';
+        if (codeBlock) codeBlock.style.display = 'none';
+        currentVideoId = '';
+        return;
+      }
+
+      if (urlError) urlError.style.display = 'none';
+      currentVideoId = videoId;
+
+      if (optionsBlock) optionsBlock.style.display = 'block';
+      if (previewBlock) previewBlock.style.display = 'block';
+      if (codeBlock) codeBlock.style.display = 'block';
+
+      updateOutput();
+    }
+
+    // Event listeners
+    btnGenerate.addEventListener('click', handleGenerate);
+
+    urlInput.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter') handleGenerate();
+    });
+
+    // Live update on option changes
+    [optWidth, optHeight, optAutoplay, optMuted, optControls].forEach((el) => {
+      if (!el) return;
+      el.addEventListener('change', () => {
+        if (currentVideoId) updateOutput();
+      });
+      el.addEventListener('input', () => {
+        if (currentVideoId) updateOutput();
+      });
+    });
+
+    // Copy button
+    btnCopy?.addEventListener('click', () => {
+      if (!codeOutput) return;
+      const text = codeOutput.textContent || '';
+
+      navigator.clipboard.writeText(text).then(() => {
+        btnCopy.textContent = 'Copied!';
+        btnCopy.classList.add('copied');
+        setTimeout(() => {
+          btnCopy.textContent = 'Copy';
+          btnCopy.classList.remove('copied');
+        }, 2000);
+      }).catch(() => {
+        // Fallback
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        btnCopy.textContent = 'Copied!';
+        btnCopy.classList.add('copied');
+        setTimeout(() => {
+          btnCopy.textContent = 'Copy';
+          btnCopy.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initEmbedTool);
+  } else {
+    initEmbedTool();
+  }
+  document.addEventListener('astro:page-load', initEmbedTool);
+</script>
