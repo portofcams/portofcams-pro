@@ -1,24 +1,367 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'Port of Cams — Live Webcams Worldwide',
+  description = 'Watch live webcams from around the world. Beach cams, city cams, scenic views, and traffic cameras streaming 24/7.',
+} = Astro.props;
+const currentPath = Astro.url.pathname;
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-		<script defer data-domain="portofcams.com" src="https://plausible.io/js/script.js"></script>
-	</head>
-	<body>
-		<slot />
-	</body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="generator" content={Astro.generator} />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script defer data-domain="portofcams.com" src="https://analytics.portofcams.com/js/script.outbound-links.404.js"></script>
+</head>
+<body>
+  <!-- Grain overlay -->
+  <div class="grain"></div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="/" class="nav-logo">Port<span>Of</span>Cams</a>
+    <ul class="nav-links">
+      <li><a href="/" class:list={[{ active: currentPath === '/' }]}>Home</a></li>
+      <li><a href="/browse" class:list={[{ active: currentPath.startsWith('/browse') }]}>Browse</a></li>
+      <li><a href="/regions" class:list={[{ active: currentPath.startsWith('/regions') }]}>Regions</a></li>
+      <li><a href="/browse?tag=featured-traffic" class:list={[{ active: false }]}>Best Traffic</a></li>
+    </ul>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Menu">&#9776;</button>
+  </nav>
+
+  <!-- Mobile nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="/">Home</a>
+    <a href="/browse">Browse Cameras</a>
+    <a href="/regions">Regions</a>
+    <a href="/browse?tag=featured-traffic">Best Traffic Cams</a>
+  </div>
+
+  <main>
+    <slot />
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">Port<span>Of</span>Cams</div>
+        <p class="footer-desc">Live webcams from iconic locations worldwide. Always on, always streaming.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="/browse">All Cameras</a></li>
+          <li><a href="/regions">By Region</a></li>
+          <li><a href="/browse?tag=featured-traffic">Scenic Traffic</a></li>
+          <li><a href="/browse?tag=wildlife">Wildlife</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&copy; {new Date().getFullYear()} PortOfCams</span>
+    </div>
+  </footer>
+
+  <script is:inline>
+    document.getElementById('navHamburger')?.addEventListener('click', function() {
+      var nav = document.getElementById('mobileNav');
+      var open = nav.classList.toggle('open');
+      this.innerHTML = open ? '&#10005;' : '&#9776;';
+    });
+    document.querySelectorAll('#mobileNav a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        document.getElementById('mobileNav').classList.remove('open');
+        document.getElementById('navHamburger').innerHTML = '&#9776;';
+      });
+    });
+  </script>
+</body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+<style is:global>
+  :root {
+    --black: #080808;
+    --deep: #0d0d0d;
+    --surface: #111111;
+    --border: rgba(255,255,255,0.06);
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: rgba(201,168,76,0.15);
+    --white: #f5f0e8;
+    --muted: rgba(245,240,232,0.4);
+    --faint: rgba(245,240,232,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  a { color: inherit; }
+
+  .display {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+  .display-italic {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.0;
+  }
+  .mono {
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+  }
+
+  /* Section */
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 48px;
+  }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 40px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    background: var(--gold);
+    color: var(--black);
+    padding: 14px 32px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.3s;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    padding: 14px 32px;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.3s;
+    display: inline-block;
+  }
+  .btn-secondary:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,8,8,0.85);
+    backdrop-filter: blur(20px);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--white);
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover,
+  .nav-links a.active { color: var(--gold); }
+  .nav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    top: 65px;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background: rgba(8,8,8,0.98);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    padding: 16px 0;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a {
+    padding: 14px 48px;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s;
+  }
+  .mobile-nav a:last-child { border-bottom: none; }
+  .mobile-nav a:hover { color: var(--gold); }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 48px 40px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 60px;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 300px;
+  }
+  .footer-col h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 10px; }
+  .footer-col a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 48px;
+    border-top: 1px solid var(--border);
+  }
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--faint);
+    letter-spacing: 0.1em;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: block; }
+    .mobile-nav a { padding: 14px 24px; }
+    .section-inner { padding: 60px 24px; }
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 40px 24px 24px;
+    }
+    .footer-bottom { padding: 16px 24px; }
+  }
 </style>

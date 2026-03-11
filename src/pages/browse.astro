@@ -1,0 +1,201 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CameraCard from '../components/CameraCard.astro';
+import { cameras, getAllRegions, getAllTags } from '../data/cameras';
+
+const regions = getAllRegions();
+const tags = getAllTags();
+---
+
+<Layout title="Browse Cameras — Port of Cams" description="Browse all live webcams worldwide. Filter by region, tag, or stream type.">
+  <section class="browse-hero">
+    <div class="section-inner">
+      <p class="section-label">Library</p>
+      <h1 class="display" style="font-size: clamp(32px, 5vw, 48px);">Browse Cameras</h1>
+      <p class="browse-sub">{cameras.length} live cameras across {regions.length} regions</p>
+    </div>
+  </section>
+
+  <section class="browse-filters">
+    <div class="section-inner" style="padding-top: 0; padding-bottom: 0;">
+      <div class="filter-bar">
+        <div class="filter-group">
+          <button class="filter-btn active" data-region="all">All</button>
+          {regions.map(r => (
+            <button class="filter-btn" data-region={r.name}>{r.name} <span class="filter-count">{r.count}</span></button>
+          ))}
+        </div>
+      </div>
+      <div class="filter-tags" id="tagFilters">
+        <button class="tag-btn active" data-tag="all">All Tags</button>
+        {tags.filter(t => !['featured', 'featured-traffic'].includes(t.name)).map(t => (
+          <button class="tag-btn" data-tag={t.name}>{t.name}</button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="browse-grid-section">
+    <div class="section-inner" style="padding-top: 24px;">
+      <div class="browse-grid" id="cameraGrid">
+        {cameras.map(cam => (
+          <div class="grid-item" data-region={cam.region} data-tags={cam.tags.join(',')}>
+            <CameraCard
+              id={cam.id}
+              name={cam.name}
+              location={cam.location}
+              streamType={cam.streamType}
+              tags={cam.tags}
+              isLive={cam.isLive}
+              isFeatured={cam.isFeatured}
+              thumbnail={cam.thumbnail}
+            />
+          </div>
+        ))}
+      </div>
+      <p class="browse-empty" id="emptyMsg" style="display:none;">No cameras match your filters.</p>
+    </div>
+  </section>
+</Layout>
+
+<script is:inline>
+(function() {
+  var regionBtns = document.querySelectorAll('.filter-btn');
+  var tagBtns = document.querySelectorAll('.tag-btn');
+  var items = document.querySelectorAll('.grid-item');
+  var empty = document.getElementById('emptyMsg');
+  var activeRegion = 'all';
+  var activeTag = 'all';
+
+  function filter() {
+    var shown = 0;
+    items.forEach(function(el) {
+      var r = el.getAttribute('data-region');
+      var t = el.getAttribute('data-tags') || '';
+      var matchR = activeRegion === 'all' || r === activeRegion;
+      var matchT = activeTag === 'all' || t.split(',').indexOf(activeTag) >= 0;
+      if (matchR && matchT) {
+        el.style.display = '';
+        shown++;
+      } else {
+        el.style.display = 'none';
+      }
+    });
+    empty.style.display = shown === 0 ? '' : 'none';
+  }
+
+  regionBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      regionBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeRegion = btn.getAttribute('data-region');
+      filter();
+    });
+  });
+
+  tagBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      tagBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeTag = btn.getAttribute('data-tag');
+      filter();
+    });
+  });
+})();
+</script>
+
+<style>
+  .browse-hero {
+    border-bottom: 1px solid var(--border);
+  }
+  .browse-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+  .browse-filters {
+    border-bottom: 1px solid var(--border);
+    background: var(--deep);
+  }
+  .filter-bar {
+    padding: 16px 0;
+    overflow-x: auto;
+  }
+  .filter-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .filter-btn.active {
+    background: var(--gold);
+    color: var(--black);
+    border-color: var(--gold);
+  }
+  .filter-count {
+    opacity: 0.6;
+    font-size: 10px;
+  }
+  .filter-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 0 0 16px;
+  }
+  .tag-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 4px 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .tag-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .tag-btn.active {
+    background: var(--gold-dim);
+    color: var(--gold);
+    border-color: rgba(201,168,76,0.3);
+  }
+  .browse-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .browse-empty {
+    text-align: center;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 60px 0;
+  }
+  @media (max-width: 768px) {
+    .browse-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

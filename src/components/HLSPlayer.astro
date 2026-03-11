@@ -1,0 +1,190 @@
+---
+interface Props {
+  src: string;
+  streamType: 'hls' | 'youtube' | 'image' | 'embed';
+  title: string;
+  poster?: string;
+}
+const { src, streamType, title, poster } = Astro.props;
+const playerId = `player-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="player-wrap">
+  {streamType === 'youtube' ? (
+    <iframe
+      src={`${src}${src.includes('?') ? '&' : '?'}autoplay=1&mute=1&controls=1&modestbranding=1`}
+      title={title}
+      allow="autoplay; encrypted-media; fullscreen"
+      allowfullscreen
+      class="player-iframe"
+    />
+  ) : streamType === 'image' ? (
+    <div class="player-image-wrap">
+      <img id={playerId} src={src} alt={title} class="player-image" />
+      <div class="player-refresh">
+        <button id={`${playerId}-btn`} class="refresh-btn" aria-label="Refresh image">&#8635; Refresh</button>
+        <span id={`${playerId}-timer`} class="refresh-timer"></span>
+      </div>
+    </div>
+  ) : streamType === 'embed' ? (
+    <iframe
+      src={src}
+      title={title}
+      allow="autoplay"
+      allowfullscreen
+      class="player-iframe"
+    />
+  ) : (
+    <div class="player-hls-wrap">
+      <video
+        id={playerId}
+        controls
+        autoplay
+        muted
+        playsinline
+        poster={poster}
+        class="player-video"
+      />
+      <div class="player-live-badge">&#9679; LIVE</div>
+    </div>
+  )}
+</div>
+
+{streamType === 'hls' && (
+  <script is:inline define:vars={{ playerId, src }}>
+    (function() {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
+      script.onload = function() {
+        var video = document.getElementById(playerId);
+        if (!video) return;
+        if (window.Hls && window.Hls.isSupported()) {
+          var hls = new window.Hls({
+            lowLatencyMode: true,
+            liveSyncDurationCount: 2,
+            liveMaxLatencyDurationCount: 5,
+            maxBufferLength: 10,
+            maxMaxBufferLength: 20,
+            liveDurationInfinity: true,
+          });
+          hls.loadSource(src);
+          hls.attachMedia(video);
+          hls.on(window.Hls.Events.MANIFEST_PARSED, function() {
+            video.play().catch(function(){});
+          });
+          hls.on(window.Hls.Events.ERROR, function(evt, data) {
+            if (data.fatal) {
+              if (data.type === window.Hls.ErrorTypes.NETWORK_ERROR) {
+                setTimeout(function() { hls.startLoad(); }, 3000);
+              } else {
+                hls.destroy();
+              }
+            }
+          });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = src;
+          video.play().catch(function(){});
+        }
+      };
+      document.head.appendChild(script);
+    })();
+  </script>
+)}
+
+{streamType === 'image' && (
+  <script is:inline define:vars={{ playerId, src }}>
+    (function() {
+      var img = document.getElementById(playerId);
+      var btn = document.getElementById(playerId + '-btn');
+      var timer = document.getElementById(playerId + '-timer');
+      var countdown = 30;
+      function refresh() {
+        img.src = src + (src.includes('?') ? '&' : '?') + '_t=' + Date.now();
+        countdown = 30;
+      }
+      btn.addEventListener('click', refresh);
+      setInterval(function() {
+        countdown--;
+        if (countdown <= 0) { refresh(); }
+        timer.textContent = countdown + 's';
+      }, 1000);
+    })();
+  </script>
+)}
+
+<style>
+  .player-wrap {
+    width: 100%;
+    background: #000;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .player-iframe {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: none;
+    display: block;
+  }
+  .player-video {
+    width: 100%;
+    aspect-ratio: 16/9;
+    display: block;
+    background: #000;
+    object-fit: contain;
+  }
+  .player-hls-wrap { position: relative; }
+  .player-live-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(200,40,40,0.85);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    padding: 4px 10px;
+    border-radius: 2px;
+    z-index: 5;
+    animation: livePulse 2s infinite;
+  }
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+  .player-image-wrap { position: relative; }
+  .player-image {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+  }
+  .player-refresh {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .refresh-btn {
+    background: rgba(8,8,8,0.8);
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 6px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .refresh-btn:hover { background: rgba(201,168,76,0.2); }
+  .refresh-timer {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    background: rgba(8,8,8,0.8);
+    padding: 4px 8px;
+    border-radius: 2px;
+  }
+</style>

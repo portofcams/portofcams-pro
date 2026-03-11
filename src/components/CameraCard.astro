@@ -1,0 +1,147 @@
+---
+interface Props {
+  id: string;
+  name: string;
+  location: string;
+  streamType: 'hls' | 'youtube' | 'image' | 'embed';
+  tags: string[];
+  isLive: boolean;
+  isFeatured?: boolean;
+  thumbnail?: string;
+}
+const { id, name, location, streamType, tags, isLive, isFeatured, thumbnail } = Astro.props;
+const typeLabel = streamType === 'hls' ? 'HLS' : streamType === 'youtube' ? 'YouTube' : streamType === 'image' ? 'Still' : 'Embed';
+---
+
+<a href={`/camera/${id}`} class="cam-card">
+  <div class="cam-thumb">
+    {thumbnail ? (
+      <img src={thumbnail} alt={name} loading="lazy" />
+    ) : (
+      <div class="cam-thumb-placeholder">
+        <span class="cam-thumb-icon">&#9711;</span>
+      </div>
+    )}
+    {isLive && <span class="cam-live">&#9679; LIVE</span>}
+    {isFeatured && <span class="cam-featured">&#9733; FEATURED</span>}
+    <span class="cam-type">{typeLabel}</span>
+  </div>
+  <div class="cam-info">
+    <h3 class="cam-name">{name}</h3>
+    <p class="cam-location">{location}</p>
+    <div class="cam-tags">
+      {tags.slice(0, 3).map(tag => (
+        <span class="cam-tag">{tag}</span>
+      ))}
+    </div>
+  </div>
+</a>
+
+<style>
+  .cam-card {
+    display: block;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: all 0.3s;
+    overflow: hidden;
+  }
+  .cam-card:hover {
+    border-color: rgba(201,168,76,0.3);
+    transform: translateY(-2px);
+  }
+  .cam-thumb {
+    position: relative;
+    aspect-ratio: 16/9;
+    background: #000;
+    overflow: hidden;
+  }
+  .cam-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cam-thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+  }
+  .cam-thumb-icon {
+    font-size: 32px;
+    color: rgba(201,168,76,0.2);
+  }
+  .cam-live {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(200,40,40,0.85);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  .cam-featured {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(201,168,76,0.85);
+    color: var(--black);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  .cam-type {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(8,8,8,0.8);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  .cam-info {
+    padding: 16px;
+  }
+  .cam-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .cam-location {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+  .cam-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .cam-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    background: var(--gold-dim);
+    padding: 2px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+</style>

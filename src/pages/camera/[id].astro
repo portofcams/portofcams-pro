@@ -1,0 +1,294 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HLSPlayer from '../../components/HLSPlayer.astro';
+import CameraCard from '../../components/CameraCard.astro';
+import { cameras, getCameraById } from '../../data/cameras';
+
+export function getStaticPaths() {
+  return cameras.map(cam => ({
+    params: { id: cam.id },
+  }));
+}
+
+const { id } = Astro.params;
+const camera = getCameraById(id!);
+if (!camera) return Astro.redirect('/browse');
+
+const related = cameras
+  .filter(c => c.id !== camera.id && c.region === camera.region)
+  .slice(0, 3);
+---
+
+<Layout title={`${camera.name} — Port of Cams`} description={camera.description}>
+  <section class="cam-page">
+    <div class="section-inner">
+      <!-- Breadcrumb -->
+      <nav class="cam-breadcrumb">
+        <a href="/">Home</a>
+        <span class="cam-sep">/</span>
+        <a href="/browse">Browse</a>
+        <span class="cam-sep">/</span>
+        <a href={`/regions#${camera.region.toLowerCase().replace(/\s+/g, '-')}`}>{camera.region}</a>
+        <span class="cam-sep">/</span>
+        <span>{camera.name}</span>
+      </nav>
+
+      <!-- Player -->
+      <div class="cam-player">
+        <HLSPlayer src={camera.hlsUrl} streamType={camera.streamType} title={camera.name} poster={camera.thumbnail} />
+      </div>
+
+      <!-- Info -->
+      <div class="cam-detail">
+        <div class="cam-main">
+          <h1 class="display" style="font-size: clamp(24px, 4vw, 36px);">{camera.name}</h1>
+          <p class="cam-loc">
+            <span class="cam-loc-icon">&#9906;</span> {camera.location}
+          </p>
+          <p class="cam-desc">{camera.description}</p>
+
+          <div class="cam-meta">
+            <div class="cam-meta-item">
+              <span class="cam-meta-label">Region</span>
+              <span class="cam-meta-val">{camera.region}{camera.subregion ? ` — ${camera.subregion}` : ''}</span>
+            </div>
+            <div class="cam-meta-item">
+              <span class="cam-meta-label">Stream</span>
+              <span class="cam-meta-val">{camera.streamType.toUpperCase()}</span>
+            </div>
+            <div class="cam-meta-item">
+              <span class="cam-meta-label">Status</span>
+              <span class="cam-meta-val cam-status-live">{camera.isLive ? '● Live' : '○ Offline'}</span>
+            </div>
+            <div class="cam-meta-item">
+              <span class="cam-meta-label">Coordinates</span>
+              <span class="cam-meta-val">{camera.lat.toFixed(4)}, {camera.lon.toFixed(4)}</span>
+            </div>
+          </div>
+
+          <div class="cam-tags-row">
+            {camera.tags.map(tag => (
+              <a href={`/browse`} class="cam-tag-link">{tag}</a>
+            ))}
+          </div>
+        </div>
+
+        <div class="cam-sidebar">
+          <!-- Share -->
+          <div class="cam-share-box">
+            <p class="cam-share-title">Share This Camera</p>
+            <div class="cam-share-btns">
+              <button class="cam-share-btn" id="copyLink" title="Copy link">&#128279; Copy Link</button>
+            </div>
+          </div>
+
+          <!-- Map placeholder -->
+          <div class="cam-map-box">
+            <p class="cam-share-title">Location</p>
+            <div class="cam-map-placeholder">
+              <a href={`https://www.google.com/maps?q=${camera.lat},${camera.lon}`} target="_blank" rel="noopener" class="cam-map-link">
+                &#127758; View on Google Maps
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related -->
+      {related.length > 0 && (
+        <div class="cam-related">
+          <p class="section-label">More from {camera.region}</p>
+          <div class="cam-related-grid">
+            {related.map(r => (
+              <CameraCard
+                id={r.id}
+                name={r.name}
+                location={r.location}
+                streamType={r.streamType}
+                tags={r.tags}
+                isLive={r.isLive}
+                isFeatured={r.isFeatured}
+                thumbnail={r.thumbnail}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>
+
+<script is:inline>
+document.getElementById('copyLink')?.addEventListener('click', function() {
+  navigator.clipboard.writeText(window.location.href).then(function() {
+    document.getElementById('copyLink').textContent = '✓ Copied!';
+    setTimeout(function() {
+      document.getElementById('copyLink').textContent = '🔗 Copy Link';
+    }, 2000);
+  });
+});
+</script>
+
+<style>
+  .cam-page {
+    padding-top: 20px;
+  }
+  .cam-breadcrumb {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .cam-breadcrumb a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .cam-breadcrumb a:hover { color: var(--gold); }
+  .cam-sep { opacity: 0.3; }
+  .cam-player {
+    margin-bottom: 32px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .cam-detail {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 40px;
+  }
+  .cam-loc {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cam-loc-icon { font-size: 16px; }
+  .cam-desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-top: 16px;
+    max-width: 640px;
+  }
+  .cam-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+    padding: 20px;
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+  .cam-meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .cam-meta-val {
+    font-size: 14px;
+    color: var(--white);
+  }
+  .cam-status-live { color: #4ade80; }
+  .cam-tags-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .cam-tag-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    background: var(--gold-dim);
+    padding: 4px 12px;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .cam-tag-link:hover {
+    background: rgba(201,168,76,0.25);
+  }
+  .cam-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .cam-share-box, .cam-map-box {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 2px;
+  }
+  .cam-share-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .cam-share-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    width: 100%;
+  }
+  .cam-share-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .cam-map-placeholder {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 24px;
+    text-align: center;
+  }
+  .cam-map-link {
+    color: var(--gold);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    transition: color 0.2s;
+  }
+  .cam-map-link:hover { color: var(--gold-light); }
+  .cam-related {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .cam-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    .cam-detail {
+      grid-template-columns: 1fr;
+    }
+    .cam-meta {
+      grid-template-columns: 1fr;
+    }
+    .cam-related-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

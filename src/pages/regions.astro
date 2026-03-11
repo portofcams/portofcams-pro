@@ -1,0 +1,111 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CameraCard from '../components/CameraCard.astro';
+import { cameras, getAllRegions, getCamerasByRegion } from '../data/cameras';
+
+const regions = getAllRegions();
+const regionData = regions.map(r => ({
+  ...r,
+  cameras: getCamerasByRegion(r.name),
+}));
+
+const regionDescriptions: Record<string, string> = {
+  'Hawaii': 'Tropical island cameras from Oahu, Maui, and the Big Island.',
+  'California': 'Scenic highway and coastal cameras across the Golden State.',
+  'Pacific NW': 'Mountain passes, river valleys, and city views from Washington and Oregon.',
+  'International': 'Iconic locations and wildlife cameras from around the world.',
+};
+---
+
+<Layout title="Regions — Port of Cams" description="Explore live cameras organized by region. Hawaii, California, Pacific Northwest, and International.">
+  <section class="regions-hero">
+    <div class="section-inner">
+      <p class="section-label">Explore</p>
+      <h1 class="display" style="font-size: clamp(32px, 5vw, 48px);">Regions</h1>
+      <p class="regions-sub">{regions.length} regions, {cameras.length} cameras</p>
+    </div>
+  </section>
+
+  {regionData.map(region => (
+    <section class="region-section" id={region.name.toLowerCase().replace(/\s+/g, '-')}>
+      <div class="section-inner">
+        <div class="region-header">
+          <div>
+            <p class="section-label">{region.name}</p>
+            <h2 class="display" style="font-size: clamp(24px, 3vw, 32px);">{region.name}</h2>
+            <p class="region-desc">{regionDescriptions[region.name] || ''}</p>
+          </div>
+          <span class="region-count">{region.count} camera{region.count !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="region-grid">
+          {region.cameras.map(cam => (
+            <CameraCard
+              id={cam.id}
+              name={cam.name}
+              location={cam.location}
+              streamType={cam.streamType}
+              tags={cam.tags}
+              isLive={cam.isLive}
+              isFeatured={cam.isFeatured}
+              thumbnail={cam.thumbnail}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+</Layout>
+
+<style>
+  .regions-hero {
+    border-bottom: 1px solid var(--border);
+  }
+  .regions-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+  .region-section {
+    border-bottom: 1px solid var(--border);
+  }
+  .region-section:last-child {
+    border-bottom: none;
+  }
+  .region-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+  .region-desc {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 8px;
+    max-width: 500px;
+  }
+  .region-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--deep);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .region-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    .region-grid {
+      grid-template-columns: 1fr;
+    }
+    .region-header {
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
+</style>
