@@ -1,0 +1,624 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Go Premium — Port of Cams"
+  description="Upgrade to Port of Cams Premium for ad-free HD streams, access to every camera, timelapse archives, and more. Plans start at $9.99/month."
+>
+
+  <!-- Hero -->
+  <section class="premium-hero">
+    <div class="premium-hero-bg"></div>
+    <div class="section-inner" style="position:relative;">
+      <div class="premium-tag mono">Premium Membership</div>
+      <h1 class="display premium-title">
+        The Ultimate<br/>
+        <em class="display-italic" style="color: var(--gold)">Live Camera</em><br/>
+        Experience
+      </h1>
+      <p class="premium-subtitle">
+        Ad-free HD streams, every camera unlocked, timelapse archives, and priority access — all for one flat price.
+      </p>
+      <div class="premium-hero-actions">
+        <a href="#pricing" class="btn-primary">View Plans</a>
+        <a href="#features" class="btn-secondary">See What's Included</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="premium-pricing" id="pricing">
+    <div class="section-inner">
+      <div class="section-label">Choose Your Plan</div>
+      <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); max-width: 550px; margin-bottom: 12px;">
+        Simple, transparent<br/><em class="display-italic" style="color: var(--gold)">pricing</em>
+      </h2>
+      <p style="color: var(--muted); font-size: 16px; margin-bottom: 60px; max-width: 500px;">
+        Start free. Upgrade when you want the full experience. Cancel anytime.
+      </p>
+
+      <div class="plan-grid">
+        <!-- Free Tier -->
+        <div class="plan-card">
+          <h3 class="plan-name">Free</h3>
+          <div class="plan-price-row">
+            <div class="plan-price display">$0</div>
+          </div>
+          <div class="plan-period mono">Forever free</div>
+          <ul class="plan-features">
+            <li><span class="check">&#10003;</span> Standard definition streams</li>
+            <li><span class="check">&#10003;</span> Access to featured cameras</li>
+            <li><span class="check">&#10003;</span> Basic region browsing</li>
+            <li class="muted-feature"><span class="x">&times;</span> Ad-supported experience</li>
+            <li class="muted-feature"><span class="x">&times;</span> Limited camera selection</li>
+            <li class="muted-feature"><span class="x">&times;</span> No timelapse archives</li>
+            <li class="muted-feature"><span class="x">&times;</span> No priority support</li>
+          </ul>
+          <a href="/browse" class="btn-secondary plan-btn">Browse Free Cameras</a>
+        </div>
+
+        <!-- Premium Tier -->
+        <div class="plan-card featured">
+          <div class="plan-badge mono">Best Value</div>
+          <h3 class="plan-name">Premium</h3>
+
+          <div class="billing-toggle" id="billingToggle">
+            <button class="toggle-opt active" data-period="monthly">Monthly</button>
+            <button class="toggle-opt" data-period="yearly">Yearly</button>
+          </div>
+
+          <div class="plan-price-row">
+            <div class="plan-price display" id="premiumPrice">
+              <sup>$</sup>9<sup>.99</sup>
+            </div>
+          </div>
+          <div class="plan-period mono" id="premiumPeriod">Per month, billed monthly</div>
+          <div class="plan-savings mono" id="premiumSavings" style="display:none;">
+            Save $29.89 per year
+          </div>
+
+          <ul class="plan-features">
+            <li><span class="check gold">&#10003;</span> Full HD &amp; 4K streams</li>
+            <li><span class="check gold">&#10003;</span> Every camera unlocked</li>
+            <li><span class="check gold">&#10003;</span> Completely ad-free</li>
+            <li><span class="check gold">&#10003;</span> Timelapse archive access</li>
+            <li><span class="check gold">&#10003;</span> Favorite &amp; save cameras</li>
+            <li><span class="check gold">&#10003;</span> Priority support</li>
+            <li><span class="check gold">&#10003;</span> Early access to new cameras</li>
+          </ul>
+          <a href="/checkout" class="btn-primary plan-btn" id="subscribeBtn">Subscribe Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Comparison -->
+  <section class="premium-compare" id="features">
+    <div class="section-inner">
+      <div class="section-label">Feature Comparison</div>
+      <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 60px;">
+        Free vs. <em class="display-italic" style="color: var(--gold)">Premium</em>
+      </h2>
+
+      <div class="compare-table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th class="compare-feature-col">Feature</th>
+              <th class="compare-plan-col">Free</th>
+              <th class="compare-plan-col gold-col">Premium</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Stream quality</td>
+              <td>SD (480p)</td>
+              <td class="gold-cell">HD &amp; 4K</td>
+            </tr>
+            <tr>
+              <td>Available cameras</td>
+              <td>Featured only</td>
+              <td class="gold-cell">All cameras</td>
+            </tr>
+            <tr>
+              <td>Advertisements</td>
+              <td>Yes</td>
+              <td class="gold-cell">None</td>
+            </tr>
+            <tr>
+              <td>Timelapse archive</td>
+              <td>&mdash;</td>
+              <td class="gold-cell">Full archive</td>
+            </tr>
+            <tr>
+              <td>Favorite cameras</td>
+              <td>&mdash;</td>
+              <td class="gold-cell">Unlimited</td>
+            </tr>
+            <tr>
+              <td>Camera notifications</td>
+              <td>&mdash;</td>
+              <td class="gold-cell">Weather &amp; event alerts</td>
+            </tr>
+            <tr>
+              <td>Support</td>
+              <td>Community</td>
+              <td class="gold-cell">Priority email</td>
+            </tr>
+            <tr>
+              <td>New camera early access</td>
+              <td>&mdash;</td>
+              <td class="gold-cell">48-hour head start</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="premium-faq" id="faq">
+    <div class="section-inner">
+      <div class="section-label">FAQ</div>
+      <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 60px;">
+        Common <em class="display-italic" style="color: var(--gold)">questions</em>
+      </h2>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary class="faq-question">Can I cancel my subscription anytime?</summary>
+          <div class="faq-answer">
+            <p>Yes. You can cancel at any time from your account settings. Your premium access continues until the end of your current billing period, and you will not be charged again.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">What payment methods do you accept?</summary>
+          <div class="faq-answer">
+            <p>We accept all major credit and debit cards (Visa, Mastercard, American Express) through our secure Stripe payment processor. Apple Pay and Google Pay are also supported.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">What does "all cameras unlocked" mean?</summary>
+          <div class="faq-answer">
+            <p>Free users have access to our featured camera selection. Premium members can view every camera on the platform, including exclusive locations and newly added cameras 48 hours before everyone else.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">How does the timelapse archive work?</summary>
+          <div class="faq-answer">
+            <p>We continuously record snapshots from all cameras. Premium members can browse timelapse videos of any camera going back up to 90 days, perfect for watching sunrises, weather events, or seasonal changes.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">Is there a yearly discount?</summary>
+          <div class="faq-answer">
+            <p>Yes. The yearly plan is $89.99/year, which saves you $29.89 compared to paying monthly. That works out to about $7.50 per month.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">Can I switch between monthly and yearly billing?</summary>
+          <div class="faq-answer">
+            <p>Absolutely. You can switch plans at any time. When upgrading to yearly, you receive a prorated credit for the remainder of your monthly period. When switching to monthly, the change takes effect at the end of your annual term.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section class="premium-cta">
+    <div class="section-inner" style="text-align:center;">
+      <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 20px;">
+        Ready to go<br/><em class="display-italic" style="color: var(--gold)">premium</em>?
+      </h2>
+      <p style="color: var(--muted); font-size: 16px; max-width: 440px; margin: 0 auto 40px; line-height: 1.7;">
+        Unlock the full Port of Cams experience. HD streams, every camera, no ads. Cancel anytime.
+      </p>
+      <a href="/checkout" class="btn-primary">Subscribe Now</a>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* Hero */
+  .premium-hero {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding-top: 80px;
+  }
+
+  .premium-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 50% 50% at 50% 30%, rgba(201,168,76,0.1) 0%, transparent 70%),
+      linear-gradient(180deg, #080808 0%, #0a0905 100%);
+  }
+
+  .premium-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 1px;
+    margin-bottom: 32px;
+    width: fit-content;
+  }
+
+  .premium-title {
+    font-size: clamp(48px, 7vw, 100px);
+    max-width: 700px;
+    margin-bottom: 28px;
+  }
+
+  .premium-subtitle {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 500px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .premium-hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* Pricing Section */
+  .premium-pricing {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+
+  .plan-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    max-width: 800px;
+  }
+
+  .plan-card {
+    background: var(--surface);
+    padding: 48px 40px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .plan-card.featured {
+    background: var(--deep);
+    border: 1px solid var(--gold);
+    margin: -1px;
+    z-index: 1;
+  }
+
+  .plan-badge {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 4px 12px;
+    display: inline-block;
+    margin-bottom: 16px;
+    width: fit-content;
+  }
+
+  .plan-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .billing-toggle {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    width: fit-content;
+  }
+
+  .toggle-opt {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .toggle-opt.active {
+    background: var(--gold);
+    color: var(--black);
+  }
+
+  .plan-price-row {
+    margin-bottom: 4px;
+  }
+
+  .plan-price {
+    font-size: 56px;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .plan-price sup {
+    font-size: 22px;
+    vertical-align: super;
+  }
+
+  .plan-period {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .plan-savings {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 32px 0 40px;
+    flex: 1;
+  }
+
+  .plan-features li {
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .plan-features li .check {
+    font-size: 14px;
+    color: rgba(245,240,232,0.3);
+    flex-shrink: 0;
+    width: 18px;
+    text-align: center;
+  }
+
+  .plan-features li .check.gold {
+    color: var(--gold);
+  }
+
+  .plan-features li .x {
+    font-size: 14px;
+    color: rgba(245,240,232,0.15);
+    flex-shrink: 0;
+    width: 18px;
+    text-align: center;
+  }
+
+  .muted-feature {
+    opacity: 0.5;
+  }
+
+  .plan-btn {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    margin-top: auto;
+  }
+
+  /* Feature Comparison */
+  .premium-compare {
+    border-top: 1px solid var(--border);
+  }
+
+  .compare-table-wrap {
+    overflow-x: auto;
+  }
+
+  .compare-table {
+    width: 100%;
+    max-width: 800px;
+    border-collapse: collapse;
+    border: 1px solid var(--border);
+  }
+
+  .compare-table th,
+  .compare-table td {
+    padding: 16px 24px;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-table thead th {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-feature-col {
+    width: 40%;
+  }
+
+  .compare-plan-col {
+    width: 30%;
+    text-align: center !important;
+  }
+
+  .compare-table td {
+    color: var(--muted);
+  }
+
+  .compare-table td:nth-child(2),
+  .compare-table td:nth-child(3) {
+    text-align: center;
+  }
+
+  .gold-col {
+    color: var(--gold) !important;
+    background: rgba(201,168,76,0.05);
+  }
+
+  .gold-cell {
+    color: var(--gold) !important;
+    background: rgba(201,168,76,0.03);
+  }
+
+  .compare-table tbody tr {
+    transition: background 0.2s;
+  }
+
+  .compare-table tbody tr:hover {
+    background: rgba(255,255,255,0.02);
+  }
+
+  /* FAQ */
+  .premium-faq {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    max-width: 800px;
+  }
+
+  .faq-item {
+    background: var(--deep);
+  }
+
+  .faq-question {
+    padding: 20px 24px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--white);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: color 0.3s;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-question::after {
+    content: '+';
+    font-family: 'DM Mono', monospace;
+    font-size: 18px;
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-left: 16px;
+    transition: transform 0.3s;
+  }
+
+  .faq-item[open] .faq-question::after {
+    content: '\2212';
+  }
+
+  .faq-question:hover {
+    color: var(--gold);
+  }
+
+  .faq-answer {
+    padding: 0 24px 20px;
+  }
+
+  .faq-answer p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 640px;
+  }
+
+  /* Bottom CTA */
+  .premium-cta {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .premium-hero { min-height: 60vh; }
+    .plan-grid { grid-template-columns: 1fr; }
+    .compare-table th,
+    .compare-table td { padding: 12px 16px; font-size: 13px; }
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    var toggle = document.getElementById('billingToggle');
+    var priceEl = document.getElementById('premiumPrice');
+    var periodEl = document.getElementById('premiumPeriod');
+    var savingsEl = document.getElementById('premiumSavings');
+    var subBtn = document.getElementById('subscribeBtn');
+
+    if (!toggle) return;
+
+    toggle.addEventListener('click', function(e) {
+      var btn = e.target.closest('.toggle-opt');
+      if (!btn) return;
+
+      toggle.querySelectorAll('.toggle-opt').forEach(function(b) {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+
+      var period = btn.getAttribute('data-period');
+
+      if (period === 'yearly') {
+        priceEl.innerHTML = '<sup>$</sup>89<sup>.99</sup>';
+        periodEl.textContent = 'Per year, billed annually';
+        savingsEl.style.display = 'block';
+        subBtn.href = '/checkout?plan=yearly';
+      } else {
+        priceEl.innerHTML = '<sup>$</sup>9<sup>.99</sup>';
+        periodEl.textContent = 'Per month, billed monthly';
+        savingsEl.style.display = 'none';
+        subBtn.href = '/checkout?plan=monthly';
+      }
+    });
+  })();
+</script>
