@@ -1,0 +1,404 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { timelapses, getAllTimelapseTags } from '../data/timelapses';
+
+const tags = getAllTimelapseTags();
+---
+
+<Layout title="Timelapse Gallery — Port of Cams" description="Watch stunning timelapse recordings from webcams around the world. Sunrises, sunsets, storms, and more.">
+  <section class="tl-hero">
+    <div class="section-inner">
+      <p class="section-label">Recordings</p>
+      <h1 class="display" style="font-size: clamp(32px, 5vw, 48px);">Timelapse Gallery</h1>
+      <p class="tl-sub">{timelapses.length} timelapse recordings from cameras worldwide</p>
+    </div>
+  </section>
+
+  <section class="tl-filters">
+    <div class="section-inner" style="padding-top: 0; padding-bottom: 0;">
+      <div class="filter-tags" id="tagFilters">
+        <button class="tag-btn active" data-tag="all">All</button>
+        {tags.map(t => (
+          <button class="tag-btn" data-tag={t.name}>{t.name} <span class="filter-count">{t.count}</span></button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="tl-grid-section">
+    <div class="section-inner" style="padding-top: 24px;">
+      <div class="tl-grid" id="timelapseGrid">
+        {timelapses.map(tl => (
+          <div class="tl-item" data-tags={tl.tags.join(',')}>
+            <button class="tl-card" data-video={tl.videoUrl} data-title={tl.title}>
+              <div class="tl-thumb">
+                <img src={tl.thumbnail} alt={tl.title} loading="lazy" />
+                <span class="tl-duration">{tl.duration}</span>
+                <span class="tl-play">&#9654;</span>
+              </div>
+              <div class="tl-info">
+                <h3 class="tl-title">{tl.title}</h3>
+                <p class="tl-camera">{tl.cameraName}</p>
+                <p class="tl-desc">{tl.description}</p>
+                <div class="tl-meta">
+                  <span class="tl-date">{new Date(tl.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  <div class="tl-tags">
+                    {tl.tags.map(tag => (
+                      <span class="tl-tag">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </button>
+          </div>
+        ))}
+      </div>
+      <p class="tl-empty" id="emptyMsg" style="display:none;">No timelapses match your filter.</p>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="tl-lightbox" id="lightbox">
+    <div class="tl-lightbox-backdrop" id="lightboxBackdrop"></div>
+    <div class="tl-lightbox-content">
+      <button class="tl-lightbox-close" id="lightboxClose">&#10005;</button>
+      <p class="tl-lightbox-title" id="lightboxTitle"></p>
+      <div class="tl-lightbox-video">
+        <iframe id="lightboxIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script is:inline>
+(function() {
+  // Tag filtering
+  var tagBtns = document.querySelectorAll('.tag-btn');
+  var items = document.querySelectorAll('.tl-item');
+  var empty = document.getElementById('emptyMsg');
+  var activeTag = 'all';
+
+  function filter() {
+    var shown = 0;
+    items.forEach(function(el) {
+      var t = el.getAttribute('data-tags') || '';
+      var match = activeTag === 'all' || t.split(',').indexOf(activeTag) >= 0;
+      if (match) {
+        el.style.display = '';
+        shown++;
+      } else {
+        el.style.display = 'none';
+      }
+    });
+    empty.style.display = shown === 0 ? '' : 'none';
+  }
+
+  tagBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      tagBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeTag = btn.getAttribute('data-tag');
+      filter();
+    });
+  });
+
+  // Lightbox
+  var lightbox = document.getElementById('lightbox');
+  var lightboxBackdrop = document.getElementById('lightboxBackdrop');
+  var lightboxClose = document.getElementById('lightboxClose');
+  var lightboxTitle = document.getElementById('lightboxTitle');
+  var lightboxIframe = document.getElementById('lightboxIframe');
+
+  function openLightbox(videoUrl, title) {
+    lightboxIframe.src = videoUrl;
+    lightboxTitle.textContent = title;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    lightboxIframe.src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.tl-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var videoUrl = card.getAttribute('data-video');
+      var title = card.getAttribute('data-title');
+      openLightbox(videoUrl, title);
+    });
+  });
+
+  lightboxBackdrop.addEventListener('click', closeLightbox);
+  lightboxClose.addEventListener('click', closeLightbox);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+})();
+</script>
+
+<style>
+  .tl-hero {
+    border-bottom: 1px solid var(--border);
+  }
+  .tl-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+  .tl-filters {
+    border-bottom: 1px solid var(--border);
+    background: var(--deep);
+  }
+  .filter-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 16px 0;
+  }
+  .tag-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tag-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .tag-btn.active {
+    background: var(--gold);
+    color: var(--black);
+    border-color: var(--gold);
+  }
+  .filter-count {
+    opacity: 0.6;
+    font-size: 10px;
+  }
+
+  /* Grid */
+  .tl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .tl-empty {
+    text-align: center;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 60px 0;
+  }
+
+  /* Card */
+  .tl-card {
+    display: block;
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: all 0.3s;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+  }
+  .tl-card:hover {
+    border-color: rgba(201,168,76,0.3);
+    transform: translateY(-2px);
+  }
+
+  /* Thumbnail */
+  .tl-thumb {
+    position: relative;
+    aspect-ratio: 16/9;
+    background: #000;
+    overflow: hidden;
+  }
+  .tl-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s;
+  }
+  .tl-card:hover .tl-thumb img {
+    transform: scale(1.03);
+  }
+  .tl-duration {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(8,8,8,0.8);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  .tl-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(201,168,76,0.85);
+    color: var(--black);
+    font-size: 18px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .tl-card:hover .tl-play {
+    opacity: 1;
+  }
+
+  /* Info */
+  .tl-info {
+    padding: 16px;
+  }
+  .tl-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .tl-camera {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .tl-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .tl-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .tl-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--faint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .tl-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .tl-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    background: var(--gold-dim);
+    padding: 2px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Lightbox */
+  .tl-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+  }
+  .tl-lightbox.open {
+    opacity: 1;
+    visibility: visible;
+  }
+  .tl-lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+  }
+  .tl-lightbox-content {
+    position: relative;
+    width: 90%;
+    max-width: 960px;
+  }
+  .tl-lightbox-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 4px;
+  }
+  .tl-lightbox-close:hover {
+    color: var(--white);
+  }
+  .tl-lightbox-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+  }
+  .tl-lightbox-video {
+    aspect-ratio: 16/9;
+    background: #000;
+    border: 1px solid var(--border);
+  }
+  .tl-lightbox-video iframe {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .tl-grid {
+      grid-template-columns: 1fr;
+    }
+    .tl-lightbox-content {
+      width: 95%;
+    }
+    .tl-lightbox-close {
+      top: -36px;
+    }
+  }
+</style>
