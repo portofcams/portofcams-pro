@@ -3,9 +3,12 @@ interface Props {
   title: string;
   description?: string;
   activeNav?: string;
+  ogImage?: string;
+  includeHls?: boolean;
 }
 
-const { title, description = "Live cameras from around the world. Watch real-time street views, beaches, landmarks, and traffic streams — all free, all live.", activeNav = "" } = Astro.props;
+const { title, description = "Live cameras from around the world. Watch real-time street views, beaches, landmarks, and traffic streams — all free, all live.", activeNav = "", ogImage = "", includeHls = false } = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, 'https://portofcams.com').href;
 ---
 
 <!DOCTYPE html>
@@ -15,11 +18,27 @@ const { title, description = "Live cameras from around the world. Watch real-tim
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:site_name" content="Port of Cams" />
+  {ogImage && <meta property="og:image" content={ogImage} />}
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  {ogImage && <meta name="twitter:image" content={ogImage} />}
+
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" href="/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js" is:inline></script>
+  {includeHls && <script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js" is:inline></script>}
 </head>
 <body>
 
