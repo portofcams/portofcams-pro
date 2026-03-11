@@ -1,0 +1,417 @@
+---
+/**
+ * Checkout page for Port of Cams Premium.
+ *
+ * Stripe integration requires the following environment variables:
+ *   STRIPE_PUBLISHABLE_KEY — pk_live_... or pk_test_... (client-side)
+ *   STRIPE_SECRET_KEY      — sk_live_... or sk_test_... (server-side, never expose)
+ *   STRIPE_MONTHLY_PRICE_ID — price_... (Stripe Price ID for $9.99/mo plan)
+ *   STRIPE_YEARLY_PRICE_ID  — price_... (Stripe Price ID for $89.99/yr plan)
+ *   STRIPE_WEBHOOK_SECRET   — whsec_... (for verifying webhook signatures)
+ *
+ * These should be set in Cloudflare Pages environment variables
+ * or in a local .env file during development.
+ */
+
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Checkout — Port of Cams Premium"
+  description="Subscribe to Port of Cams Premium. Choose monthly or yearly billing and complete your purchase securely through Stripe."
+>
+
+  <section class="checkout-page">
+    <div class="checkout-bg"></div>
+    <div class="section-inner checkout-inner" style="position:relative;">
+
+      <a href="/premium" class="checkout-back mono">&larr; Back to Premium</a>
+
+      <h1 class="display checkout-title">
+        Complete Your<br/>
+        <em class="display-italic" style="color: var(--gold)">Subscription</em>
+      </h1>
+
+      <!-- Plan Selector -->
+      <div class="checkout-card">
+        <div class="checkout-section-label mono">Select Billing Period</div>
+
+        <div class="plan-selector" id="planSelector">
+          <label class="plan-option active" data-plan="monthly">
+            <input type="radio" name="plan" value="monthly" checked />
+            <div class="plan-option-inner">
+              <div class="plan-option-header">
+                <span class="plan-option-name">Monthly</span>
+                <span class="plan-option-price display">$9.99<sub>/mo</sub></span>
+              </div>
+              <span class="plan-option-detail mono">Billed monthly. Cancel anytime.</span>
+            </div>
+          </label>
+
+          <label class="plan-option" data-plan="yearly">
+            <input type="radio" name="plan" value="yearly" />
+            <div class="plan-option-inner">
+              <div class="plan-option-header">
+                <span class="plan-option-name">
+                  Yearly
+                  <span class="plan-option-save mono">Save 25%</span>
+                </span>
+                <span class="plan-option-price display">$89.99<sub>/yr</sub></span>
+              </div>
+              <span class="plan-option-detail mono">Billed annually. That's just $7.50/mo.</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- Summary -->
+        <div class="checkout-summary">
+          <div class="summary-row">
+            <span class="mono">Plan</span>
+            <span id="summaryPlan">Premium Monthly</span>
+          </div>
+          <div class="summary-row">
+            <span class="mono">Amount</span>
+            <span id="summaryAmount">$9.99/month</span>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-row total">
+            <span class="mono">Due Today</span>
+            <span class="display" id="summaryTotal" style="font-size:28px; color: var(--gold);">$9.99</span>
+          </div>
+        </div>
+
+        <!-- Stripe Redirect -->
+        <div class="stripe-notice">
+          <div class="stripe-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <rect width="24" height="24" rx="4" fill="var(--gold)"/>
+              <path d="M12 6.5v5m0 0v5m0-5h5m-5 0H7" stroke="var(--black)" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p>You'll be securely redirected to <strong>Stripe</strong> to complete your payment. We never see or store your card details.</p>
+        </div>
+
+        <button class="btn-primary checkout-btn" id="checkoutBtn">
+          Subscribe &amp; Pay
+        </button>
+
+        <p class="checkout-terms mono">
+          By subscribing you agree to our <a href="/terms">Terms of Service</a>.
+          Cancel anytime from your account settings.
+        </p>
+      </div>
+
+      <!-- Trust Signals -->
+      <div class="trust-row">
+        <div class="trust-item mono">256-bit SSL encrypted</div>
+        <div class="trust-item mono">Powered by Stripe</div>
+        <div class="trust-item mono">Cancel anytime</div>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .checkout-page {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    padding-top: 80px;
+  }
+
+  .checkout-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 40% 40% at 50% 20%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      var(--deep);
+  }
+
+  .checkout-inner {
+    max-width: 640px;
+  }
+
+  .checkout-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    transition: color 0.3s;
+  }
+
+  .checkout-back:hover {
+    color: var(--gold);
+  }
+
+  .checkout-title {
+    font-size: clamp(36px, 5vw, 56px);
+    margin-bottom: 48px;
+  }
+
+  .checkout-card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 40px;
+  }
+
+  .checkout-section-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  /* Plan Selector */
+  .plan-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .plan-option {
+    display: block;
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .plan-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .plan-option.active {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.04);
+  }
+
+  .plan-option:hover {
+    border-color: rgba(201,168,76,0.5);
+  }
+
+  .plan-option-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .plan-option-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .plan-option-name {
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .plan-option-save {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 2px 8px;
+    border-radius: 1px;
+  }
+
+  .plan-option-price {
+    font-size: 24px;
+    font-weight: 300;
+  }
+
+  .plan-option-price sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .plan-option-detail {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  /* Summary */
+  .checkout-summary {
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 24px;
+    background: rgba(0,0,0,0.2);
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .summary-row span:first-child {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .summary-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 0;
+  }
+
+  .summary-row.total span:last-child {
+    font-weight: 600;
+  }
+
+  /* Stripe Notice */
+  .stripe-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+    background: rgba(0,0,0,0.15);
+  }
+
+  .stripe-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .stripe-notice p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .stripe-notice strong {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  /* Checkout Button */
+  .checkout-btn {
+    width: 100%;
+    padding: 18px 40px;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+  }
+
+  .checkout-terms {
+    font-size: 11px;
+    color: var(--faint);
+    text-align: center;
+    letter-spacing: 0.06em;
+    line-height: 1.6;
+  }
+
+  .checkout-terms a {
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .checkout-terms a:hover {
+    color: var(--gold);
+  }
+
+  /* Trust Row */
+  .trust-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .trust-item {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .checkout-card { padding: 28px 20px; }
+    .trust-row { gap: 20px; }
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    var selector = document.getElementById('planSelector');
+    var summaryPlan = document.getElementById('summaryPlan');
+    var summaryAmount = document.getElementById('summaryAmount');
+    var summaryTotal = document.getElementById('summaryTotal');
+    var checkoutBtn = document.getElementById('checkoutBtn');
+
+    if (!selector) return;
+
+    // Check URL for pre-selected plan
+    var params = new URLSearchParams(window.location.search);
+    var preselect = params.get('plan');
+    if (preselect === 'yearly') {
+      updatePlan('yearly');
+    }
+
+    selector.addEventListener('change', function(e) {
+      if (e.target.name === 'plan') {
+        updatePlan(e.target.value);
+      }
+    });
+
+    function updatePlan(plan) {
+      selector.querySelectorAll('.plan-option').forEach(function(opt) {
+        var isActive = opt.getAttribute('data-plan') === plan;
+        opt.classList.toggle('active', isActive);
+        opt.querySelector('input').checked = isActive;
+      });
+
+      if (plan === 'yearly') {
+        summaryPlan.textContent = 'Premium Yearly';
+        summaryAmount.textContent = '$89.99/year';
+        summaryTotal.textContent = '$89.99';
+      } else {
+        summaryPlan.textContent = 'Premium Monthly';
+        summaryAmount.textContent = '$9.99/month';
+        summaryTotal.textContent = '$9.99';
+      }
+    }
+
+    // Placeholder: redirect to Stripe Checkout
+    checkoutBtn.addEventListener('click', function() {
+      var selectedPlan = selector.querySelector('input:checked').value;
+      // TODO: Replace with actual Stripe Checkout redirect
+      // fetch('/api/create-checkout-session', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ plan: selectedPlan })
+      // })
+      // .then(r => r.json())
+      // .then(data => window.location.href = data.url);
+
+      alert('Stripe checkout integration coming soon. Selected plan: ' + selectedPlan);
+    });
+  })();
+</script>

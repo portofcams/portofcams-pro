@@ -1,99 +1,71 @@
 ---
 interface Props {
-  title?: string;
+  title: string;
   description?: string;
+  activeNav?: string;
 }
-const {
-  title = 'Port of Cams — Live Webcams Worldwide',
-  description = 'Watch live webcams from around the world. Beach cams, city cams, scenic views, and traffic cameras streaming 24/7.',
-} = Astro.props;
-const currentPath = Astro.url.pathname;
+
+const { title, description = "Live cameras from around the world. Watch real-time street views, beaches, landmarks, and traffic streams — all free, all live.", activeNav = "" } = Astro.props;
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="icon" href="/favicon.ico" />
-  <meta name="generator" content={Astro.generator} />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" href="/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <script defer data-domain="portofcams.com" src="https://analytics.portofcams.com/js/script.outbound-links.404.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js" is:inline></script>
 </head>
 <body>
-  <!-- Grain overlay -->
-  <div class="grain"></div>
 
   <!-- Nav -->
   <nav>
     <a href="/" class="nav-logo">Port<span>Of</span>Cams</a>
     <ul class="nav-links">
-      <li><a href="/" class:list={[{ active: currentPath === '/' }]}>Home</a></li>
-      <li><a href="/browse" class:list={[{ active: currentPath.startsWith('/browse') }]}>Browse</a></li>
-      <li><a href="/regions" class:list={[{ active: currentPath.startsWith('/regions') }]}>Regions</a></li>
-      <li><a href="/browse?tag=featured-traffic" class:list={[{ active: false }]}>Best Traffic</a></li>
+      <li><a href="/" class:list={[{ active: activeNav === "home" }]}>Home</a></li>
+      <li><a href="/browse" class:list={[{ active: activeNav === "browse" }]}>Browse</a></li>
+      <li><a href="/timelapse" class:list={[{ active: activeNav === "timelapse" }]}>Timelapse</a></li>
+      <li><a href="/premium" class:list={[{ active: activeNav === "premium" }]}>Premium</a></li>
+      <li><a href="/premium" class="nav-cta">Go Premium</a></li>
     </ul>
-    <button class="nav-hamburger" id="navHamburger" aria-label="Menu">&#9776;</button>
+    <button class="nav-mobile-toggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
-  <!-- Mobile nav -->
-  <div class="mobile-nav" id="mobileNav">
-    <a href="/">Home</a>
-    <a href="/browse">Browse Cameras</a>
-    <a href="/regions">Regions</a>
-    <a href="/browse?tag=featured-traffic">Best Traffic Cams</a>
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/browse">Browse Cameras</a></li>
+      <li><a href="/timelapse">Timelapse</a></li>
+      <li><a href="/premium" style="color: var(--gold);">Go Premium</a></li>
+    </ul>
   </div>
 
-  <main>
-    <slot />
-  </main>
+  <slot />
 
   <!-- Footer -->
   <footer>
     <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="footer-logo">Port<span>Of</span>Cams</div>
-        <p class="footer-desc">Live webcams from iconic locations worldwide. Always on, always streaming.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Explore</h4>
-        <ul>
-          <li><a href="/browse">All Cameras</a></li>
-          <li><a href="/regions">By Region</a></li>
-          <li><a href="/browse?tag=featured-traffic">Scenic Traffic</a></li>
-          <li><a href="/browse?tag=wildlife">Wildlife</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <ul>
-          <li><a href="/privacy">Privacy Policy</a></li>
-          <li><a href="/terms">Terms of Service</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span class="footer-copy">&copy; {new Date().getFullYear()} PortOfCams</span>
+      <div class="footer-logo">Port<span>Of</span>Cams</div>
+      <ul class="footer-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/browse">Browse</a></li>
+        <li><a href="/timelapse">Timelapse</a></li>
+        <li><a href="/premium">Premium</a></li>
+      </ul>
+      <div class="footer-copy mono">&copy; 2026 PortOfCams</div>
     </div>
   </footer>
 
-  <script is:inline>
-    document.getElementById('navHamburger')?.addEventListener('click', function() {
-      var nav = document.getElementById('mobileNav');
-      var open = nav.classList.toggle('open');
-      this.innerHTML = open ? '&#10005;' : '&#9776;';
-    });
-    document.querySelectorAll('#mobileNav a').forEach(function(a) {
-      a.addEventListener('click', function() {
-        document.getElementById('mobileNav').classList.remove('open');
-        document.getElementById('navHamburger').innerHTML = '&#9776;';
-      });
-    });
-  </script>
 </body>
 </html>
 
@@ -112,6 +84,7 @@ const currentPath = Astro.url.pathname;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
   html { scroll-behavior: smooth; }
 
   body {
@@ -123,7 +96,9 @@ const currentPath = Astro.url.pathname;
     min-height: 100vh;
   }
 
-  .grain {
+  /* Grain overlay */
+  body::before {
+    content: '';
     position: fixed;
     inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
@@ -132,31 +107,145 @@ const currentPath = Astro.url.pathname;
     opacity: 0.4;
   }
 
-  a { color: inherit; }
-
+  /* Typography */
   .display {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 600;
     line-height: 1.0;
     letter-spacing: -0.02em;
   }
+
   .display-italic {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
     font-style: italic;
     line-height: 1.0;
   }
+
   .mono {
     font-family: 'DM Mono', monospace;
     font-weight: 300;
   }
 
-  /* Section */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,8,8,0.85);
+    backdrop-filter: blur(20px);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--white);
+  }
+
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active { color: var(--white); }
+
+  .nav-cta {
+    background: var(--gold);
+    color: var(--black) !important;
+    padding: 10px 24px;
+    border-radius: 2px;
+    font-weight: 500 !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  .nav-cta:hover { background: var(--gold-light) !important; color: var(--black) !important; }
+
+  .nav-mobile-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .nav-mobile-toggle span {
+    width: 24px;
+    height: 1.5px;
+    background: var(--white);
+    transition: all 0.3s;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: rgba(8,8,8,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    z-index: 99;
+    padding: 24px;
+  }
+
+  .mobile-menu.open { display: block; }
+
+  .mobile-menu ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mobile-menu a {
+    color: var(--muted);
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .mobile-menu a:hover { color: var(--white); }
+
+  /* Shared section styles */
   .section-inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 80px 48px;
+    padding: 120px 48px;
   }
+
   .section-label {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
@@ -168,6 +257,7 @@ const currentPath = Astro.url.pathname;
     align-items: center;
     gap: 12px;
   }
+
   .section-label::after {
     content: '';
     flex: 1;
@@ -181,7 +271,7 @@ const currentPath = Astro.url.pathname;
   .btn-primary {
     background: var(--gold);
     color: var(--black);
-    padding: 14px 32px;
+    padding: 16px 36px;
     font-size: 13px;
     font-weight: 500;
     letter-spacing: 0.1em;
@@ -192,15 +282,18 @@ const currentPath = Astro.url.pathname;
     display: inline-block;
     border: none;
     cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
   }
+
   .btn-primary:hover {
     background: var(--gold-light);
     transform: translateY(-1px);
   }
+
   .btn-secondary {
     border: 1px solid rgba(255,255,255,0.2);
     color: var(--white);
-    padding: 14px 32px;
+    padding: 16px 36px;
     font-size: 13px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -208,143 +301,73 @@ const currentPath = Astro.url.pathname;
     border-radius: 2px;
     transition: all 0.3s;
     display: inline-block;
+    background: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
   }
+
   .btn-secondary:hover {
     border-color: var(--gold);
     color: var(--gold);
   }
 
-  /* Nav */
-  nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 48px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(8,8,8,0.85);
-    backdrop-filter: blur(20px);
+  /* Animations */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.8s forwards;
   }
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--white);
+
+  .fade-up:nth-child(2) { animation-delay: 0.1s; }
+  .fade-up:nth-child(3) { animation-delay: 0.2s; }
+  .fade-up:nth-child(4) { animation-delay: 0.3s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
   }
-  .nav-logo span { color: var(--gold); }
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 36px;
-    list-style: none;
-  }
-  .nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 13px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: color 0.3s;
-  }
-  .nav-links a:hover,
-  .nav-links a.active { color: var(--gold); }
-  .nav-hamburger {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 24px;
-    cursor: pointer;
-    padding: 4px;
-  }
-  .mobile-nav {
-    display: none;
-    position: fixed;
-    top: 65px;
-    left: 0;
-    right: 0;
-    z-index: 99;
-    background: rgba(8,8,8,0.98);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    flex-direction: column;
-    padding: 16px 0;
-  }
-  .mobile-nav.open { display: flex; }
-  .mobile-nav a {
-    padding: 14px 48px;
-    text-decoration: none;
-    color: var(--muted);
-    font-size: 14px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    border-bottom: 1px solid var(--border);
-    transition: color 0.2s;
-  }
-  .mobile-nav a:last-child { border-bottom: none; }
-  .mobile-nav a:hover { color: var(--gold); }
 
   /* Footer */
   footer {
     border-top: 1px solid var(--border);
     background: var(--deep);
   }
+
   .footer-inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 60px 48px 40px;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 60px;
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
+
   .footer-logo {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-bottom: 12px;
   }
+
   .footer-logo span { color: var(--gold); }
-  .footer-desc {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.7;
-    max-width: 300px;
+
+  .footer-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
   }
-  .footer-col h4 {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 16px;
-    font-weight: 400;
-  }
-  .footer-col ul { list-style: none; }
-  .footer-col li { margin-bottom: 10px; }
-  .footer-col a {
+
+  .footer-links a {
     color: var(--muted);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 13px;
+    letter-spacing: 0.06em;
     transition: color 0.3s;
   }
-  .footer-col a:hover { color: var(--white); }
-  .footer-bottom {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px 48px;
-    border-top: 1px solid var(--border);
-  }
+
+  .footer-links a:hover { color: var(--white); }
+
   .footer-copy {
-    font-family: 'DM Mono', monospace;
     font-size: 11px;
     color: var(--faint);
     letter-spacing: 0.1em;
@@ -352,16 +375,40 @@ const currentPath = Astro.url.pathname;
 
   /* Responsive */
   @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
+    nav { padding: 20px 24px; }
     .nav-links { display: none; }
-    .nav-hamburger { display: block; }
-    .mobile-nav a { padding: 14px 24px; }
-    .section-inner { padding: 60px 24px; }
+    .nav-mobile-toggle { display: flex; }
+    .section-inner { padding: 80px 24px; }
     .footer-inner {
-      grid-template-columns: 1fr;
-      gap: 32px;
-      padding: 40px 24px 24px;
+      flex-direction: column;
+      gap: 24px;
+      text-align: center;
+      padding: 32px 24px;
     }
-    .footer-bottom { padding: 16px 24px; }
   }
 </style>
+
+<script>
+  function initNav() {
+    const toggle = document.querySelector('.nav-mobile-toggle');
+    const mobileMenu = document.querySelector('.mobile-menu');
+
+    toggle?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('open');
+    });
+
+    // Close mobile menu on link click
+    mobileMenu?.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileMenu?.classList.remove('open');
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNav);
+  } else {
+    initNav();
+  }
+  document.addEventListener('astro:page-load', initNav);
+</script>

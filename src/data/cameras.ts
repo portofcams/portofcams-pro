@@ -2,305 +2,213 @@ export interface Camera {
   id: string;
   name: string;
   location: string;
+  region: string;
   description: string;
   hlsUrl: string;
-  thumbnail?: string;
   tags: string[];
-  region: string;
-  subregion?: string;
-  lat: number;
-  lon: number;
+  coordinates: { lat: number; lng: number };
   isLive: boolean;
-  isFeatured?: boolean;
-  streamType: 'hls' | 'youtube' | 'image' | 'embed';
 }
 
 export const cameras: Camera[] = [
-  // ─── Hawaii ────────────────────────────────────────────
   {
-    id: 'east-lewers-st',
-    name: 'East Lewers Street',
-    location: 'Waikiki, Oahu, HI',
-    description: 'Live street view of Lewers Street in the heart of Waikiki. Watch the bustling nightlife, restaurants, and pedestrian activity 24/7.',
-    hlsUrl: 'https://cams.portofcams.com/east-lewers-st/index.m3u8',
-    tags: ['street', 'nightlife', 'waikiki', 'featured'],
-    region: 'Hawaii',
-    subregion: 'Oahu',
-    lat: 21.2793,
-    lon: -157.8283,
+    id: "east-lewers-st",
+    name: "East Lewers Street",
+    location: "Waikiki, HI",
+    region: "Hawaii",
+    description:
+      "Live street view of East Lewers Street in the heart of Waikiki. Watch the bustling nightlife, foot traffic, and vibrant energy of one of Hawaii's most iconic streets.",
+    hlsUrl: "https://cams.portofcams.com/east-lewers-st/",
+    tags: ["street", "nightlife", "urban"],
+    coordinates: { lat: 21.2769, lng: -157.8268 },
     isLive: true,
-    isFeatured: true,
-    streamType: 'hls',
   },
   {
-    id: 'oahu-road-conditions',
-    name: 'Oahu Road Conditions',
-    location: 'Oahu, HI',
-    description: 'Live traffic conditions across Oahu highways. Monitor road conditions before heading out.',
-    hlsUrl: 'https://cdn3.wowza.com/5/V2Y2VmhqMEFDTUkx/olelo/G0125_017/playlist.m3u8',
-    tags: ['traffic', 'highway', 'featured-traffic'],
-    region: 'Hawaii',
-    subregion: 'Oahu',
-    lat: 21.4389,
-    lon: -158.0001,
+    id: "kalakaua-ave",
+    name: "Kalakaua Avenue",
+    location: "Waikiki, HI",
+    region: "Hawaii",
+    description:
+      "Panoramic view of Kalakaua Avenue, the main strip running through Waikiki. See the palm trees, shops, and constant flow of visitors along this famous boulevard.",
+    hlsUrl: "https://cams.portofcams.com/kalakaua-ave/",
+    tags: ["street", "shopping", "urban"],
+    coordinates: { lat: 21.2793, lng: -157.8292 },
     isLive: true,
-    streamType: 'hls',
-  },
-
-  // ─── California — Scenic Traffic Cams ──────────────────
-  {
-    id: 'pch-laguna-bluebird',
-    name: 'PCH at Blue Bird — Laguna Beach',
-    location: 'Laguna Beach, CA',
-    description: 'Pacific Coast Highway northbound at Blue Bird Canyon in Laguna Beach. One of the most scenic coastal highway cameras in Southern California.',
-    hlsUrl: 'https://wzmedia.dot.ca.gov/D12/NBPCHBLUEBIRD.stream/playlist.m3u8',
-    tags: ['traffic', 'scenic', 'highway', 'coastal', 'featured-traffic'],
-    region: 'California',
-    subregion: 'SoCal',
-    lat: 33.530071,
-    lon: -117.772769,
-    isLive: true,
-    isFeatured: true,
-    streamType: 'hls',
   },
   {
-    id: 'pch-laguna-broadway-sb',
-    name: 'PCH at Broadway SB — Laguna Beach',
-    location: 'Laguna Beach, CA',
-    description: 'Pacific Coast Highway southbound at Broadway in Laguna Beach with ocean views.',
-    hlsUrl: 'https://wzmedia.dot.ca.gov/D12/SBPCHBROADWAY.stream/playlist.m3u8',
-    tags: ['traffic', 'scenic', 'highway', 'coastal', 'featured-traffic'],
-    region: 'California',
-    subregion: 'SoCal',
-    lat: 33.5423,
-    lon: -117.7876,
+    id: "waikiki-beach",
+    name: "Waikiki Beach",
+    location: "Waikiki, HI",
+    region: "Hawaii",
+    description:
+      "Iconic Waikiki Beach with Diamond Head in the background. Watch surfers, sunbathers, and stunning Pacific sunsets from this world-famous shoreline.",
+    hlsUrl: "https://cams.portofcams.com/waikiki-beach/",
+    tags: ["beach", "surf", "ocean"],
+    coordinates: { lat: 21.2766, lng: -157.8278 },
     isLive: true,
-    streamType: 'hls',
   },
   {
-    id: 'pch-laguna-broadway-nb',
-    name: 'PCH at Broadway NB — Laguna Beach',
-    location: 'Laguna Beach, CA',
-    description: 'Pacific Coast Highway northbound at Broadway in Laguna Beach.',
-    hlsUrl: 'https://wzmedia.dot.ca.gov/D12/NBPCHBROADWAY.stream/playlist.m3u8',
-    tags: ['traffic', 'scenic', 'highway', 'coastal', 'featured-traffic'],
-    region: 'California',
-    subregion: 'SoCal',
-    lat: 33.5423,
-    lon: -117.7876,
+    id: "times-square",
+    name: "Times Square",
+    location: "New York, NY",
+    region: "International",
+    description:
+      "The crossroads of the world. Watch the dazzling lights, massive billboards, and endless foot traffic of Manhattan's most famous intersection.",
+    hlsUrl: "https://cams.portofcams.com/times-square/",
+    tags: ["urban", "nightlife", "landmark"],
+    coordinates: { lat: 40.758, lng: -73.9855 },
     isLive: true,
-    streamType: 'hls',
   },
   {
-    id: 'sr-74-san-antonio',
-    name: 'SR-74 at San Antonio',
-    location: 'San Juan Capistrano, CA',
-    description: 'State Route 74 Ortega Highway at San Antonio — scenic canyon road through the coastal mountains.',
-    hlsUrl: 'https://wzmedia.dot.ca.gov/D12/EB74SANANTONIO.stream/playlist.m3u8',
-    tags: ['traffic', 'scenic', 'canyon', 'featured-traffic'],
-    region: 'California',
-    subregion: 'SoCal',
-    lat: 33.508,
-    lon: -117.652,
+    id: "shibuya-crossing",
+    name: "Shibuya Crossing",
+    location: "Tokyo, Japan",
+    region: "International",
+    description:
+      "The world's busiest pedestrian crossing. Watch thousands of people navigate this iconic Tokyo intersection during each signal change.",
+    hlsUrl: "https://cams.portofcams.com/shibuya-crossing/",
+    tags: ["urban", "traffic", "landmark"],
+    coordinates: { lat: 35.6595, lng: 139.7004 },
     isLive: true,
-    streamType: 'hls',
   },
   {
-    id: 'sr-91-coal-canyon',
-    name: 'SR-91 at Coal Canyon',
-    location: 'Yorba Linda, CA',
-    description: 'Westbound SR-91 at the SR-241 interchange through Coal Canyon — dramatic canyon scenery.',
-    hlsUrl: 'https://wzmedia.dot.ca.gov/D12/WB91COALCANYON.stream/playlist.m3u8',
-    tags: ['traffic', 'scenic', 'canyon', 'featured-traffic'],
-    region: 'California',
-    subregion: 'SoCal',
-    lat: 33.9128,
-    lon: -117.6348,
+    id: "abbey-road",
+    name: "Abbey Road Crossing",
+    location: "London, UK",
+    region: "International",
+    description:
+      "The legendary Abbey Road zebra crossing made famous by The Beatles. Watch visitors recreate the iconic album cover walk throughout the day.",
+    hlsUrl: "https://cams.portofcams.com/abbey-road/",
+    tags: ["landmark", "street", "music"],
+    coordinates: { lat: 51.5321, lng: -0.1779 },
     isLive: true,
-    streamType: 'hls',
   },
   {
-    id: 'i5-sr57-interchange',
-    name: 'I-5 / SR-57 / SR-22 Interchange',
-    location: 'Orange, CA',
-    description: 'Major freeway interchange in Orange County where I-5, SR-57, and SR-22 converge. A massive traffic hub.',
-    hlsUrl: 'https://wzmedia.dot.ca.gov/D12/NB5SO57&22.stream/playlist.m3u8',
-    tags: ['traffic', 'highway', 'interchange', 'featured-traffic'],
-    region: 'California',
-    subregion: 'SoCal',
-    lat: 33.7875,
-    lon: -117.8714,
+    id: "jackson-hole-town-square",
+    name: "Jackson Hole Town Square",
+    location: "Jackson, WY",
+    region: "US Mainland",
+    description:
+      "The famous elk-antler arches of Jackson Hole Town Square. Watch the charming mountain town activity with the Teton Range as a backdrop.",
+    hlsUrl: "https://cams.portofcams.com/jackson-hole-town-square/",
+    tags: ["landmark", "mountain", "town"],
+    coordinates: { lat: 43.4799, lng: -110.7624 },
     isLive: true,
-    streamType: 'hls',
   },
   {
-    id: 'i15-del-lago',
-    name: 'I-15 at Del Lago',
-    location: 'Escondido, CA',
-    description: 'Southbound I-15 at Del Lago transit station in North San Diego County.',
-    hlsUrl: 'https://wzmedia.dot.ca.gov/D11/C091_SB_15_at_Del_Lago.stream/playlist.m3u8',
-    tags: ['traffic', 'highway', 'featured-traffic'],
-    region: 'California',
-    subregion: 'SoCal',
-    lat: 33.1610,
-    lon: -117.0989,
+    id: "bourbon-street",
+    name: "Bourbon Street",
+    location: "New Orleans, LA",
+    region: "US Mainland",
+    description:
+      "The heart of the French Quarter. Experience the nonstop energy of New Orleans with live music spilling out of clubs and the famous Bourbon Street nightlife.",
+    hlsUrl: "https://cams.portofcams.com/bourbon-street/",
+    tags: ["nightlife", "music", "street"],
+    coordinates: { lat: 29.9584, lng: -90.0654 },
     isLive: true,
-    streamType: 'hls',
-  },
-
-  // ─── Pacific Northwest — Scenic Traffic Cams ──────────
-  {
-    id: 'snoqualmie-pass',
-    name: 'Snoqualmie Pass I-90',
-    location: 'Snoqualmie Pass, WA',
-    description: 'Mountain pass summit on I-90. Check snow levels, road conditions, and visibility at this major Cascade crossing.',
-    hlsUrl: 'https://images.wsdot.wa.gov/sc/090VC05200.jpg',
-    tags: ['traffic', 'mountain', 'snow', 'scenic', 'featured-traffic'],
-    region: 'Pacific NW',
-    subregion: 'Washington',
-    lat: 47.428,
-    lon: -121.420,
-    isLive: true,
-    streamType: 'image',
   },
   {
-    id: 'i84-north-powder',
-    name: 'I-84 at North Powder',
-    location: 'North Powder, OR',
-    description: 'Interstate 84 in scenic eastern Oregon. Mountain views and wide-open high desert landscapes.',
-    hlsUrl: 'https://tripcheck.com/RoadCams/cams/I-84 at N Powder S_pid5234.jpg',
-    tags: ['traffic', 'scenic', 'mountain', 'featured-traffic'],
-    region: 'Pacific NW',
-    subregion: 'Oregon',
-    lat: 45.01481,
-    lon: -117.9191,
+    id: "south-beach-miami",
+    name: "South Beach",
+    location: "Miami, FL",
+    region: "US Mainland",
+    description:
+      "Sun-soaked South Beach in Miami. Watch the colorful Art Deco backdrop, beachgoers on the white sand, and the turquoise Atlantic waters.",
+    hlsUrl: "https://cams.portofcams.com/south-beach-miami/",
+    tags: ["beach", "ocean", "urban"],
+    coordinates: { lat: 25.7826, lng: -80.1341 },
     isLive: true,
-    streamType: 'image',
   },
   {
-    id: 'santiam-pass',
-    name: 'Santiam Pass US-20',
-    location: 'Santiam Pass, OR',
-    description: 'US Route 20 at Santiam Pass in the Oregon Cascades. Monitor snow conditions at this scenic mountain crossing.',
-    hlsUrl: 'https://tripcheck.com/RoadCams/cams/Santiam Pass WB_pid5258.jpg',
-    tags: ['traffic', 'mountain', 'snow', 'scenic', 'featured-traffic'],
-    region: 'Pacific NW',
-    subregion: 'Oregon',
-    lat: 44.4224,
-    lon: -121.8483,
+    id: "venice-grand-canal",
+    name: "Grand Canal",
+    location: "Venice, Italy",
+    region: "International",
+    description:
+      "The main waterway of Venice. Watch gondolas, water taxis, and vaporetti navigate the stunning Grand Canal lined with centuries-old palaces.",
+    hlsUrl: "https://cams.portofcams.com/venice-grand-canal/",
+    tags: ["landmark", "water", "urban"],
+    coordinates: { lat: 45.4371, lng: 12.3327 },
     isLive: true,
-    streamType: 'image',
   },
   {
-    id: 'or82-minam',
-    name: 'OR-82 at Minam',
-    location: 'Minam, OR',
-    description: 'Oregon Route 82 at Minam in the Wallowa Mountains. Remote river valley with stunning mountain scenery.',
-    hlsUrl: 'https://tripcheck.com/RoadCams/cams/OR82 at Minam WB MP34.9_pid5262.jpg',
-    tags: ['traffic', 'scenic', 'mountain', 'river', 'featured-traffic'],
-    region: 'Pacific NW',
-    subregion: 'Oregon',
-    lat: 45.6207,
-    lon: -117.7260,
+    id: "santorini-caldera",
+    name: "Santorini Caldera",
+    location: "Santorini, Greece",
+    region: "International",
+    description:
+      "Breathtaking view of the Santorini caldera with its iconic white and blue buildings cascading down volcanic cliffs above the deep blue Aegean Sea.",
+    hlsUrl: "https://cams.portofcams.com/santorini-caldera/",
+    tags: ["ocean", "landmark", "scenic"],
+    coordinates: { lat: 36.4166, lng: 25.4321 },
     isLive: true,
-    streamType: 'image',
   },
   {
-    id: 'portland-ne-columbia',
-    name: 'Portland NE Columbia at 47th',
-    location: 'Portland, OR',
-    description: 'City traffic camera at NE Columbia Blvd and 47th Ave in Portland.',
-    hlsUrl: 'https://tripcheck.com/RoadCams/cams/NE Columbia at 47th_pid5231.jpg',
-    tags: ['traffic', 'city', 'featured-traffic'],
-    region: 'Pacific NW',
-    subregion: 'Oregon',
-    lat: 45.5601,
-    lon: -122.6146,
+    id: "i-h1-east",
+    name: "H-1 Freeway East",
+    location: "Honolulu, HI",
+    region: "Hawaii",
+    description:
+      "Live traffic view of the H-1 Freeway heading east through Honolulu. Monitor commute conditions and traffic flow on Oahu's main highway.",
+    hlsUrl: "https://cams.portofcams.com/i-h1-east/",
+    tags: ["traffic", "highway"],
+    coordinates: { lat: 21.3156, lng: -157.859 },
     isLive: true,
-    streamType: 'image',
-  },
-
-  // ─── International ─────────────────────────────────────
-  {
-    id: 'abbey-road-london',
-    name: 'Abbey Road Crossing',
-    location: 'London, UK',
-    description: 'The world-famous Abbey Road zebra crossing made iconic by The Beatles. Watch tourists recreate the album cover 24/7.',
-    hlsUrl: 'https://www.youtube.com/embed/XwXKJHgRM50',
-    tags: ['street', 'iconic', 'city', 'international'],
-    region: 'International',
-    subregion: 'Europe',
-    lat: 51.532,
-    lon: -0.1781,
-    isLive: true,
-    isFeatured: true,
-    streamType: 'youtube',
   },
   {
-    id: 'prague-charles-bridge',
-    name: 'Prague Charles Bridge',
-    location: 'Prague, Czech Republic',
-    description: 'Live view of the historic Charles Bridge over the Vltava River. One of the most beautiful medieval bridges in Europe.',
-    hlsUrl: 'https://www.youtube.com/embed/0tz1y8zLeQU',
-    tags: ['city', 'historic', 'bridge', 'international'],
-    region: 'International',
-    subregion: 'Europe',
-    lat: 50.0755,
-    lon: 14.4378,
+    id: "i-h1-west",
+    name: "H-1 Freeway West",
+    location: "Honolulu, HI",
+    region: "Hawaii",
+    description:
+      "Live traffic view of the H-1 Freeway heading west from Honolulu toward Pearl City. Check westbound commute conditions in real time.",
+    hlsUrl: "https://cams.portofcams.com/i-h1-west/",
+    tags: ["traffic", "highway"],
+    coordinates: { lat: 21.3245, lng: -157.876 },
     isLive: true,
-    streamType: 'youtube',
   },
   {
-    id: 'churchill-polar-bears',
-    name: 'Polar Bear Cam',
-    location: 'Churchill, Manitoba, Canada',
-    description: 'Watch polar bears in their natural habitat from the Tundra Buggy in Churchill, the polar bear capital of the world.',
-    hlsUrl: 'https://files.explore.org/files/Tundra-Buggy-Polar-Bear-Cam-034031907.jpg',
-    tags: ['wildlife', 'arctic', 'nature', 'international'],
-    region: 'International',
-    subregion: 'Americas',
-    lat: 58.7684,
-    lon: -94.165,
+    id: "santa-monica-pier",
+    name: "Santa Monica Pier",
+    location: "Santa Monica, CA",
+    region: "US Mainland",
+    description:
+      "The iconic Santa Monica Pier with its famous Ferris wheel and Pacific Park. Watch the sunset over the Pacific Ocean from this beloved California landmark.",
+    hlsUrl: "https://cams.portofcams.com/santa-monica-pier/",
+    tags: ["beach", "landmark", "ocean"],
+    coordinates: { lat: 34.0086, lng: -118.4981 },
     isLive: true,
-    streamType: 'image',
   },
 ];
 
-// Helper functions
+export const regions = [...new Set(cameras.map((c) => c.region))].sort();
+export const allTags = [...new Set(cameras.flatMap((c) => c.tags))].sort();
+
 export function getCameraById(id: string): Camera | undefined {
-  return cameras.find(c => c.id === id);
+  return cameras.find((c) => c.id === id);
 }
 
 export function getCamerasByRegion(region: string): Camera[] {
-  return cameras.filter(c => c.region === region);
+  return cameras.filter((c) => c.region === region);
 }
 
 export function getCamerasByTag(tag: string): Camera[] {
-  return cameras.filter(c => c.tags.includes(tag));
+  return cameras.filter((c) => c.tags.includes(tag));
 }
 
-export function getFeaturedCameras(): Camera[] {
-  return cameras.filter(c => c.isFeatured);
-}
+export function getRelatedCameras(id: string, limit = 4): Camera[] {
+  const camera = getCameraById(id);
+  if (!camera) return [];
 
-export function getAllRegions(): { name: string; count: number }[] {
-  const map = new Map<string, number>();
-  for (const c of cameras) {
-    map.set(c.region, (map.get(c.region) || 0) + 1);
-  }
-  return Array.from(map.entries())
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count);
-}
-
-export function getAllTags(): { name: string; count: number }[] {
-  const map = new Map<string, number>();
-  for (const c of cameras) {
-    for (const t of c.tags) {
-      map.set(t, (map.get(t) || 0) + 1);
-    }
-  }
-  return Array.from(map.entries())
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count);
+  return cameras
+    .filter((c) => c.id !== id)
+    .map((c) => ({
+      camera: c,
+      score:
+        (c.region === camera.region ? 2 : 0) +
+        c.tags.filter((t) => camera.tags.includes(t)).length,
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((r) => r.camera);
 }

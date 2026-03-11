@@ -1,294 +1,351 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import HLSPlayer from '../../components/HLSPlayer.astro';
-import CameraCard from '../../components/CameraCard.astro';
-import { cameras, getCameraById } from '../../data/cameras';
+import { cameras, getCameraById, getRelatedCameras } from '../../data/cameras';
 
 export function getStaticPaths() {
-  return cameras.map(cam => ({
+  return cameras.map((cam) => ({
     params: { id: cam.id },
   }));
 }
 
 const { id } = Astro.params;
-const camera = getCameraById(id!);
-if (!camera) return Astro.redirect('/browse');
-
-const related = cameras
-  .filter(c => c.id !== camera.id && c.region === camera.region)
-  .slice(0, 3);
+const camera = getCameraById(id!)!;
+const related = getRelatedCameras(id!, 4);
 ---
 
-<Layout title={`${camera.name} — Port of Cams`} description={camera.description}>
-  <section class="cam-page">
-    <div class="section-inner">
-      <!-- Breadcrumb -->
-      <nav class="cam-breadcrumb">
+<Layout
+  title={`${camera.name} — Live Camera | PortOfCams`}
+  description={camera.description}
+>
+
+  <!-- Breadcrumb + Camera Header -->
+  <section class="cam-header">
+    <div class="section-inner" style="padding-top: 100px; padding-bottom: 40px;">
+      <nav class="breadcrumb mono fade-up">
         <a href="/">Home</a>
-        <span class="cam-sep">/</span>
+        <span class="breadcrumb-sep">/</span>
         <a href="/browse">Browse</a>
-        <span class="cam-sep">/</span>
-        <a href={`/regions#${camera.region.toLowerCase().replace(/\s+/g, '-')}`}>{camera.region}</a>
-        <span class="cam-sep">/</span>
-        <span>{camera.name}</span>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{camera.name}</span>
       </nav>
-
-      <!-- Player -->
-      <div class="cam-player">
-        <HLSPlayer src={camera.hlsUrl} streamType={camera.streamType} title={camera.name} poster={camera.thumbnail} />
-      </div>
-
-      <!-- Info -->
-      <div class="cam-detail">
-        <div class="cam-main">
-          <h1 class="display" style="font-size: clamp(24px, 4vw, 36px);">{camera.name}</h1>
-          <p class="cam-loc">
-            <span class="cam-loc-icon">&#9906;</span> {camera.location}
-          </p>
-          <p class="cam-desc">{camera.description}</p>
-
-          <div class="cam-meta">
-            <div class="cam-meta-item">
-              <span class="cam-meta-label">Region</span>
-              <span class="cam-meta-val">{camera.region}{camera.subregion ? ` — ${camera.subregion}` : ''}</span>
-            </div>
-            <div class="cam-meta-item">
-              <span class="cam-meta-label">Stream</span>
-              <span class="cam-meta-val">{camera.streamType.toUpperCase()}</span>
-            </div>
-            <div class="cam-meta-item">
-              <span class="cam-meta-label">Status</span>
-              <span class="cam-meta-val cam-status-live">{camera.isLive ? '● Live' : '○ Offline'}</span>
-            </div>
-            <div class="cam-meta-item">
-              <span class="cam-meta-label">Coordinates</span>
-              <span class="cam-meta-val">{camera.lat.toFixed(4)}, {camera.lon.toFixed(4)}</span>
-            </div>
-          </div>
-
-          <div class="cam-tags-row">
-            {camera.tags.map(tag => (
-              <a href={`/browse`} class="cam-tag-link">{tag}</a>
-            ))}
-          </div>
-        </div>
-
-        <div class="cam-sidebar">
-          <!-- Share -->
-          <div class="cam-share-box">
-            <p class="cam-share-title">Share This Camera</p>
-            <div class="cam-share-btns">
-              <button class="cam-share-btn" id="copyLink" title="Copy link">&#128279; Copy Link</button>
-            </div>
-          </div>
-
-          <!-- Map placeholder -->
-          <div class="cam-map-box">
-            <p class="cam-share-title">Location</p>
-            <div class="cam-map-placeholder">
-              <a href={`https://www.google.com/maps?q=${camera.lat},${camera.lon}`} target="_blank" rel="noopener" class="cam-map-link">
-                &#127758; View on Google Maps
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Related -->
-      {related.length > 0 && (
-        <div class="cam-related">
-          <p class="section-label">More from {camera.region}</p>
-          <div class="cam-related-grid">
-            {related.map(r => (
-              <CameraCard
-                id={r.id}
-                name={r.name}
-                location={r.location}
-                streamType={r.streamType}
-                tags={r.tags}
-                isLive={r.isLive}
-                isFeatured={r.isFeatured}
-                thumbnail={r.thumbnail}
-              />
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   </section>
+
+  <!-- Player Section -->
+  <section class="cam-player-section">
+    <div class="cam-player-inner">
+      <HLSPlayer hlsUrl={camera.hlsUrl} cameraName={camera.name} />
+    </div>
+  </section>
+
+  <!-- Camera Info -->
+  <section class="cam-info-section">
+    <div class="section-inner" style="padding-top: 40px; padding-bottom: 80px;">
+      <div class="cam-info-grid">
+        <div class="cam-info-main">
+          <div class="cam-live-status">
+            <span class="cam-live-dot"></span>
+            <span class="mono cam-live-text">LIVE NOW</span>
+          </div>
+          <h1 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 8px;">
+            {camera.name}
+          </h1>
+          <p class="cam-location">{camera.location}</p>
+          <p class="cam-description">{camera.description}</p>
+          <div class="cam-tags">
+            {camera.tags.map((tag) => (
+              <span class="cam-tag mono">{tag}</span>
+            ))}
+          </div>
+        </div>
+        <div class="cam-info-meta">
+          <div class="meta-card">
+            <div class="meta-label mono">Region</div>
+            <div class="meta-value">{camera.region}</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label mono">Coordinates</div>
+            <div class="meta-value mono" style="font-size: 13px;">
+              {camera.coordinates.lat.toFixed(4)}, {camera.coordinates.lng.toFixed(4)}
+            </div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label mono">Stream</div>
+            <div class="meta-value mono" style="font-size: 13px;">HLS / Adaptive</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label mono">Status</div>
+            <div class="meta-value" style="color: var(--gold);">
+              {camera.isLive ? 'Online' : 'Offline'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Cameras -->
+  {related.length > 0 && (
+    <section class="related-section">
+      <div class="section-inner" style="padding-top: 60px;">
+        <div class="section-label">More Cameras</div>
+        <h2 class="display" style="font-size: clamp(28px, 3vw, 40px); margin-bottom: 40px;">
+          You might also <em class="display-italic" style="color: var(--gold)">enjoy</em>
+        </h2>
+        <div class="related-grid">
+          {related.map((cam) => (
+            <a href={`/camera/${cam.id}`} class="related-card">
+              <div class="related-preview">
+                <div class="related-overlay"></div>
+                <div class="related-live">
+                  <span class="related-live-dot"></span>
+                  <span class="mono">LIVE</span>
+                </div>
+              </div>
+              <div class="related-info">
+                <h3>{cam.name}</h3>
+                <p>{cam.location}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
 </Layout>
 
-<script is:inline>
-document.getElementById('copyLink')?.addEventListener('click', function() {
-  navigator.clipboard.writeText(window.location.href).then(function() {
-    document.getElementById('copyLink').textContent = '✓ Copied!';
-    setTimeout(function() {
-      document.getElementById('copyLink').textContent = '🔗 Copy Link';
-    }, 2000);
-  });
-});
-</script>
-
 <style>
-  .cam-page {
-    padding-top: 20px;
+  .cam-header {
+    background: var(--deep);
+    border-bottom: 1px solid var(--border);
   }
-  .cam-breadcrumb {
-    font-family: 'DM Mono', monospace;
+
+  .breadcrumb {
     font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 24px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     display: flex;
     align-items: center;
     gap: 8px;
     flex-wrap: wrap;
   }
-  .cam-breadcrumb a {
+
+  .breadcrumb a {
     color: var(--muted);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color 0.3s;
   }
-  .cam-breadcrumb a:hover { color: var(--gold); }
-  .cam-sep { opacity: 0.3; }
-  .cam-player {
-    margin-bottom: 32px;
-    border-radius: 2px;
-    overflow: hidden;
+
+  .breadcrumb a:hover { color: var(--gold); }
+
+  .breadcrumb-sep { color: var(--faint); }
+  .breadcrumb-current { color: var(--white); }
+
+  /* Player */
+  .cam-player-section {
+    background: var(--black);
+    border-bottom: 1px solid var(--border);
   }
-  .cam-detail {
+
+  .cam-player-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  /* Info */
+  .cam-info-grid {
     display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 40px;
+    grid-template-columns: 1fr 280px;
+    gap: 60px;
+    align-items: start;
   }
-  .cam-loc {
+
+  .cam-live-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .cam-live-dot {
+    width: 8px;
+    height: 8px;
+    background: #e53e3e;
+    border-radius: 50%;
+    animation: pulse-cam 2s infinite;
+  }
+
+  @keyframes pulse-cam {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(229,62,62,0.4); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(229,62,62,0); }
+  }
+
+  .cam-live-text {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #e53e3e;
+  }
+
+  .cam-location {
+    font-size: 16px;
+    color: var(--gold);
+    margin-bottom: 20px;
     font-family: 'DM Mono', monospace;
     font-size: 13px;
-    color: var(--gold);
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    letter-spacing: 0.08em;
   }
-  .cam-loc-icon { font-size: 16px; }
-  .cam-desc {
-    font-size: 15px;
+
+  .cam-description {
+    font-size: 16px;
     color: var(--muted);
-    line-height: 1.7;
-    margin-top: 16px;
-    max-width: 640px;
+    line-height: 1.8;
+    margin-bottom: 24px;
   }
-  .cam-meta {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 24px;
-    padding: 20px;
-    background: var(--deep);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-  }
-  .cam-meta-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    display: block;
-    margin-bottom: 4px;
-  }
-  .cam-meta-val {
-    font-size: 14px;
-    color: var(--white);
-  }
-  .cam-status-live { color: #4ade80; }
-  .cam-tags-row {
+
+  .cam-tags {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    margin-top: 20px;
   }
-  .cam-tag-link {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--gold);
-    background: var(--gold-dim);
-    padding: 4px 12px;
-    border-radius: 2px;
-    text-decoration: none;
-    transition: all 0.2s;
+
+  .cam-tag {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 1px;
   }
-  .cam-tag-link:hover {
-    background: rgba(201,168,76,0.25);
-  }
-  .cam-sidebar {
+
+  /* Meta sidebar */
+  .cam-info-meta {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-  }
-  .cam-share-box, .cam-map-box {
-    background: var(--deep);
+    gap: 1px;
+    background: var(--border);
     border: 1px solid var(--border);
-    padding: 20px;
-    border-radius: 2px;
   }
-  .cam-share-title {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.15em;
+
+  .meta-card {
+    background: var(--surface);
+    padding: 16px 20px;
+  }
+
+  .meta-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
   }
-  .cam-share-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--white);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    padding: 8px 16px;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.2s;
-    width: 100%;
+
+  .meta-value {
+    font-size: 15px;
+    font-weight: 400;
   }
-  .cam-share-btn:hover {
-    border-color: var(--gold);
-    color: var(--gold);
-  }
-  .cam-map-placeholder {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 24px;
-    text-align: center;
-  }
-  .cam-map-link {
-    color: var(--gold);
-    text-decoration: none;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    transition: color 0.2s;
-  }
-  .cam-map-link:hover { color: var(--gold-light); }
-  .cam-related {
-    margin-top: 60px;
-    padding-top: 40px;
+
+  /* Related */
+  .related-section {
     border-top: 1px solid var(--border);
+    background: var(--deep);
   }
-  .cam-related-grid {
+
+  .related-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
   }
+
+  .related-card {
+    background: var(--deep);
+    text-decoration: none;
+    color: var(--white);
+    transition: background 0.3s;
+  }
+
+  .related-card:hover { background: var(--surface); }
+
+  .related-preview {
+    aspect-ratio: 16 / 10;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.01) 0px,
+        rgba(255,255,255,0.01) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+  }
+
+  .related-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 50%);
+  }
+
+  .related-live {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(0,0,0,0.6);
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  .related-live-dot {
+    width: 5px;
+    height: 5px;
+    background: #e53e3e;
+    border-radius: 50%;
+    animation: pulse-cam 2s infinite;
+  }
+
+  .related-live span:last-child {
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: #e53e3e;
+  }
+
+  .related-info {
+    padding: 16px 20px;
+  }
+
+  .related-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    transition: color 0.3s;
+  }
+
+  .related-card:hover .related-info h3 {
+    color: var(--gold);
+  }
+
+  .related-info p {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* Responsive */
   @media (max-width: 768px) {
-    .cam-detail {
+    .cam-player-inner { padding: 0 24px; }
+    .cam-info-grid {
       grid-template-columns: 1fr;
+      gap: 40px;
     }
-    .cam-meta {
-      grid-template-columns: 1fr;
-    }
-    .cam-related-grid {
-      grid-template-columns: 1fr;
-    }
+    .related-grid { grid-template-columns: 1fr; }
   }
 </style>
