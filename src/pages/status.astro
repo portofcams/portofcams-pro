@@ -1,0 +1,765 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { cameras, regions } from '../data/cameras';
+
+const totalCameras = cameras.length;
+const regionCounts: Record<string, number> = {};
+cameras.forEach(c => {
+  regionCounts[c.region] = (regionCounts[c.region] || 0) + 1;
+});
+---
+
+<Layout title="Camera Status — PortOfCams" description="Monitor the health and availability of all PortOfCams live camera streams.">
+
+  <!-- Page Header -->
+  <section class="status-header">
+    <div class="section-inner" style="padding-bottom: 60px;">
+      <div class="section-label fade-up">System Status</div>
+      <h1 class="display fade-up" style="font-size: clamp(36px, 4.5vw, 64px); max-width: 700px; margin-bottom: 20px;">
+        Camera <em class="display-italic" style="color: var(--gold)">Health</em> Dashboard
+      </h1>
+      <p class="status-subtitle fade-up">
+        Monitor real-time availability of all camera streams. Run health checks to verify each feed is online.
+      </p>
+    </div>
+  </section>
+
+  <!-- Summary Stats -->
+  <section class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat-block">
+        <span class="stat-value mono" id="stat-total">{totalCameras}</span>
+        <span class="stat-label mono">Total Cameras</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-block">
+        <span class="stat-value mono stat-live" id="stat-live">—</span>
+        <span class="stat-label mono">Live</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-block">
+        <span class="stat-value mono stat-offline" id="stat-offline">—</span>
+        <span class="stat-label mono">Offline</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-block">
+        <span class="stat-value mono stat-unknown" id="stat-unknown">{totalCameras}</span>
+        <span class="stat-label mono">Unchecked</span>
+      </div>
+      <div class="stat-actions">
+        <button class="btn-primary" id="check-all-btn">Check All</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Progress Bar -->
+  <div class="progress-wrapper" id="progress-wrapper" style="display: none;">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <span class="progress-text mono" id="progress-text">0 / {totalCameras}</span>
+  </div>
+
+  <!-- Camera Status Table -->
+  <section class="status-table-section">
+    <div class="section-inner" style="padding-top: 40px;">
+      <div class="status-timestamp mono" id="status-timestamp">Last checked: never</div>
+
+      <div class="status-table">
+        <div class="table-header">
+          <div class="th-status">Status</div>
+          <div class="th-name">Camera</div>
+          <div class="th-region">Region</div>
+          <div class="th-stream">Stream</div>
+          <div class="th-checked">Checked</div>
+          <div class="th-action">Action</div>
+        </div>
+
+        {cameras.map((cam) => (
+          <div
+            class="table-row"
+            id={`row-${cam.id}`}
+            data-id={cam.id}
+            data-hls={cam.hlsUrl}
+            data-region={cam.region}
+          >
+            <div class="td-status">
+              <span class="status-dot unknown" id={`dot-${cam.id}`}></span>
+              <span class="status-text mono" id={`text-${cam.id}`}>Unknown</span>
+            </div>
+            <div class="td-name">
+              <a href={`/camera/${cam.id}`} class="cam-name">{cam.name}</a>
+              <span class="cam-location">{cam.location}</span>
+            </div>
+            <div class="td-region">
+              <span class="region-badge mono">{cam.region}</span>
+            </div>
+            <div class="td-stream">
+              <span class="stream-type mono">{
+                cam.hlsUrl.includes('youtube.com') || cam.hlsUrl.includes('youtu.be')
+                  ? 'YouTube'
+                  : /\.(jpe?g|png|gif|webp|bmp)(\?|$)/i.test(cam.hlsUrl)
+                    ? 'Image'
+                    : 'HLS'
+              }</span>
+            </div>
+            <div class="td-checked">
+              <span class="checked-time mono" id={`time-${cam.id}`}>—</span>
+            </div>
+            <div class="td-action">
+              <button class="btn-check mono" data-cam-id={cam.id} title="Check this camera">
+                Refresh
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .status-header {
+    padding-top: 100px;
+    border-bottom: 1px solid var(--border);
+    background: var(--deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .status-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 50% 50% at 50% 80%, rgba(201,168,76,0.06) 0%, transparent 70%);
+  }
+
+  .status-subtitle {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+  }
+
+  /* Stats Bar */
+  .stats-bar {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 72px;
+    z-index: 50;
+  }
+
+  .stats-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .stat-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+
+  .stat-value.stat-live { color: #48bb78; }
+  .stat-value.stat-offline { color: #f56565; }
+  .stat-value.stat-unknown { color: #ecc94b; }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--border);
+  }
+
+  .stat-actions {
+    margin-left: auto;
+  }
+
+  .stat-actions .btn-primary {
+    padding: 12px 28px;
+    font-size: 12px;
+  }
+
+  /* Progress Bar */
+  .progress-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 48px 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .progress-text {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  /* Timestamp */
+  .status-timestamp {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  /* Table */
+  .status-table {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    overflow-x: auto;
+  }
+
+  .table-header {
+    display: grid;
+    grid-template-columns: 140px 1fr 120px 80px 120px 90px;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.015);
+  }
+
+  .table-header > div {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .table-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 120px 80px 120px 90px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    transition: background 0.2s;
+  }
+
+  .table-row:last-child {
+    border-bottom: none;
+  }
+
+  .table-row:hover {
+    background: rgba(255,255,255,0.015);
+  }
+
+  .table-row.status-live {
+    border-left: 2px solid #48bb78;
+  }
+
+  .table-row.status-offline {
+    border-left: 2px solid #f56565;
+  }
+
+  .table-row.status-checking {
+    border-left: 2px solid var(--gold);
+    opacity: 0.7;
+  }
+
+  /* Status Dot */
+  .td-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .status-dot.unknown {
+    background: #ecc94b;
+    opacity: 0.5;
+  }
+
+  .status-dot.live {
+    background: #48bb78;
+    box-shadow: 0 0 8px rgba(72, 187, 120, 0.4);
+    animation: pulse-live 2s infinite;
+  }
+
+  .status-dot.offline {
+    background: #f56565;
+    box-shadow: 0 0 8px rgba(245, 101, 101, 0.3);
+  }
+
+  .status-dot.checking {
+    background: var(--gold);
+    animation: pulse-check 0.8s infinite;
+  }
+
+  @keyframes pulse-live {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  @keyframes pulse-check {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .status-text {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Camera Name */
+  .td-name {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .cam-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cam-name:hover {
+    color: var(--gold);
+  }
+
+  .cam-location {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* Region Badge */
+  .region-badge {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: var(--gold-dim);
+    padding: 3px 10px;
+    border-radius: 2px;
+    border: 1px solid rgba(201,168,76,0.15);
+    display: inline-block;
+  }
+
+  /* Stream Type */
+  .stream-type {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  /* Checked Time */
+  .checked-time {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+  }
+
+  /* Action Button */
+  .btn-check {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 5px 12px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .btn-check:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .btn-check:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .table-header {
+      display: none;
+    }
+
+    .table-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      padding: 16px 20px;
+    }
+
+    .td-status {
+      order: 1;
+    }
+
+    .td-name {
+      order: 2;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .td-region {
+      order: 3;
+    }
+
+    .td-stream {
+      order: 5;
+    }
+
+    .td-checked {
+      order: 4;
+    }
+
+    .td-action {
+      order: 6;
+      margin-left: auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stats-inner {
+      padding: 16px 24px;
+      gap: 16px;
+    }
+
+    .stat-value {
+      font-size: 20px;
+    }
+
+    .stat-actions {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    .stat-actions .btn-primary {
+      width: 100%;
+      text-align: center;
+    }
+
+    .progress-wrapper {
+      padding: 12px 24px 0;
+    }
+
+    .status-table {
+      font-size: 13px;
+    }
+  }
+</style>
+
+<script define:vars={{ totalCameras }}>
+  function initStatusDashboard() {
+    const checkAllBtn = document.getElementById('check-all-btn');
+    const progressWrapper = document.getElementById('progress-wrapper');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    const timestampEl = document.getElementById('status-timestamp');
+    const statLive = document.getElementById('stat-live');
+    const statOffline = document.getElementById('stat-offline');
+    const statUnknown = document.getElementById('stat-unknown');
+
+    let liveCount = 0;
+    let offlineCount = 0;
+    let unknownCount = totalCameras;
+    let isRunning = false;
+
+    function updateStats() {
+      if (statLive) statLive.textContent = String(liveCount);
+      if (statOffline) statOffline.textContent = String(offlineCount);
+      if (statUnknown) statUnknown.textContent = String(unknownCount);
+    }
+
+    function formatTime(date) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    function setCameraStatus(camId, status) {
+      const dot = document.getElementById(`dot-${camId}`);
+      const text = document.getElementById(`text-${camId}`);
+      const row = document.getElementById(`row-${camId}`);
+      const timeEl = document.getElementById(`time-${camId}`);
+
+      if (!dot || !text || !row) return;
+
+      // Remove old status classes
+      dot.classList.remove('unknown', 'live', 'offline', 'checking');
+      row.classList.remove('status-live', 'status-offline', 'status-checking');
+
+      if (status === 'checking') {
+        dot.classList.add('checking');
+        row.classList.add('status-checking');
+        text.textContent = 'Checking...';
+        text.style.color = 'var(--gold)';
+      } else if (status === 'live') {
+        dot.classList.add('live');
+        row.classList.add('status-live');
+        text.textContent = 'Live';
+        text.style.color = '#48bb78';
+        if (timeEl) timeEl.textContent = formatTime(new Date());
+      } else if (status === 'offline') {
+        dot.classList.add('offline');
+        row.classList.add('status-offline');
+        text.textContent = 'Offline';
+        text.style.color = '#f56565';
+        if (timeEl) timeEl.textContent = formatTime(new Date());
+      } else {
+        dot.classList.add('unknown');
+        text.textContent = 'Unknown';
+        text.style.color = '';
+      }
+    }
+
+    function getStreamType(url) {
+      if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
+      if (/\.(jpe?g|png|gif|webp|bmp)(\?|$)/i.test(url)) return 'image';
+      return 'hls';
+    }
+
+    async function checkCamera(camId, hlsUrl) {
+      setCameraStatus(camId, 'checking');
+      const streamType = getStreamType(hlsUrl);
+
+      // YouTube streams — we can't reliably check from client-side, assume live
+      if (streamType === 'youtube') {
+        return 'live';
+      }
+
+      // Image streams — attempt to load via Image object
+      if (streamType === 'image') {
+        return new Promise((resolve) => {
+          const img = new Image();
+          const timeout = setTimeout(() => { img.src = ''; resolve('unknown'); }, 8000);
+          img.onload = () => { clearTimeout(timeout); resolve('live'); };
+          img.onerror = () => { clearTimeout(timeout); resolve('offline'); };
+          img.src = hlsUrl + (hlsUrl.includes('?') ? '&' : '?') + '_t=' + Date.now();
+        });
+      }
+
+      // HLS streams — fetch the .m3u8 playlist
+      try {
+        const m3u8Url = hlsUrl.endsWith('/') ? hlsUrl + 'index.m3u8' : hlsUrl;
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 8000);
+
+        const response = await fetch(m3u8Url, {
+          method: 'HEAD',
+          mode: 'cors',
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeout);
+
+        if (response.ok) {
+          return 'live';
+        } else {
+          return 'offline';
+        }
+      } catch (err) {
+        // CORS blocks HEAD — try GET as fallback
+        try {
+          const m3u8Url = hlsUrl.endsWith('/') ? hlsUrl + 'index.m3u8' : hlsUrl;
+          const controller2 = new AbortController();
+          const timeout2 = setTimeout(() => controller2.abort(), 8000);
+
+          const response2 = await fetch(m3u8Url, {
+            mode: 'cors',
+            signal: controller2.signal,
+          });
+
+          clearTimeout(timeout2);
+
+          if (response2.ok) {
+            return 'live';
+          } else {
+            return 'offline';
+          }
+        } catch (e) {
+          // CORS or network error — mark unknown, not offline
+          if (e && e.name === 'TypeError') {
+            return 'unknown';
+          }
+          return 'unknown';
+        }
+      }
+    }
+
+    async function checkSingleCamera(camId) {
+      const row = document.getElementById(`row-${camId}`);
+      if (!row) return;
+
+      const hlsUrl = row.dataset.hls || '';
+      const prevDot = document.getElementById(`dot-${camId}`);
+      const wasLive = prevDot?.classList.contains('live');
+      const wasOffline = prevDot?.classList.contains('offline');
+      const wasUnknown = prevDot?.classList.contains('unknown');
+
+      const result = await checkCamera(camId, hlsUrl);
+      setCameraStatus(camId, result);
+
+      // Decrement the previous state count
+      if (wasLive) liveCount--;
+      else if (wasOffline) offlineCount--;
+      else if (wasUnknown) unknownCount--;
+
+      // Increment the new state count
+      if (result === 'live') liveCount++;
+      else if (result === 'offline') offlineCount++;
+      else unknownCount++;
+
+      updateStats();
+    }
+
+    async function checkAllCameras() {
+      if (isRunning) return;
+      isRunning = true;
+
+      if (checkAllBtn) {
+        checkAllBtn.textContent = 'Checking...';
+        checkAllBtn.disabled = true;
+      }
+
+      // Reset counts
+      liveCount = 0;
+      offlineCount = 0;
+      unknownCount = totalCameras;
+      updateStats();
+
+      // Show progress
+      if (progressWrapper) progressWrapper.style.display = 'flex';
+      if (progressFill) progressFill.style.width = '0%';
+
+      const rows = document.querySelectorAll('.table-row');
+      let completed = 0;
+
+      // Disable all individual refresh buttons
+      document.querySelectorAll('.btn-check').forEach((btn) => {
+        btn.disabled = true;
+      });
+
+      // Check cameras in batches of 3 for speed
+      const batchSize = 3;
+      const rowArray = Array.from(rows);
+
+      for (let i = 0; i < rowArray.length; i += batchSize) {
+        const batch = rowArray.slice(i, i + batchSize);
+        const promises = batch.map(async (row) => {
+          const camId = row.dataset.id || '';
+          const hlsUrl = row.dataset.hls || '';
+
+          const result = await checkCamera(camId, hlsUrl);
+          setCameraStatus(camId, result);
+
+          if (result === 'live') liveCount++;
+          else if (result === 'offline') offlineCount++;
+          unknownCount--;
+
+          completed++;
+          const pct = Math.round((completed / totalCameras) * 100);
+          if (progressFill) progressFill.style.width = pct + '%';
+          if (progressText) progressText.textContent = `${completed} / ${totalCameras}`;
+
+          updateStats();
+        });
+
+        await Promise.all(promises);
+      }
+
+      // Done
+      if (timestampEl) {
+        timestampEl.textContent = `Last checked: ${formatTime(new Date())}`;
+      }
+
+      if (checkAllBtn) {
+        checkAllBtn.textContent = 'Check All';
+        checkAllBtn.disabled = false;
+      }
+
+      // Re-enable individual buttons
+      document.querySelectorAll('.btn-check').forEach((btn) => {
+        btn.disabled = false;
+      });
+
+      isRunning = false;
+    }
+
+    // Bind Check All button
+    checkAllBtn?.addEventListener('click', checkAllCameras);
+
+    // Bind individual refresh buttons
+    document.querySelectorAll('.btn-check').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const camId = btn.dataset.camId;
+        if (camId && !isRunning) {
+          btn.disabled = true;
+          checkSingleCamera(camId).then(() => {
+            btn.disabled = false;
+          });
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStatusDashboard);
+  } else {
+    initStatusDashboard();
+  }
+  document.addEventListener('astro:page-load', initStatusDashboard);
+</script>
