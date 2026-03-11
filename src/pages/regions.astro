@@ -43,11 +43,9 @@ const regionDescriptions: Record<string, string> = {
               id={cam.id}
               name={cam.name}
               location={cam.location}
-              streamType={cam.streamType}
+              streamType="hls"
               tags={cam.tags}
               isLive={cam.isLive}
-              isFeatured={cam.isFeatured}
-              thumbnail={cam.thumbnail}
             />
           ))}
         </div>

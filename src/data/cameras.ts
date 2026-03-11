@@ -188,6 +188,16 @@ export function getCameraById(id: string): Camera | undefined {
   return cameras.find((c) => c.id === id);
 }
 
+export function getAllRegions(): { name: string; count: number }[] {
+  const map = new Map<string, number>();
+  for (const c of cameras) {
+    map.set(c.region, (map.get(c.region) || 0) + 1);
+  }
+  return Array.from(map.entries())
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
 export function getCamerasByRegion(region: string): Camera[] {
   return cameras.filter((c) => c.region === region);
 }
