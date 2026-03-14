@@ -86,8 +86,13 @@ const canonicalUrl = new URL(Astro.url.pathname, 'https://portofcams.com').href;
         <li><a href="/status">Status</a></li>
       </ul>
       <div class="footer-sister-sites">
+        <span class="footer-sister-label mono">Our Products</span>
+        <a href="https://pro.portofcams.com" target="_blank" rel="noopener noreferrer">Pro <span class="mono">HD Streams</span></a>
+        <a href="https://camdrop.portofcams.com" target="_blank" rel="noopener noreferrer">CamDrop <span class="mono">Construction Timelapse</span></a>
+      </div>
+      <div class="footer-sister-sites">
         <span class="footer-sister-label mono">Sister Sites</span>
-        <a href="https://alohacalendar.com" target="_blank" rel="noopener noreferrer">AlohaCalendar <span class="mono">Hawaii Events</span></a>
+        <a href="https://hawaiicalendar.com" target="_blank" rel="noopener noreferrer">Hawaii Calendar <span class="mono">Hawaii Events</span></a>
         <a href="https://lastfrontierevents.com" target="_blank" rel="noopener noreferrer">Last Frontier Events <span class="mono">Alaska Events</span></a>
       </div>
       <div class="footer-copy mono">&copy; 2026 PortOfCams</div>
@@ -365,8 +370,10 @@ const canonicalUrl = new URL(Astro.url.pathname, 'https://portofcams.com').href;
     margin: 0 auto;
     padding: 40px 48px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 32px;
   }
 
   .footer-logo {
@@ -397,8 +404,8 @@ const canonicalUrl = new URL(Astro.url.pathname, 'https://portofcams.com').href;
 
   .footer-sister-sites {
     display: flex;
-    align-items: center;
-    gap: 24px;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .footer-sister-label {
