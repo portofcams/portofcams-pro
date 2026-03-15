@@ -1,0 +1,671 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Host a Camera — Port of Cams"
+  description="Partner with Port of Cams. We provide and install professional streaming cameras at your location for free. Get a premium account, daily analytics, and an embeddable live player."
+  activeNav="host"
+>
+
+  <!-- Hero -->
+  <section class="host-hero">
+    <div class="host-hero-bg"></div>
+    <div class="section-inner" style="position:relative; text-align:center;">
+      <div class="host-tag mono">Now Accepting Applications</div>
+      <h1 class="display host-title">
+        We Install the Camera.<br/>
+        <em class="display-italic" style="color: var(--gold)">You Get Premium for Free.</em>
+      </h1>
+      <p class="host-subtitle">
+        Got a great location? We provide and install a professional streaming camera — completely free.
+        Every feed runs 100% end-to-end encrypted, direct to our hardened servers.
+        You get a free premium account, daily viewer analytics, and an embeddable live player for your website.
+      </p>
+      <a href="#apply" class="btn-primary">Apply Now</a>
+    </div>
+  </section>
+
+  <!-- Why Host -->
+  <section class="host-why">
+    <div class="section-inner">
+      <div class="section-label">Why Partner With Us</div>
+      <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 60px;">
+        Zero Effort. <em class="display-italic" style="color: var(--gold)">Maximum Exposure.</em>
+      </h2>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          </div>
+          <h3>We Provide the Hardware</h3>
+          <p>We supply and ship a professional-grade streaming camera to your location at no cost. We walk you through the one-time plug-in. That's it — you're done.</p>
+        </div>
+
+        <div class="why-card">
+          <div class="why-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <h3>Real Audience</h3>
+          <p>Tap into our growing audience of Hawaii locals, travelers, researchers, and remote viewers hungry for live island content.</p>
+        </div>
+
+        <div class="why-card">
+          <div class="why-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+          </div>
+          <h3>Free Premium Account</h3>
+          <p>Every camera host gets a complimentary premium account ($9.99/month value) with full HD access to the entire Port of Cams network, plus daily viewer analytics.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Security -->
+  <section class="host-security">
+    <div class="section-inner">
+      <div class="section-label">Built From the Ground Up</div>
+      <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 16px;">
+        Security We Spent Months <em class="display-italic" style="color: var(--gold)">Engineering</em>
+      </h2>
+      <p style="color: var(--muted); font-size: 15px; margin-bottom: 60px; max-width: 600px; line-height: 1.8;">
+        Before we streamed a single frame, we spent months hardening the infrastructure.
+        Every decision — from how the camera connects to how viewers receive segments — was designed with security first.
+      </p>
+
+      <div class="security-grid">
+        <div class="security-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <div>
+            <h4>100% Encrypted Feed, End to End</h4>
+            <p>Every byte your camera transmits travels over TLS-encrypted RTMP — from the moment it leaves your location to the moment it lands on our servers.</p>
+          </div>
+        </div>
+
+        <div class="security-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <div>
+            <h4>Hardened Private Infrastructure</h4>
+            <p>Our streaming servers run on locked-down private endpoints — no public RTMP exposure, no shared ingress. Months of penetration testing and DDoS mitigation are baked in.</p>
+          </div>
+        </div>
+
+        <div class="security-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+          <div>
+            <h4>Unique Stream Keys Per Camera</h4>
+            <p>Each camera gets a cryptographically unique stream key. Keys are rotated on demand. Even if one were compromised, zero other feeds are affected.</p>
+          </div>
+        </div>
+
+        <div class="security-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          <div>
+            <h4>Authenticated HLS Delivery</h4>
+            <p>Viewers receive time-limited, signed segment URLs. Nobody can hotlink or leech your stream. Premium feeds add an additional token layer.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust bar -->
+      <div class="trust-bar">
+        <div><span class="trust-val">TLS 1.3</span><span class="trust-label mono">Encrypted Transport</span></div>
+        <div><span class="trust-val">Signed</span><span class="trust-label mono">HLS Segments</span></div>
+        <div><span class="trust-val">Private</span><span class="trust-label mono">RTMP Endpoints</span></div>
+        <div><span class="trust-val">Zero</span><span class="trust-label mono">Public Exposure</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tiers -->
+  <section class="host-tiers">
+    <div class="section-inner">
+      <div class="section-label">What You Get</div>
+      <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 60px;">
+        Free vs. <em class="display-italic" style="color: var(--gold)">Premium</em> Hosting
+      </h2>
+
+      <div class="tier-grid">
+        <!-- Free -->
+        <div class="tier-card">
+          <div class="tier-header">
+            <span class="tier-label mono">Free</span>
+            <div class="tier-price display">$0 <span class="tier-period">/ month</span></div>
+            <p class="tier-desc">Get listed and start streaming. No credit card.</p>
+          </div>
+          <ul class="tier-features">
+            <li><span class="check">&#10003;</span> Listed on the public cameras page</li>
+            <li><span class="check">&#10003;</span> Unlimited live streaming hours</li>
+            <li><span class="check">&#10003;</span> Basic viewer count stats</li>
+            <li><span class="check">&#10003;</span> Standard HLS stream delivery</li>
+            <li><span class="check">&#10003;</span> Community exposure &amp; discovery</li>
+            <li><span class="check">&#10003;</span> Port of Cams branding on your feed</li>
+          </ul>
+          <a href="#apply" class="btn-secondary tier-btn">Apply Free</a>
+        </div>
+
+        <!-- Premium -->
+        <div class="tier-card featured">
+          <div class="tier-badge mono">Premium</div>
+          <div class="tier-header">
+            <span class="tier-label mono" style="color: var(--gold);">Premium Host</span>
+            <div class="tier-price display">Free <span class="tier-period">($9.99/mo value)</span></div>
+            <p class="tier-desc">Complimentary premium account for every camera host.</p>
+          </div>
+          <ul class="tier-features">
+            <li><span class="check gold">&#10003;</span> Everything in Free</li>
+            <li><span class="check gold">&#10003;</span> Free premium account ($9.99/month value)</li>
+            <li><span class="check gold">&#10003;</span> We provide &amp; install all camera equipment</li>
+            <li><span class="check gold">&#10003;</span> Featured homepage placement &amp; player</li>
+            <li><span class="check gold">&#10003;</span> 48-Hour DVR — viewers rewind up to 2 days</li>
+            <li><span class="check gold">&#10003;</span> Daily viewer analytics dashboard</li>
+            <li><span class="check gold">&#10003;</span> Embeddable live player for your own website</li>
+            <li><span class="check gold">&#10003;</span> Priority stream health monitoring</li>
+            <li><span class="check gold">&#10003;</span> Dedicated support channel</li>
+          </ul>
+          <a href="#apply" class="btn-primary tier-btn">Apply for Premium</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sponsorship -->
+  <section class="host-sponsorship">
+    <div class="section-inner">
+      <div class="sponsor-card">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        <div>
+          <h3>Sponsorship Opportunities</h3>
+          <p>Premium camera operators can partner with local businesses, tourism boards, and brands for sponsored feeds.
+          Your camera's live view becomes a branded experience. We facilitate introductions and handle ad placement logistics.</p>
+        </div>
+        <a href="#apply" class="btn-secondary" style="flex-shrink:0; white-space:nowrap;">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Application Form -->
+  <section class="host-apply" id="apply">
+    <div class="section-inner">
+      <div class="section-label">Get Started</div>
+      <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 16px;">
+        Apply for a Camera <em class="display-italic" style="color: var(--gold)">Installation</em>
+      </h2>
+      <p style="color: var(--muted); font-size: 15px; margin-bottom: 60px; max-width: 500px; line-height: 1.7;">
+        Tell us about your location. We review every application and ship the hardware — you'll hear back within 48 hours.
+      </p>
+
+      <div class="form-wrapper">
+        <form id="hostForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="hfName" class="form-label mono">Your Name *</label>
+              <input id="hfName" required type="text" placeholder="Kai Makoa" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label for="hfEmail" class="form-label mono">Email *</label>
+              <input id="hfEmail" required type="email" autocomplete="email" placeholder="you@example.com" class="form-input" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="hfLocation" class="form-label mono">Your Location *</label>
+              <input id="hfLocation" required type="text" placeholder="Honolulu, Oahu" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label for="hfTier" class="form-label mono">Membership Interest</label>
+              <select id="hfTier" class="form-input">
+                <option value="free">Free Listing</option>
+                <option value="premium">Premium Host</option>
+                <option value="sponsorship">Sponsorship Inquiry</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="hfView" class="form-label mono">Describe the View</label>
+            <input id="hfView" type="text" placeholder="Beachfront, harbor entrance, volcano overlook..." class="form-input" />
+          </div>
+          <div class="form-group">
+            <label for="hfMessage" class="form-label mono">Anything Else?</label>
+            <textarea id="hfMessage" rows="3" placeholder="Camera type, internet connection, questions..." class="form-input form-textarea"></textarea>
+          </div>
+          <button type="submit" id="hfSubmit" class="btn-primary form-submit">Submit Application</button>
+        </form>
+
+        <!-- Success message -->
+        <div id="hfSuccess" class="form-success" style="display:none;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          <h3 class="display" style="font-size: 28px; margin-top: 16px;">Application Received!</h3>
+          <p style="color: var(--muted); font-size: 15px; line-height: 1.7; margin-top: 8px;">
+            We'll review your submission and be in touch within 48 hours.<br/>
+            Check your inbox at <span id="hfConfirmEmail" style="color: var(--gold);"></span>
+          </p>
+        </div>
+
+        <!-- Error message -->
+        <div id="hfError" class="form-error" style="display:none;"></div>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* Hero */
+  .host-hero {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding-top: 80px;
+  }
+
+  .host-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 30%, rgba(201,168,76,0.08) 0%, transparent 70%),
+      linear-gradient(180deg, #080808 0%, #0a0905 100%);
+  }
+
+  .host-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    border-radius: 1px;
+    margin-bottom: 32px;
+  }
+
+  .host-title {
+    font-size: clamp(40px, 6vw, 80px);
+    max-width: 800px;
+    margin: 0 auto 28px;
+  }
+
+  .host-subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.8;
+    margin: 0 auto 40px;
+  }
+
+  /* Why section */
+  .host-why {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .why-card {
+    background: var(--deep);
+    padding: 40px 32px;
+  }
+
+  .why-icon { margin-bottom: 20px; }
+
+  .why-card h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .why-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* Security */
+  .host-security {
+    border-top: 1px solid var(--border);
+  }
+
+  .security-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+
+  .security-card {
+    background: var(--surface);
+    padding: 32px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .security-card svg { flex-shrink: 0; margin-top: 2px; }
+
+  .security-card h4 {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .security-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .trust-bar {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    padding: 32px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    text-align: center;
+  }
+
+  .trust-bar > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .trust-val {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  .trust-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* Tiers */
+  .host-tiers {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+
+  .tier-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    max-width: 800px;
+  }
+
+  .tier-card {
+    background: var(--surface);
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .tier-card.featured {
+    background: var(--deep);
+    border: 1px solid var(--gold);
+    margin: -1px;
+    z-index: 1;
+  }
+
+  .tier-badge {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 4px 12px;
+    display: inline-block;
+    margin-bottom: 16px;
+    width: fit-content;
+  }
+
+  .tier-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .tier-price {
+    font-size: 48px;
+    font-weight: 300;
+    line-height: 1;
+    margin: 8px 0 4px;
+  }
+
+  .tier-period {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .tier-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+    margin-bottom: 24px;
+  }
+
+  .tier-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex: 1;
+  }
+
+  .tier-features li {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tier-features .check {
+    color: rgba(245,240,232,0.2);
+    flex-shrink: 0;
+    width: 16px;
+    text-align: center;
+  }
+
+  .tier-features .check.gold { color: var(--gold); }
+
+  .tier-btn {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    margin-top: auto;
+  }
+
+  /* Sponsorship */
+  .host-sponsorship {
+    border-top: 1px solid var(--border);
+  }
+
+  .sponsor-card {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 40px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .sponsor-card h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .sponsor-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* Form */
+  .host-apply {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+
+  .form-wrapper {
+    max-width: 600px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 48px 40px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .form-group { margin-bottom: 16px; }
+  .form-row .form-group { margin-bottom: 0; }
+
+  .form-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .form-input:focus { border-color: var(--gold); }
+
+  .form-input::placeholder { color: rgba(245,240,232,0.15); }
+
+  select.form-input {
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .form-textarea { resize: none; }
+
+  .form-submit {
+    width: 100%;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  /* Success message */
+  .form-success {
+    text-align: center;
+    padding: 48px 24px;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    background: rgba(201,168,76,0.04);
+  }
+
+  /* Error message */
+  .form-error {
+    margin-top: 16px;
+    padding: 16px 20px;
+    border: 1px solid rgba(239,68,68,0.3);
+    background: rgba(239,68,68,0.06);
+    color: #ef4444;
+    font-size: 14px;
+    border-radius: 2px;
+    text-align: center;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .host-hero { min-height: 60vh; }
+    .why-grid { grid-template-columns: 1fr; }
+    .security-grid { grid-template-columns: 1fr; }
+    .tier-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .sponsor-card { flex-direction: column; text-align: center; }
+    .trust-bar { flex-wrap: wrap; gap: 24px; }
+    .form-wrapper { padding: 32px 24px; }
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    var form = document.getElementById('hostForm');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var btn = document.getElementById('hfSubmit');
+      btn.disabled = true;
+      btn.textContent = 'Sending\u2026';
+
+      var payload = {
+        name:     document.getElementById('hfName').value.trim(),
+        email:    document.getElementById('hfEmail').value.trim(),
+        location: document.getElementById('hfLocation').value.trim(),
+        tier:     document.getElementById('hfTier').value,
+        view:     document.getElementById('hfView').value.trim(),
+        message:  document.getElementById('hfMessage').value.trim()
+      };
+
+      fetch('/api/host-application', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(function(res) {
+        if (res.ok) {
+          form.style.display = 'none';
+          var successEl = document.getElementById('hfSuccess');
+          successEl.style.display = 'block';
+          var confirmEmail = document.getElementById('hfConfirmEmail');
+          if (confirmEmail) confirmEmail.textContent = payload.email;
+        } else {
+          throw new Error('Server error');
+        }
+      })
+      .catch(function() {
+        var errEl = document.getElementById('hfError');
+        errEl.style.display = 'block';
+        errEl.textContent = 'Something went wrong. Email us directly at Portofcams@gmail.com';
+        btn.disabled = false;
+        btn.textContent = 'Submit Application';
+      });
+    });
+  })();
+</script>

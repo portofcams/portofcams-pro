@@ -50,6 +50,7 @@ const canonicalUrl = new URL(Astro.url.pathname, 'https://portofcams.com').href;
       <li><a href="/browse" class:list={[{ active: activeNav === "browse" }]}>Browse</a></li>
       <li><a href="/timelapse" class:list={[{ active: activeNav === "timelapse" }]}>Timelapse</a></li>
       <li><a href="/embed" class:list={[{ active: activeNav === "embed" }]}>Embed Tool</a></li>
+      <li><a href="/host" class:list={[{ active: activeNav === "host" }]}>Host a Cam</a></li>
       <li><a href="/premium" class:list={[{ active: activeNav === "premium" }]}>Premium</a></li>
       <li><a href="/premium" class="nav-cta">Go Premium</a></li>
     </ul>
@@ -67,6 +68,7 @@ const canonicalUrl = new URL(Astro.url.pathname, 'https://portofcams.com').href;
       <li><a href="/browse">Browse Cameras</a></li>
       <li><a href="/timelapse">Timelapse</a></li>
       <li><a href="/embed">Embed Tool</a></li>
+      <li><a href="/host">Host a Cam</a></li>
       <li><a href="/premium" style="color: var(--gold);">Go Premium</a></li>
     </ul>
   </div>
@@ -82,6 +84,7 @@ const canonicalUrl = new URL(Astro.url.pathname, 'https://portofcams.com').href;
         <li><a href="/browse">Browse</a></li>
         <li><a href="/timelapse">Timelapse</a></li>
         <li><a href="/embed">Embed</a></li>
+        <li><a href="/host">Host</a></li>
         <li><a href="/premium">Premium</a></li>
         <li><a href="/status">Status</a></li>
       </ul>
