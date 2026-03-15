@@ -56,10 +56,16 @@ import { cameras, regions, allTags } from '../data/cameras';
           >
             <div class="card-preview">
               <div class="card-overlay"></div>
-              <div class="card-live-badge">
-                <span class="card-live-dot"></span>
-                <span class="mono">LIVE</span>
-              </div>
+              {cam.source === 'windy' ? (
+                <div class="card-windy-badge">
+                  <span class="mono">{cam.isLive ? 'LIVE' : 'TIMELAPSE'}</span>
+                </div>
+              ) : (
+                <div class="card-live-badge">
+                  <span class="card-live-dot"></span>
+                  <span class="mono">LIVE</span>
+                </div>
+              )}
               <div class="card-location-badge mono">{cam.region}</div>
             </div>
             <div class="card-info">
@@ -257,6 +263,26 @@ import { cameras, regions, allTags } from '../data/cameras';
     font-size: 9px;
     letter-spacing: 0.15em;
     color: #e53e3e;
+  }
+
+  .card-windy-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+    padding: 4px 10px;
+    border-radius: 2px;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+
+  .card-windy-badge span {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
   }
 
   .card-location-badge {

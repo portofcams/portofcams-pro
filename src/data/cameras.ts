@@ -8,6 +8,9 @@ export interface Camera {
   tags: string[];
   coordinates: { lat: number; lng: number };
   isLive: boolean;
+  source?: 'native' | 'windy';
+  embedUrl?: string;
+  windyId?: number;
 }
 
 export const cameras: Camera[] = [
@@ -179,6 +182,285 @@ export const cameras: Camera[] = [
     coordinates: { lat: 34.0086, lng: -118.4981 },
     isLive: true,
   },
+
+  // === WINDY CAMS — Hawaii ===
+  {
+    id: "ala-moana-beach",
+    name: "Ala Moana Beach Park",
+    location: "Honolulu, HI",
+    region: "Hawaii",
+    description:
+      "Panoramic view of Ala Moana Beach Park, one of Oahu's most popular local beaches. Watch outrigger canoes, paddleboarders, and the turquoise waters of this urban paradise.",
+    hlsUrl: "",
+    tags: ["beach", "ocean", "scenic"],
+    coordinates: { lat: 21.2889, lng: -157.8477 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1471450467/day",
+    windyId: 1471450467,
+  },
+  {
+    id: "kahala-resort",
+    name: "Kahala Resort",
+    location: "Honolulu, HI",
+    region: "Hawaii",
+    description:
+      "View from the luxurious Kahala Hotel & Resort on Oahu's upscale east side. Watch the calm waters and exclusive beach away from the Waikiki crowds.",
+    hlsUrl: "",
+    tags: ["beach", "resort", "ocean"],
+    coordinates: { lat: 21.2668, lng: -157.7733 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1793899298/day",
+    windyId: 1793899298,
+  },
+  {
+    id: "charley-young-beach",
+    name: "Charley Young Beach",
+    location: "Kihei, Maui",
+    region: "Hawaii",
+    description:
+      "Live view of Charley Young Beach in Kihei on Maui's south shore. A local favorite for swimming and sunset watching with views across Ma'alaea Bay.",
+    hlsUrl: "",
+    tags: ["beach", "surf", "ocean"],
+    coordinates: { lat: 20.7362, lng: -156.4508 },
+    isLive: true,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1793876400/day",
+    windyId: 1793876400,
+  },
+  {
+    id: "royal-lahaina-resort",
+    name: "Royal Lahaina Resort",
+    location: "Lahaina, Maui",
+    region: "Hawaii",
+    description:
+      "Beachfront view from the Royal Lahaina Resort in Ka'anapali. Watch the famous Ka'anapali Beach, one of the best beaches in America, with views toward Lanai and Molokai.",
+    hlsUrl: "",
+    tags: ["beach", "resort", "ocean"],
+    coordinates: { lat: 20.9328, lng: -156.6917 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1743969593/day",
+    windyId: 1743969593,
+  },
+  {
+    id: "wailea-beach",
+    name: "Wailea Beach",
+    location: "Wailea, Maui",
+    region: "Hawaii",
+    description:
+      "View of Wailea Beach on Maui's sunny south shore. A crescent of golden sand backed by luxury resorts with calm, clear waters perfect for swimming and snorkeling.",
+    hlsUrl: "",
+    tags: ["beach", "resort", "ocean"],
+    coordinates: { lat: 20.6864, lng: -156.4423 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1401526080/day",
+    windyId: 1401526080,
+  },
+  {
+    id: "kilauea-volcano",
+    name: "Kilauea Volcano - Halema'uma'u",
+    location: "Big Island, HI",
+    region: "Hawaii",
+    description:
+      "View of the Halema'uma'u crater at Kilauea, one of the world's most active volcanoes. Watch volcanic activity, steam vents, and the dramatic landscape of Hawaii Volcanoes National Park.",
+    hlsUrl: "",
+    tags: ["volcano", "scenic", "landmark"],
+    coordinates: { lat: 19.4069, lng: -155.2834 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1359483331/day",
+    windyId: 1359483331,
+  },
+  {
+    id: "mauna-kea-observatory",
+    name: "Mauna Kea Observatory",
+    location: "Big Island, HI",
+    region: "Hawaii",
+    description:
+      "View from the summit of Mauna Kea at 13,796 feet, home to some of the world's most powerful telescopes. Often above the clouds with stunning views of the volcanic landscape.",
+    hlsUrl: "",
+    tags: ["mountain", "scenic", "landmark"],
+    coordinates: { lat: 19.8207, lng: -155.4681 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1299010708/day",
+    windyId: 1299010708,
+  },
+
+  // === WINDY CAMS — Alaska ===
+  {
+    id: "anchorage-skyline",
+    name: "Anchorage Skyline",
+    location: "Anchorage, AK",
+    region: "Alaska",
+    description:
+      "Panoramic view of the Anchorage skyline with the Chugach Mountains in the background. Watch the dramatic Alaska weather, northern lights season, and the city's changing seasons.",
+    hlsUrl: "",
+    tags: ["urban", "mountain", "scenic"],
+    coordinates: { lat: 61.2181, lng: -149.9003 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1675825714/day",
+    windyId: 1675825714,
+  },
+  {
+    id: "anchorage-town-square",
+    name: "Anchorage Town Square",
+    location: "Anchorage, AK",
+    region: "Alaska",
+    description:
+      "View of downtown Anchorage's Town Square, the city's central gathering place. See events, markets, and daily life in Alaska's largest city.",
+    hlsUrl: "",
+    tags: ["urban", "landmark", "town"],
+    coordinates: { lat: 61.2176, lng: -149.8914 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1793899826/day",
+    windyId: 1793899826,
+  },
+  {
+    id: "ship-creek-anchorage",
+    name: "Ship Creek",
+    location: "Anchorage, AK",
+    region: "Alaska",
+    description:
+      "View of Ship Creek in downtown Anchorage, famous for urban salmon fishing. Watch anglers catch king and silver salmon right in the heart of the city during summer runs.",
+    hlsUrl: "",
+    tags: ["water", "wildlife", "scenic"],
+    coordinates: { lat: 61.2261, lng: -149.8822 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1793899824/day",
+    windyId: 1793899824,
+  },
+  {
+    id: "juneau-harbor",
+    name: "Juneau Harbor",
+    location: "Juneau, AK",
+    region: "Alaska",
+    description:
+      "View of Juneau's harbor, Alaska's capital city accessible only by air or sea. Watch cruise ships, float planes, and the stunning Gastineau Channel backed by mountains and glaciers.",
+    hlsUrl: "",
+    tags: ["water", "urban", "scenic"],
+    coordinates: { lat: 58.3005, lng: -134.4197 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1680336661/day",
+    windyId: 1680336661,
+  },
+  {
+    id: "fairbanks-airport-way",
+    name: "Fairbanks - Airport Way",
+    location: "Fairbanks, AK",
+    region: "Alaska",
+    description:
+      "View along Airport Way in Fairbanks, the Golden Heart City. Experience extreme Alaska conditions from -40F winters to midnight sun summers in the interior.",
+    hlsUrl: "",
+    tags: ["traffic", "urban", "scenic"],
+    coordinates: { lat: 64.8378, lng: -147.7164 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1738676898/day",
+    windyId: 1738676898,
+  },
+
+  // === WINDY CAMS — California ===
+  {
+    id: "la-i110-wilshire",
+    name: "I-110 at Wilshire Blvd",
+    location: "Los Angeles, CA",
+    region: "California",
+    description:
+      "Live traffic camera on the I-110 freeway at Wilshire Blvd in downtown Los Angeles. Monitor real-time traffic conditions on one of LA's busiest corridors.",
+    hlsUrl: "",
+    tags: ["traffic", "highway", "urban"],
+    coordinates: { lat: 34.0522, lng: -118.2668 },
+    isLive: true,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1709835159/day",
+    windyId: 1709835159,
+  },
+  {
+    id: "la-i10-downtown",
+    name: "I-10 at Downtown LA",
+    location: "Los Angeles, CA",
+    region: "California",
+    description:
+      "Live traffic camera on the I-10 freeway near downtown Los Angeles. Watch the constant flow of traffic through one of America's busiest highway interchanges.",
+    hlsUrl: "",
+    tags: ["traffic", "highway", "urban"],
+    coordinates: { lat: 34.0407, lng: -118.2468 },
+    isLive: true,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1709835270/day",
+    windyId: 1709835270,
+  },
+  {
+    id: "san-diego-bay",
+    name: "San Diego Bay",
+    location: "San Diego, CA",
+    region: "California",
+    description:
+      "Live view of San Diego Bay with the city skyline and Coronado Bridge. Watch sailboats, naval vessels, and stunning sunsets over one of California's most beautiful harbors.",
+    hlsUrl: "",
+    tags: ["ocean", "urban", "scenic"],
+    coordinates: { lat: 32.7157, lng: -117.1611 },
+    isLive: true,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1649778683/day",
+    windyId: 1649778683,
+  },
+  {
+    id: "sf-us101",
+    name: "US-101 at Octavia St",
+    location: "San Francisco, CA",
+    region: "California",
+    description:
+      "Live traffic camera on US-101 at Octavia Street in San Francisco. Monitor traffic flow near the Central Freeway and Hayes Valley neighborhood.",
+    hlsUrl: "",
+    tags: ["traffic", "highway", "urban"],
+    coordinates: { lat: 37.7749, lng: -122.4241 },
+    isLive: true,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1596825917/day",
+    windyId: 1596825917,
+  },
+
+  // === WINDY CAMS — Pacific NW ===
+  {
+    id: "seattle-columbia-center",
+    name: "Columbia Center Skyline",
+    location: "Seattle, WA",
+    region: "Pacific NW",
+    description:
+      "View from near the Columbia Center, Seattle's tallest building. Watch the city skyline with views toward Puget Sound, the Olympic Mountains, and Mount Rainier on clear days.",
+    hlsUrl: "",
+    tags: ["urban", "scenic", "landmark"],
+    coordinates: { lat: 47.6047, lng: -122.3310 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1345843224/day",
+    windyId: 1345843224,
+  },
+  {
+    id: "portland-i405",
+    name: "Portland - I-405",
+    location: "Portland, OR",
+    region: "Pacific NW",
+    description:
+      "Traffic view along I-405 in Portland, Oregon. Watch the flow of traffic through the Rose City with views of the West Hills and downtown skyline.",
+    hlsUrl: "",
+    tags: ["traffic", "highway", "urban"],
+    coordinates: { lat: 45.5155, lng: -122.6870 },
+    isLive: false,
+    source: "windy",
+    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1513199656/day",
+    windyId: 1513199656,
+  },
+
 ];
 
 export const regions = [...new Set(cameras.map((c) => c.region))].sort();
