@@ -104,22 +104,26 @@ const featuredCameras = cameras.slice(0, 6);
         <a href="/browse" class="btn-secondary" style="flex-shrink: 0; align-self: flex-end;">View All Cameras</a>
       </div>
       <div class="featured-grid">
-        {featuredCameras.map((cam) => (
-          <a href={`/camera/${cam.id}`} class="featured-card">
-            <div class="featured-preview">
-              <div class="featured-overlay"></div>
-              <div class="featured-live">
-                <span class="featured-live-dot"></span>
-                <span class="mono">LIVE</span>
+        {featuredCameras.map((cam) => {
+          const streamUrl = cam.hlsUrl.endsWith('/') ? cam.hlsUrl + 'index.m3u8' : cam.hlsUrl;
+          return (
+            <a href={`/camera/${cam.id}`} class="featured-card" data-stream={streamUrl}>
+              <div class="featured-preview">
+                <video class="featured-video" muted playsinline></video>
+                <div class="featured-overlay"></div>
+                <div class="featured-live">
+                  <span class="featured-live-dot"></span>
+                  <span class="mono">LIVE</span>
+                </div>
+                <div class="featured-region mono">{cam.region}</div>
               </div>
-              <div class="featured-region mono">{cam.region}</div>
-            </div>
-            <div class="featured-info">
-              <h3>{cam.name}</h3>
-              <p>{cam.location}</p>
-            </div>
-          </a>
-        ))}
+              <div class="featured-info">
+                <h3>{cam.name}</h3>
+                <p>{cam.location}</p>
+              </div>
+            </a>
+          );
+        })}
       </div>
     </div>
   </section>
@@ -399,14 +403,15 @@ const featuredCameras = cameras.slice(0, 6);
     background: var(--surface);
     position: relative;
     overflow: hidden;
-    background-image:
-      repeating-linear-gradient(
-        0deg,
-        rgba(255,255,255,0.01) 0px,
-        rgba(255,255,255,0.01) 1px,
-        transparent 1px,
-        transparent 4px
-      );
+  }
+
+  .featured-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .featured-overlay {
@@ -560,3 +565,34 @@ const featuredCameras = cameras.slice(0, 6);
     .statement .section-inner { padding-top: 100px; padding-bottom: 100px; }
   }
 </style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.featured-card[data-stream]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const card = entry.target;
+        const video = card.querySelector('.featured-video');
+        const url = card.dataset.stream;
+        if (!url || !video || card.dataset.loaded) return;
+        card.dataset.loaded = 'true';
+        observer.unobserve(card);
+
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = url;
+          video.play().catch(() => {});
+        } else if (window.Hls && Hls.isSupported()) {
+          const hls = new Hls({ startLevel: 0, capLevelToPlayerSize: true, maxBufferLength: 5 });
+          hls.loadSource(url);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
+          hls.on(Hls.Events.ERROR, (_, data) => {
+            if (data.fatal) hls.destroy();
+          });
+        }
+      });
+    }, { rootMargin: '300px' });
+    cards.forEach(card => observer.observe(card));
+  });
+</script>
