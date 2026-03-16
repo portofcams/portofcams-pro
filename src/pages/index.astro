@@ -2,7 +2,15 @@
 import Layout from '../layouts/Layout.astro';
 import { cameras } from '../data/cameras';
 
-const featuredCameras = cameras.slice(0, 6);
+// Pick cameras that have a working stream: HLS from our server or Windy embeds
+const featuredCameras = [
+  cameras.find(c => c.id === 'east-lewers-st'),      // HLS - live
+  cameras.find(c => c.id === 'charley-young-beach'),  // Windy - Maui beach
+  cameras.find(c => c.id === 'san-diego-bay'),        // Windy - harbor
+  cameras.find(c => c.id === 'kilauea-volcano'),      // Windy - volcano
+  cameras.find(c => c.id === 'juneau-harbor'),         // Windy - Alaska
+  cameras.find(c => c.id === 'seattle-columbia-center'), // Windy - Seattle
+].filter(Boolean) as typeof cameras;
 ---
 
 <Layout title="PortOfCams Pro — Live Streaming for Venues, Events & Destinations" activeNav="home" includeHls={true}>
@@ -105,11 +113,16 @@ const featuredCameras = cameras.slice(0, 6);
       </div>
       <div class="featured-grid">
         {featuredCameras.map((cam) => {
-          const streamUrl = cam.hlsUrl.endsWith('/') ? cam.hlsUrl + 'index.m3u8' : cam.hlsUrl;
+          const isHls = cam.hlsUrl && cam.hlsUrl.length > 0;
+          const streamUrl = isHls ? (cam.hlsUrl.endsWith('/') ? cam.hlsUrl + 'index.m3u8' : cam.hlsUrl) : '';
           return (
-            <a href={`/camera/${cam.id}`} class="featured-card" data-stream={streamUrl}>
+            <a href={`/camera/${cam.id}`} class="featured-card" data-stream={streamUrl} data-embed={cam.embedUrl || ''}>
               <div class="featured-preview">
-                <video class="featured-video" muted playsinline></video>
+                {isHls ? (
+                  <video class="featured-video" muted playsinline></video>
+                ) : cam.embedUrl ? (
+                  <iframe class="featured-embed" src={cam.embedUrl} allow="autoplay" loading="lazy"></iframe>
+                ) : null}
                 <div class="featured-overlay"></div>
                 <div class="featured-live">
                   <span class="featured-live-dot"></span>
@@ -405,13 +418,16 @@ const featuredCameras = cameras.slice(0, 6);
     overflow: hidden;
   }
 
-  .featured-video {
+  .featured-video,
+  .featured-embed {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    border: none;
+    pointer-events: none;
   }
 
   .featured-overlay {
@@ -568,7 +584,8 @@ const featuredCameras = cameras.slice(0, 6);
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.featured-card[data-stream]');
+    // Only lazy-load HLS cards (Windy embeds load themselves via iframe)
+    const hlsCards = document.querySelectorAll('.featured-card[data-stream]');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
@@ -593,6 +610,8 @@ const featuredCameras = cameras.slice(0, 6);
         }
       });
     }, { rootMargin: '300px' });
-    cards.forEach(card => observer.observe(card));
+    hlsCards.forEach(card => {
+      if (card.dataset.stream) observer.observe(card);
+    });
   });
 </script>
