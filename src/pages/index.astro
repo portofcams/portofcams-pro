@@ -2,15 +2,15 @@
 import Layout from '../layouts/Layout.astro';
 import { cameras } from '../data/cameras';
 
-// Pick cameras that have a working stream: HLS from our server or Windy embeds
-const featuredCameras = [
-  cameras.find(c => c.id === 'east-lewers-st'),      // HLS - live
-  cameras.find(c => c.id === 'charley-young-beach'),  // Windy - Maui beach
-  cameras.find(c => c.id === 'san-diego-bay'),        // Windy - harbor
-  cameras.find(c => c.id === 'kilauea-volcano'),      // Windy - volcano
-  cameras.find(c => c.id === 'juneau-harbor'),         // Windy - Alaska
-  cameras.find(c => c.id === 'seattle-columbia-center'), // Windy - Seattle
-].filter(Boolean) as typeof cameras;
+// Hand-picked live feeds — 1 HLS (our server) + 5 YouTube live streams
+const featuredFeeds = [
+  { name: 'East Lewers Street', location: 'Waikiki, HI', region: 'Hawaii', type: 'hls' as const, url: 'https://cams.portofcams.com/east-lewers-st/index.m3u8', link: '/camera/east-lewers-st' },
+  { name: 'Banzai Pipeline', location: 'North Shore, HI', region: 'Hawaii', type: 'youtube' as const, url: 'https://www.youtube.com/embed/VI8Wj5EwoRM', link: '/camera/east-lewers-st' },
+  { name: 'Grand Teton', location: 'Jackson, WY', region: 'US Mainland', type: 'youtube' as const, url: 'https://www.youtube.com/embed/o4fKtgPVpoU', link: '/browse' },
+  { name: 'Abbey Road', location: 'London, UK', region: 'International', type: 'youtube' as const, url: 'https://www.youtube.com/embed/XwXKJHgRM50', link: '/camera/abbey-road' },
+  { name: 'Brooks Falls Bear Cam', location: 'Katmai, AK', region: 'Alaska', type: 'youtube' as const, url: 'https://www.youtube.com/embed/2UIA8xOVcOs', link: '/browse' },
+  { name: 'Cannon Beach', location: 'Oregon Coast', region: 'Pacific NW', type: 'youtube' as const, url: 'https://www.youtube.com/embed/yHsRXs9WTuA', link: '/browse' },
+];
 ---
 
 <Layout title="PortOfCams Pro — Live Streaming for Venues, Events & Destinations" activeNav="home" includeHls={true}>
@@ -112,31 +112,27 @@ const featuredCameras = [
         <a href="/browse" class="btn-secondary" style="flex-shrink: 0; align-self: flex-end;">View All Cameras</a>
       </div>
       <div class="featured-grid">
-        {featuredCameras.map((cam) => {
-          const isHls = cam.hlsUrl && cam.hlsUrl.length > 0;
-          const streamUrl = isHls ? (cam.hlsUrl.endsWith('/') ? cam.hlsUrl + 'index.m3u8' : cam.hlsUrl) : '';
-          return (
-            <a href={`/camera/${cam.id}`} class="featured-card" data-stream={streamUrl} data-embed={cam.embedUrl || ''}>
-              <div class="featured-preview">
-                {isHls ? (
-                  <video class="featured-video" muted playsinline></video>
-                ) : cam.embedUrl ? (
-                  <iframe class="featured-embed" src={cam.embedUrl} allow="autoplay" loading="lazy"></iframe>
-                ) : null}
-                <div class="featured-overlay"></div>
-                <div class="featured-live">
-                  <span class="featured-live-dot"></span>
-                  <span class="mono">LIVE</span>
-                </div>
-                <div class="featured-region mono">{cam.region}</div>
+        {featuredFeeds.map((feed) => (
+          <a href={feed.link} class="featured-card" data-stream={feed.type === 'hls' ? feed.url : ''}>
+            <div class="featured-preview">
+              {feed.type === 'hls' ? (
+                <video class="featured-video" muted playsinline></video>
+              ) : (
+                <iframe class="featured-embed" src={`${feed.url}?autoplay=1&mute=1&controls=0&loop=1&modestbranding=1&playsinline=1&rel=0&showinfo=0`} allow="accelerometer; autoplay; encrypted-media; gyroscope" loading="lazy"></iframe>
+              )}
+              <div class="featured-overlay"></div>
+              <div class="featured-live">
+                <span class="featured-live-dot"></span>
+                <span class="mono">LIVE</span>
               </div>
-              <div class="featured-info">
-                <h3>{cam.name}</h3>
-                <p>{cam.location}</p>
-              </div>
-            </a>
-          );
-        })}
+              <div class="featured-region mono">{feed.region}</div>
+            </div>
+            <div class="featured-info">
+              <h3>{feed.name}</h3>
+              <p>{feed.location}</p>
+            </div>
+          </a>
+        ))}
       </div>
     </div>
   </section>
