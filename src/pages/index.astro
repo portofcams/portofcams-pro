@@ -5,55 +5,101 @@ import { cameras } from '../data/cameras';
 const featuredCameras = cameras.slice(0, 6);
 ---
 
-<Layout title="PortOfCams — Live Cameras from Around the World" activeNav="home" includeHls={true}>
+<Layout title="PortOfCams Pro — Live Streaming for Venues, Events & Destinations" activeNav="home" includeHls={true}>
 
   <!-- Hero -->
   <section class="hero">
     <div class="hero-bg"></div>
-    <div class="hero-lines"></div>
-    <div style="position:relative;">
-      <div class="hero-tag fade-up mono">Live Cameras Worldwide</div>
+    <div class="hero-content">
+      <div class="hero-tag fade-up mono">Live Event Streaming Platform</div>
       <h1 class="display fade-up">
-        See the World.<br/>
-        <em class="display-italic" style="color: var(--gold)">Live.</em>
+        Your venue.<br/>
+        <em class="display-italic" style="color: var(--gold)">Always on.</em>
       </h1>
-      <div class="hero-sub fade-up">
-        <p class="hero-desc">
-          Curated live camera feeds from iconic locations across the globe — street views, beaches, landmarks, and traffic. All free, all live, always on.
-        </p>
-        <div class="hero-actions">
-          <a href="/browse" class="btn-primary">Browse Cameras</a>
-          <a href="#featured" class="btn-secondary">See Featured</a>
+      <p class="hero-desc fade-up">
+        Professional live video streaming for venues, events, and destinations. HD cameras installed free — your location streaming 24/7 to thousands of viewers.
+      </p>
+      <div class="hero-actions fade-up">
+        <a href="/browse" class="btn-primary">Browse Live Feeds</a>
+        <a href="/host" class="btn-secondary">Host a Camera</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Capability Strip -->
+  <section class="capabilities">
+    <div class="cap-inner">
+      <div class="cap-item">
+        <div class="cap-val display">24/7</div>
+        <div class="cap-label mono">Live Streaming</div>
+      </div>
+      <div class="cap-divider"></div>
+      <div class="cap-item">
+        <div class="cap-val display">HD</div>
+        <div class="cap-label mono">Video Quality</div>
+      </div>
+      <div class="cap-divider"></div>
+      <div class="cap-item">
+        <div class="cap-val display">Free</div>
+        <div class="cap-label mono">Camera Install</div>
+      </div>
+      <div class="cap-divider"></div>
+      <div class="cap-item">
+        <div class="cap-val display">3</div>
+        <div class="cap-label mono">Social Platforms</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We Do -->
+  <section class="what-section">
+    <div class="section-inner">
+      <p class="eyebrow mono fade-up">What We Do</p>
+      <h2 class="display section-headline fade-up">
+        Live cameras for<br/>
+        <em class="display-italic" style="color: var(--gold)">every stage</em>
+      </h2>
+      <p class="section-body fade-up">
+        Concerts, surf breaks, resort pools, downtown streets — we install and manage professional live cameras at your location. Viewers watch from anywhere in the world. You get exposure, engagement, and a marketing channel that never sleeps.
+      </p>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="usecases">
+    <div class="section-inner">
+      <div class="usecase-grid">
+        <div class="usecase-card">
+          <div class="usecase-number mono">01</div>
+          <h3 class="display">Venues &amp; Bars</h3>
+          <p>Stream live music, happy hours, and packed dance floors. Let people see the energy before they walk in.</p>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-number mono">02</div>
+          <h3 class="display">Beach Resorts</h3>
+          <p>Show off crystal blue water, perfect waves, and golden sunsets. Viewers become guests.</p>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-number mono">03</div>
+          <h3 class="display">Events &amp; Festivals</h3>
+          <p>Broadcast your event live to the world. Build FOMO, sell tickets, grow your audience.</p>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-number mono">04</div>
+          <h3 class="display">Tourism &amp; Landmarks</h3>
+          <p>Let travelers preview your destination in real-time. Live cameras drive bookings and foot traffic.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Ticker -->
-  <div class="ticker">
-    <div class="ticker-inner">
-      <div class="ticker-item"><span>*</span> Live Streams</div>
-      <div class="ticker-item"><span>*</span> Street Views</div>
-      <div class="ticker-item"><span>*</span> Beach Cams</div>
-      <div class="ticker-item"><span>*</span> Traffic Cameras</div>
-      <div class="ticker-item"><span>*</span> Landmark Views</div>
-      <div class="ticker-item"><span>*</span> Global Coverage</div>
-      <div class="ticker-item"><span>*</span> Live Streams</div>
-      <div class="ticker-item"><span>*</span> Street Views</div>
-      <div class="ticker-item"><span>*</span> Beach Cams</div>
-      <div class="ticker-item"><span>*</span> Traffic Cameras</div>
-      <div class="ticker-item"><span>*</span> Landmark Views</div>
-      <div class="ticker-item"><span>*</span> Global Coverage</div>
-    </div>
-  </div>
-
   <!-- Featured Cameras -->
   <section class="featured" id="featured">
     <div class="section-inner">
-      <div class="section-label">Featured Cameras</div>
+      <p class="eyebrow mono">Live Now</p>
       <div class="featured-header">
-        <h2 class="display" style="font-size: clamp(40px, 4vw, 64px); max-width: 600px;">
-          Popular<br/><em class="display-italic" style="color: var(--gold)">right now</em>
+        <h2 class="display" style="font-size: clamp(40px, 5vw, 72px); max-width: 600px;">
+          Streaming<br/><em class="display-italic" style="color: var(--gold)">right now</em>
         </h2>
         <a href="/browse" class="btn-secondary" style="flex-shrink: 0; align-self: flex-end;">View All Cameras</a>
       </div>
@@ -81,80 +127,42 @@ const featuredCameras = cameras.slice(0, 6);
   <!-- How It Works -->
   <section class="how" id="how">
     <div class="section-inner">
-      <div class="section-label">How It Works</div>
-      <h2 class="display" style="font-size: clamp(40px,4vw,64px); max-width: 600px;">
-        Simple <em class="display-italic" style="color: var(--gold)">& free</em>
+      <p class="eyebrow mono">How It Works</p>
+      <h2 class="display" style="font-size: clamp(40px,5vw,72px); max-width: 700px;">
+        Three steps to <em class="display-italic" style="color: var(--gold)">going live</em>
       </h2>
       <div class="how-grid">
         <div class="how-card">
           <div class="how-number">01</div>
-          <h3>Browse Cameras</h3>
-          <p>Explore our curated collection of live cameras from around the world. Filter by region, type, or browse them all.</p>
+          <h3>We Install</h3>
+          <p>We ship and install a professional HD camera at your venue — completely free. You just need WiFi.</p>
         </div>
         <div class="how-card">
           <div class="how-number">02</div>
-          <h3>Watch Live</h3>
-          <p>Click any camera to open a full-screen live stream. All feeds are in real-time with low latency HLS delivery.</p>
+          <h3>You Stream</h3>
+          <p>Your location goes live on PortOfCams, reaching thousands of viewers every day. We handle all the tech.</p>
         </div>
         <div class="how-card">
           <div class="how-number">03</div>
-          <h3>Discover More</h3>
-          <p>Find related cameras and explore new locations. We're always adding new feeds from iconic spots worldwide.</p>
+          <h3>You Grow</h3>
+          <p>AI-generated timelapse clips auto-post to YouTube, Instagram, and TikTok — free social content, daily.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Stats -->
-  <section class="stats">
-    <div class="section-inner" style="padding-top: 80px; padding-bottom: 80px;">
-      <div class="stats-grid">
-        <div class="stat">
-          <div class="stat-number">{cameras.length}</div>
-          <div class="stat-label mono">Live Cameras</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">3</div>
-          <div class="stat-label mono">Regions</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">24/7</div>
-          <div class="stat-label mono">Always Live</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">Free</div>
-          <div class="stat-label mono">No Account Needed</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Premium Upsell -->
-  <section class="premium-upsell">
-    <div class="section-inner">
-      <div class="upsell-card">
-        <div class="upsell-badge mono">Premium</div>
-        <h2 class="display" style="font-size: clamp(28px, 3vw, 44px); margin-bottom: 16px;">
-          Want HD, no ads &amp; <em class="display-italic" style="color: var(--gold)">every camera</em>?
-        </h2>
-        <p style="color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 500px; margin-bottom: 32px;">
-          Upgrade to Premium for full HD streams, ad-free viewing, timelapse archives, and access to every camera on the platform. Starting at $9.99/month.
-        </p>
-        <a href="/premium" class="btn-primary">Go Premium</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="cta-section">
+  <!-- Big Statement -->
+  <section class="statement">
     <div class="section-inner" style="text-align: center;">
-      <h2 class="display" style="font-size: clamp(40px, 5vw, 72px); margin-bottom: 20px;">
-        Start <em class="display-italic" style="color: var(--gold)">watching</em>
+      <h2 class="display fade-up" style="font-size: clamp(48px, 7vw, 100px); max-width: 900px; margin: 0 auto 40px;">
+        Your camera.<br/>
+        Our platform.<br/>
+        <em class="display-italic" style="color: var(--gold)">Their audience.</em>
       </h2>
-      <p style="color: var(--muted); font-size: 17px; line-height: 1.7; max-width: 480px; margin: 0 auto 40px;">
-        Explore live cameras from beaches, city streets, and landmarks around the world. No signup required.
+      <p style="color: var(--muted); font-size: 20px; line-height: 1.7; max-width: 520px; margin: 0 auto 48px;">
+        Every beautiful moment at your location becomes shareable content — captured, clipped, and posted automatically.
       </p>
-      <a href="/browse" class="btn-primary">Browse All Cameras</a>
+      <a href="/host" class="btn-primary">Get a Free Camera</a>
     </div>
   </section>
 
@@ -166,8 +174,10 @@ const featuredCameras = cameras.slice(0, 6);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 48px 80px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 120px 48px 80px;
     position: relative;
     overflow: hidden;
   }
@@ -176,16 +186,13 @@ const featuredCameras = cameras.slice(0, 6);
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(201,168,76,0.08) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 60% at 20% 60%, rgba(201,168,76,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 50% 40%, rgba(201,168,76,0.06) 0%, transparent 70%),
       linear-gradient(180deg, #080808 0%, #0a0905 100%);
   }
 
-  .hero-lines {
-    position: absolute;
-    inset: 0;
-    background-image:
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 80px);
+  .hero-content {
+    position: relative;
+    max-width: 900px;
   }
 
   .hero-tag {
@@ -197,10 +204,12 @@ const featuredCameras = cameras.slice(0, 6);
     font-size: 11px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    padding: 8px 16px;
+    padding: 8px 20px;
     border-radius: 1px;
-    margin-bottom: 32px;
+    margin-bottom: 40px;
     width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero-tag::before {
@@ -218,70 +227,139 @@ const featuredCameras = cameras.slice(0, 6);
   }
 
   .hero h1 {
-    font-size: clamp(64px, 9vw, 140px);
-    max-width: 900px;
+    font-size: clamp(64px, 10vw, 140px);
     margin-bottom: 40px;
     position: relative;
   }
 
-  .hero h1 em {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-weight: 300;
-    color: var(--gold);
-  }
-
-  .hero-sub {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-
   .hero-desc {
-    font-size: 17px;
+    font-size: 20px;
     color: var(--muted);
-    max-width: 440px;
+    max-width: 560px;
     line-height: 1.7;
+    margin: 0 auto 48px;
   }
 
   .hero-actions {
     display: flex;
     gap: 16px;
-    flex-shrink: 0;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
-  /* Ticker */
-  .ticker {
+  /* Capability Strip */
+  .capabilities {
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    padding: 14px 0;
-    overflow: hidden;
     background: var(--deep);
   }
 
-  .ticker-inner {
+  .cap-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 48px;
     display: flex;
-    gap: 60px;
-    animation: ticker 20s linear infinite;
-    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
   }
 
-  .ticker-item {
-    font-family: 'DM Mono', monospace;
+  .cap-item { text-align: center; }
+
+  .cap-val {
+    font-size: clamp(36px, 4vw, 56px);
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .cap-label {
     font-size: 11px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--muted);
-    flex-shrink: 0;
   }
 
-  .ticker-item span { color: var(--gold); margin-right: 20px; }
+  .cap-divider {
+    width: 1px;
+    height: 48px;
+    background: var(--border);
+  }
 
-  @keyframes ticker {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+  /* What We Do */
+  .what-section {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .what-section .section-inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .section-headline {
+    font-size: clamp(40px, 6vw, 80px);
+    margin-bottom: 32px;
+    max-width: 700px;
+  }
+
+  .section-body {
+    font-size: 20px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 600px;
+    text-align: center;
+  }
+
+  /* Use Cases */
+  .usecases {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+
+  .usecase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .usecase-card {
+    background: var(--deep);
+    padding: 56px 48px;
+    transition: background 0.3s;
+  }
+
+  .usecase-card:hover { background: var(--surface); }
+
+  .usecase-number {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .usecase-card h3 {
+    font-size: clamp(24px, 3vw, 36px);
+    margin-bottom: 12px;
+  }
+
+  .usecase-card p {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 360px;
   }
 
   /* Featured Cameras */
@@ -295,7 +373,7 @@ const featuredCameras = cameras.slice(0, 6);
     align-items: flex-start;
     justify-content: space-between;
     gap: 24px;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
     flex-wrap: wrap;
   }
 
@@ -384,12 +462,12 @@ const featuredCameras = cameras.slice(0, 6);
   }
 
   .featured-info {
-    padding: 16px 20px;
+    padding: 20px 24px;
   }
 
   .featured-info h3 {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 600;
     margin-bottom: 4px;
     transition: color 0.3s;
@@ -398,13 +476,14 @@ const featuredCameras = cameras.slice(0, 6);
   .featured-card:hover .featured-info h3 { color: var(--gold); }
 
   .featured-info p {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--muted);
   }
 
   /* How It Works */
   .how {
     border-top: 1px solid var(--border);
+    background: var(--surface);
   }
 
   .how-grid {
@@ -413,12 +492,12 @@ const featuredCameras = cameras.slice(0, 6);
     gap: 1px;
     background: var(--border);
     border: 1px solid var(--border);
-    margin-top: 60px;
+    margin-top: 64px;
   }
 
   .how-card {
     background: var(--surface);
-    padding: 48px 40px;
+    padding: 56px 44px;
     position: relative;
   }
 
@@ -434,110 +513,50 @@ const featuredCameras = cameras.slice(0, 6);
 
   .how-card h3 {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 600;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
 
   .how-card p {
-    font-size: 15px;
+    font-size: 16px;
     color: var(--muted);
     line-height: 1.7;
   }
 
-  /* Stats */
-  .stats {
-    border-top: 1px solid var(--border);
-    background: var(--surface);
-  }
-
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-
-  .stat {
-    background: var(--surface);
-    padding: 48px 32px;
-    text-align: center;
-  }
-
-  .stat-number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 56px;
-    font-weight: 600;
-    color: var(--gold);
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-
-  .stat-label {
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  /* Premium Upsell */
-  .premium-upsell {
-    border-top: 1px solid var(--border);
-    background: var(--surface);
-  }
-
-  .upsell-card {
-    border: 1px solid rgba(201,168,76,0.2);
-    background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, rgba(201,168,76,0.02) 100%);
-    padding: 60px 48px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .upsell-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .upsell-badge {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--black);
-    background: var(--gold);
-    padding: 4px 12px;
-    display: inline-block;
-    margin-bottom: 24px;
-  }
-
-  /* CTA */
-  .cta-section {
+  /* Big Statement */
+  .statement {
     border-top: 1px solid var(--border);
     background: var(--deep);
     position: relative;
     overflow: hidden;
   }
 
-  .cta-section::before {
+  .statement::before {
     content: '';
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 50% 60% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%);
+      radial-gradient(ellipse 50% 60% at 50% 50%, rgba(201,168,76,0.05) 0%, transparent 70%);
+  }
+
+  .statement .section-inner {
+    padding-top: 160px;
+    padding-bottom: 160px;
   }
 
   /* Responsive */
   @media (max-width: 768px) {
-    .hero { padding: 0 24px 60px; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-desc { font-size: 17px; }
+    .cap-inner { flex-wrap: wrap; gap: 32px; padding: 40px 24px; }
+    .cap-divider { display: none; }
+    .cap-inner { justify-content: space-around; }
+    .usecase-grid { grid-template-columns: 1fr; }
+    .usecase-card { padding: 40px 28px; }
     .featured-grid { grid-template-columns: 1fr; }
     .how-grid { grid-template-columns: 1fr; }
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .section-body { font-size: 17px; }
+    .statement .section-inner { padding-top: 100px; padding-bottom: 100px; }
   }
 </style>
