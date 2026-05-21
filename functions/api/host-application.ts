@@ -1,13 +1,15 @@
 /**
  * Cloudflare Pages Function — proxies host application form submissions
- * to the AI services API at ai.portofcams.com.
+ * to the public ai.portofcams.com host-applications endpoint.
+ *
+ * The upstream endpoint is intentionally public (it's a contact form) and
+ * server-side rate-limited per IP. No API key required.
  */
 
 const API_URL = "https://ai.portofcams.com/api/host-applications";
-const API_KEY = "REDACTED_INVALID_KEY";
 
 const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "https://portofcams.com",
+  "Access-Control-Allow-Origin": "https://pro.portofcams.com",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
@@ -20,24 +22,28 @@ export const onRequestPost: PagesFunction = async ({ request }) => {
   try {
     const body = await request.json();
 
-    // Basic validation
-    if (!body.name || !body.email || !body.location) {
+    if (!body || typeof body !== "object" || !body.name || !body.email || !body.location) {
       return Response.json(
         { success: false, error: "Name, email, and location are required" },
         { status: 400, headers: CORS_HEADERS }
       );
     }
 
+    const forwardedFor =
+      request.headers.get("cf-connecting-ip") ||
+      request.headers.get("x-forwarded-for") ||
+      "";
+
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-API-Key": API_KEY,
+        ...(forwardedFor ? { "X-Forwarded-For": forwardedFor } : {}),
       },
       body: JSON.stringify(body),
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({ success: false, error: "Bad upstream response" }));
 
     return Response.json(data, {
       status: response.status,
