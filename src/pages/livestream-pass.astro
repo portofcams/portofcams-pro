@@ -1,0 +1,84 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout title="Livestream Pass · PortOfCams" description="24-hour livestream pass for any cam">
+  <main style="max-width: 720px; margin: 40px auto; padding: 0 20px; font-family: system-ui;">
+    <h1>Livestream pass (demo)</h1>
+    <p>
+      Buy a 24-hour pass to any single cam. Pass is a QR token validated through
+      <code>pocTickets</code> on every player load — no account required, no email confirmation flow.
+      <strong>This is a wiring demo — Stripe is not yet attached.</strong>
+    </p>
+
+    <hr style="margin: 24px 0;" />
+
+    <section>
+      <h2>1. Buy pass</h2>
+      <form id="buy-form" style="display: grid; gap: 10px; max-width: 400px;">
+        <label>
+          Cam ID
+          <select name="cam_id" required>
+            <option value="kakaako">Kakaʻako (Honolulu)</option>
+            <option value="haleiwa">Haleʻiwa (North Shore)</option>
+            <option value="seward">Seward (Alaska)</option>
+          </select>
+        </label>
+        <label>
+          Email
+          <input name="buyer_email" type="email" required value="test@pro.portofcams.com" />
+        </label>
+        <button type="submit">Buy 24h pass ($4.99 — DEMO, no charge)</button>
+      </form>
+      <pre id="buy-result" style="background:#f0f0f0;padding:12px;border-radius:8px;font-size:13px;overflow:auto;display:none;"></pre>
+    </section>
+
+    <hr style="margin: 24px 0;" />
+
+    <section>
+      <h2>2. Use pass (HLS gate)</h2>
+      <p style="font-size:14px;color:#666;">
+        Player calls <code>/api/livestream-check?token=…&cam_id=…</code> before loading the HLS source.
+        If valid, returns <code>stream_url</code>. If invalid/expired, refuses.
+      </p>
+      <form id="check-form" style="display: grid; gap: 10px; max-width: 500px;">
+        <label>
+          Pass token
+          <input name="token" placeholder="paste qr_token from step 1" required style="font-family:monospace;" />
+        </label>
+        <label>
+          Cam ID
+          <input name="cam_id" value="kakaako" required />
+        </label>
+        <button type="submit">Validate pass</button>
+      </form>
+      <pre id="check-result" style="background:#f0f0f0;padding:12px;border-radius:8px;font-size:13px;overflow:auto;display:none;"></pre>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById("buy-form")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target as HTMLFormElement);
+      const r = await fetch("/api/livestream-pass", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cam_id: fd.get("cam_id"), buyer_email: fd.get("buyer_email") }),
+      });
+      const out = document.getElementById("buy-result")!;
+      out.style.display = "block";
+      out.textContent = JSON.stringify(await r.json(), null, 2);
+    });
+    document.getElementById("check-form")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target as HTMLFormElement);
+      const params = new URLSearchParams({
+        token: String(fd.get("token") || ""),
+        cam_id: String(fd.get("cam_id") || ""),
+      });
+      const r = await fetch(`/api/livestream-check?${params}`);
+      const out = document.getElementById("check-result")!;
+      out.style.display = "block";
+      out.textContent = JSON.stringify(await r.json(), null, 2);
+    });
+  </script>
+</Layout>
