@@ -262,6 +262,10 @@ import Layout from '../layouts/Layout.astro';
                   </div>
                 </div>
               </label>
+              <label class="photo-later">
+                <input type="checkbox" id="photoLater" />
+                <span>I don't have a photo right now &mdash; I'll email one later</span>
+              </label>
             </div>
             <div class="form-group">
               <label class="form-label mono">What does the camera see? <span class="opt">(pick any)</span></label>
@@ -932,6 +936,19 @@ import Layout from '../layouts/Layout.astro';
   }
   .photo-remove:hover { color: var(--gold-light); }
 
+  .photo-later {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+  }
+  .photo-later input { accent-color: var(--gold); width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
+  .photo-later:hover { color: rgba(245,240,232,0.7); }
+
   /* Navigation */
   .wiz-nav {
     display: flex;
@@ -1070,6 +1087,8 @@ import Layout from '../layouts/Layout.astro';
       $('photoEmpty').hidden = false;
     });
 
+    $('photoLater').addEventListener('change', function () { clearError(); });
+
     ['dragover', 'dragenter'].forEach(function (evt) {
       drop.addEventListener(evt, function (e) { e.preventDefault(); drop.classList.add('is-drag'); });
     });
@@ -1096,7 +1115,7 @@ import Layout from '../layouts/Layout.astro';
         if (!$('hfLocation').value.trim()) return 'Where is the spot? Add a location.';
         if (!getChoice('property')) return 'Pick your relationship to the property.';
       } else if (n === 2) {
-        if (!photoDataUrl) return 'A photo of the view is required \u2014 it is how we evaluate the spot.';
+        if (!photoDataUrl && !$('photoLater').checked) return 'Add a photo of the view \u2014 or check "I\'ll email one later" below.';
       } else if (n === 3) {
         if (!getChoice('internet')) return "Let us know the spot's internet.";
         if (!getChoice('power')) return 'Is there power near the mount point?';
@@ -1174,6 +1193,7 @@ import Layout from '../layouts/Layout.astro';
         location: $('hfLocation').value.trim(),
         property_relationship: getChoice('property'),
         view_photo: photoDataUrl || '',
+        photo_later: $('photoLater').checked,
         view_tags: getTags('viewTags'),
         view: $('hfView').value.trim(),
         internet: getChoice('internet'),
