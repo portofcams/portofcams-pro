@@ -164,7 +164,7 @@ import Layout from '../layouts/Layout.astro';
             <li><span class="check gold">&#10003;</span> Priority stream health monitoring</li>
             <li><span class="check gold">&#10003;</span> Dedicated support channel</li>
           </ul>
-          <a href="#apply" class="btn-primary tier-btn">Apply for Premium</a>
+          <a href="#apply" class="btn-primary tier-btn" data-prefill-tier="premium">Apply for Premium</a>
         </div>
       </div>
     </div>
@@ -180,7 +180,7 @@ import Layout from '../layouts/Layout.astro';
           <p>Premium camera operators can partner with local businesses, tourism boards, and brands for sponsored feeds.
           Your camera's live view becomes a branded experience. We facilitate introductions and handle ad placement logistics.</p>
         </div>
-        <a href="#apply" class="btn-secondary" style="flex-shrink:0; white-space:nowrap;">Learn More</a>
+        <a href="#apply" class="btn-secondary" style="flex-shrink:0; white-space:nowrap;" data-prefill-tier="sponsorship" data-prefill-adv="yes">Learn More</a>
       </div>
     </div>
   </section>
@@ -192,58 +192,192 @@ import Layout from '../layouts/Layout.astro';
       <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 16px;">
         Apply for a Camera <em class="display-italic" style="color: var(--gold)">Installation</em>
       </h2>
-      <p style="color: var(--muted); font-size: 15px; margin-bottom: 60px; max-width: 500px; line-height: 1.7;">
-        Tell us about your location. We review every application and ship the hardware — you'll hear back within 48 hours.
+      <p style="color: rgba(245,240,232,0.65); font-size: 16px; margin-bottom: 48px; max-width: 520px; line-height: 1.7;">
+        Four quick steps. We review every application, then ship and walk you through the hardware — you'll hear back within 48 hours.
       </p>
 
       <div class="form-wrapper">
-        <form id="hostForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="hfName" class="form-label mono">Your Name *</label>
-              <input id="hfName" required type="text" placeholder="Kai Makoa" class="form-input" />
+        <!-- Progress -->
+        <div class="wiz-progress" id="wizProgress">
+          <div class="wiz-steps mono">
+            <span class="wiz-stepname is-active" data-for="1"><i>1</i> You &amp; the spot</span>
+            <span class="wiz-stepname" data-for="2"><i>2</i> The view</span>
+            <span class="wiz-stepname" data-for="3"><i>3</i> Setup</span>
+            <span class="wiz-stepname" data-for="4"><i>4</i> Plan</span>
+          </div>
+          <div class="wiz-bar"><div class="wiz-bar-fill" id="wizBarFill"></div></div>
+        </div>
+
+        <form id="hostForm" novalidate>
+          <!-- STEP 1 — You & the spot -->
+          <fieldset class="wiz-step is-active" data-step="1">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="hfName" class="form-label mono">Your name *</label>
+                <input id="hfName" required type="text" autocomplete="name" placeholder="Kai Makoa" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label for="hfEmail" class="form-label mono">Email *</label>
+                <input id="hfEmail" required type="email" autocomplete="email" placeholder="you@example.com" class="form-input" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="hfPhone" class="form-label mono">Phone <span class="opt">(optional)</span></label>
+                <input id="hfPhone" type="tel" autocomplete="tel" placeholder="(808) 555-0142" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label for="hfLocation" class="form-label mono">Location *</label>
+                <input id="hfLocation" required type="text" placeholder="Venice, CA" class="form-input" />
+              </div>
             </div>
             <div class="form-group">
-              <label for="hfEmail" class="form-label mono">Email *</label>
-              <input id="hfEmail" required type="email" autocomplete="email" placeholder="you@example.com" class="form-input" />
+              <label class="form-label mono">Your relationship to the property *</label>
+              <div class="choice-group" data-name="property">
+                <button type="button" class="choice" data-value="own">I own it</button>
+                <button type="button" class="choice" data-value="manage">I manage / lease it</button>
+                <button type="button" class="choice" data-value="permission">I have permission to install</button>
+                <button type="button" class="choice" data-value="need-permission">I'd need to get permission</button>
+              </div>
             </div>
-          </div>
-          <div class="form-row">
+          </fieldset>
+
+          <!-- STEP 2 — The view -->
+          <fieldset class="wiz-step" data-step="2">
             <div class="form-group">
-              <label for="hfLocation" class="form-label mono">Your Location *</label>
-              <input id="hfLocation" required type="text" placeholder="Honolulu, Oahu" class="form-input" />
+              <label class="form-label mono">Photo of the view *</label>
+              <p class="field-help">A quick snap from where the camera would sit. This is the single biggest factor in how fast we say yes.</p>
+              <label class="photo-drop" id="photoDrop" for="hfPhoto">
+                <input id="hfPhoto" type="file" accept="image/*" hidden />
+                <div class="photo-empty" id="photoEmpty">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                  <span class="photo-title">Tap to add a photo</span>
+                  <span class="photo-sub">or drag an image here &middot; JPG, PNG, HEIC</span>
+                </div>
+                <div class="photo-preview" id="photoPreview" hidden>
+                  <img id="photoImg" alt="View preview" />
+                  <div class="photo-meta">
+                    <span id="photoName" class="mono"></span>
+                    <button type="button" class="photo-remove" id="photoRemove">Remove</button>
+                  </div>
+                </div>
+              </label>
             </div>
             <div class="form-group">
-              <label for="hfTier" class="form-label mono">Membership Interest</label>
-              <select id="hfTier" class="form-input">
-                <option value="free">Free Listing</option>
-                <option value="premium">Premium Host</option>
-                <option value="sponsorship">Sponsorship Inquiry</option>
-              </select>
+              <label class="form-label mono">What does the camera see? <span class="opt">(pick any)</span></label>
+              <div class="tag-group" data-name="viewTags">
+                <button type="button" class="tag" data-value="Beach">Beach</button>
+                <button type="button" class="tag" data-value="Surf break">Surf break</button>
+                <button type="button" class="tag" data-value="Harbor / marina">Harbor / marina</button>
+                <button type="button" class="tag" data-value="Mountains">Mountains</button>
+                <button type="button" class="tag" data-value="Volcano">Volcano</button>
+                <button type="button" class="tag" data-value="Waterfall">Waterfall</button>
+                <button type="button" class="tag" data-value="City / skyline">City / skyline</button>
+                <button type="button" class="tag" data-value="Sunset / horizon">Sunset / horizon</button>
+                <button type="button" class="tag" data-value="Wildlife">Wildlife</button>
+                <button type="button" class="tag" data-value="Traffic / street">Traffic / street</button>
+                <button type="button" class="tag" data-value="Resort / pool">Resort / pool</button>
+                <button type="button" class="tag" data-value="Other">Other</button>
+              </div>
             </div>
+            <div class="form-group">
+              <label for="hfView" class="form-label mono">Describe the view <span class="opt">(optional)</span></label>
+              <input id="hfView" type="text" placeholder="Beachfront on the Venice Boardwalk, facing the sunset" class="form-input" />
+            </div>
+          </fieldset>
+
+          <!-- STEP 3 — Setup -->
+          <fieldset class="wiz-step" data-step="3">
+            <p class="field-help" style="margin-top:0;">This tells us what to ship and how to get you live fast. Not sure? Just give your best guess.</p>
+            <div class="form-group">
+              <label class="form-label mono">Internet at the location *</label>
+              <div class="choice-group" data-name="internet">
+                <button type="button" class="choice" data-value="wifi">Wi-Fi</button>
+                <button type="button" class="choice" data-value="ethernet">Wired ethernet</button>
+                <button type="button" class="choice" data-value="cellular">Cellular only</button>
+                <button type="button" class="choice" data-value="none">None yet</button>
+                <button type="button" class="choice" data-value="unsure">Not sure</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label mono">Power outlet near the mount point? *</label>
+              <div class="choice-group" data-name="power">
+                <button type="button" class="choice" data-value="yes">Yes</button>
+                <button type="button" class="choice" data-value="no">No</button>
+                <button type="button" class="choice" data-value="unsure">Not sure</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label mono">Where would the camera mount? <span class="opt">(optional)</span></label>
+              <div class="choice-group" data-name="mount">
+                <button type="button" class="choice" data-value="window">Inside, through a window</button>
+                <button type="button" class="choice" data-value="wall">Exterior wall</button>
+                <button type="button" class="choice" data-value="roof-pole">Roof or pole</button>
+                <button type="button" class="choice" data-value="railing">Railing or deck</button>
+                <button type="button" class="choice" data-value="unsure">Not sure</button>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- STEP 4 — Plan & advertising -->
+          <fieldset class="wiz-step" data-step="4">
+            <div class="form-group">
+              <label class="form-label mono">Which are you interested in?</label>
+              <div class="choice-group" data-name="tier">
+                <button type="button" class="choice is-active" data-value="free" aria-pressed="true">Free listing</button>
+                <button type="button" class="choice" data-value="premium">Premium host</button>
+                <button type="button" class="choice" data-value="sponsorship">Sponsorship</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label mono">Open to advertising or a sponsored placement on your feed?</label>
+              <p class="field-help">Premium feeds can carry one tasteful local sponsor. You always approve who appears.</p>
+              <div class="choice-group" data-name="advertising">
+                <button type="button" class="choice" data-value="yes">Yes, I'm interested</button>
+                <button type="button" class="choice" data-value="maybe">Maybe &mdash; tell me more</button>
+                <button type="button" class="choice" data-value="no">No thanks</button>
+              </div>
+            </div>
+            <div class="adv-fields" id="advFields" hidden>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="hfBizName" class="form-label mono">Business or brand <span class="opt">(optional)</span></label>
+                  <input id="hfBizName" type="text" placeholder="Venice Beach Cafe" class="form-input" />
+                </div>
+                <div class="form-group">
+                  <label for="hfBizUrl" class="form-label mono">Website or social <span class="opt">(optional)</span></label>
+                  <input id="hfBizUrl" type="text" inputmode="url" placeholder="instagram.com/yourspot" class="form-input" />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="hfMessage" class="form-label mono">Anything else? <span class="opt">(optional)</span></label>
+              <textarea id="hfMessage" rows="3" placeholder="Camera ideas, best time to reach you, questions..." class="form-input form-textarea"></textarea>
+            </div>
+          </fieldset>
+
+          <!-- Inline per-step error -->
+          <div id="hfStepError" class="form-error" style="display:none;"></div>
+
+          <!-- Navigation -->
+          <div class="wiz-nav">
+            <button type="button" class="btn-secondary wiz-back" id="wizBack" hidden>Back</button>
+            <button type="button" class="btn-primary wiz-advance" id="wizNext">Continue</button>
+            <button type="submit" class="btn-primary wiz-advance" id="hfSubmit" hidden>Submit application</button>
           </div>
-          <div class="form-group">
-            <label for="hfView" class="form-label mono">Describe the View</label>
-            <input id="hfView" type="text" placeholder="Beachfront, harbor entrance, volcano overlook..." class="form-input" />
-          </div>
-          <div class="form-group">
-            <label for="hfMessage" class="form-label mono">Anything Else?</label>
-            <textarea id="hfMessage" rows="3" placeholder="Camera type, internet connection, questions..." class="form-input form-textarea"></textarea>
-          </div>
-          <button type="submit" id="hfSubmit" class="btn-primary form-submit">Submit Application</button>
         </form>
 
         <!-- Success message -->
         <div id="hfSuccess" class="form-success" style="display:none;">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-          <h3 class="display" style="font-size: 28px; margin-top: 16px;">Application Received!</h3>
+          <h3 class="display" style="font-size: 28px; margin-top: 16px;">Application received!</h3>
           <p style="color: var(--muted); font-size: 15px; line-height: 1.7; margin-top: 8px;">
-            We'll review your submission and be in touch within 48 hours.<br/>
-            Check your inbox at <span id="hfConfirmEmail" style="color: var(--gold);"></span>
+            We'll review your view and be in touch within 48 hours.<br/>
+            Confirmation headed to <span id="hfConfirmEmail" style="color: var(--gold);"></span>
           </p>
         </div>
 
-        <!-- Error message -->
+        <!-- Fatal error message -->
         <div id="hfError" class="form-error" style="display:none;"></div>
       </div>
     </div>
@@ -551,30 +685,31 @@ import Layout from '../layouts/Layout.astro';
 
   .form-label {
     display: block;
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
+    color: rgba(245,240,232,0.75);
+    margin-bottom: 10px;
+    font-weight: 500;
   }
 
   .form-input {
     width: 100%;
-    padding: 12px 16px;
-    background: var(--deep);
-    border: 1px solid var(--border);
+    padding: 14px 16px;
+    background: #0f0f0f;
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: 2px;
     color: var(--white);
     font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 300;
+    font-size: 15px;
+    font-weight: 400;
     outline: none;
     transition: border-color 0.3s;
   }
 
   .form-input:focus { border-color: var(--gold); }
 
-  .form-input::placeholder { color: rgba(245,240,232,0.15); }
+  .form-input::placeholder { color: rgba(245,240,232,0.32); }
 
   select.form-input {
     appearance: none;
@@ -621,26 +756,434 @@ import Layout from '../layouts/Layout.astro';
     .trust-bar { flex-wrap: wrap; gap: 24px; }
     .form-wrapper { padding: 32px 24px; }
   }
+
+  /* ── Wizard ─────────────────────────────────────── */
+  /* The .btn-* and .photo-* classes set their own display, which would
+     override the UA [hidden] rule — force hidden to win inside the form. */
+  .host-apply [hidden] { display: none !important; }
+
+  .opt { color: var(--muted); text-transform: none; letter-spacing: 0; font-weight: 400; }
+
+  .field-help {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: -2px 0 14px;
+  }
+
+  /* Progress */
+  .wiz-progress { margin-bottom: 32px; }
+
+  .wiz-steps {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .wiz-stepname {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.32);
+    transition: color 0.3s;
+  }
+
+  .wiz-stepname i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.18);
+    font-style: normal;
+    font-size: 10px;
+    transition: all 0.3s;
+  }
+
+  .wiz-stepname.is-active { color: var(--gold); }
+  .wiz-stepname.is-active i { border-color: var(--gold); color: var(--gold); }
+  .wiz-stepname.is-done { color: rgba(245,240,232,0.55); }
+  .wiz-stepname.is-done i {
+    border-color: var(--gold);
+    background: var(--gold);
+    color: var(--black);
+  }
+
+  .wiz-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .wiz-bar-fill {
+    height: 100%;
+    width: 25%;
+    background: var(--gold);
+    border-radius: 3px;
+    transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  /* Steps */
+  .wiz-step {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: none;
+    animation: wizFade 0.35s ease;
+  }
+  .wiz-step.is-active { display: block; }
+
+  @keyframes wizFade {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Choice + tag chips */
+  .choice-group { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .choice, .tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: rgba(245,240,232,0.7);
+    background: #0f0f0f;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 2px;
+    padding: 11px 16px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    text-align: left;
+  }
+
+  .choice:hover, .tag:hover { border-color: rgba(201,168,76,0.5); color: var(--white); }
+
+  .choice.is-active, .tag.is-active {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+  }
+
+  .tag-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { padding: 9px 14px; border-radius: 100px; font-size: 12px; }
+
+  /* Photo upload */
+  .photo-drop {
+    display: block;
+    border: 1px dashed rgba(201,168,76,0.4);
+    border-radius: 3px;
+    background: rgba(201,168,76,0.03);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    overflow: hidden;
+  }
+  .photo-drop:hover, .photo-drop.is-drag {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.07);
+  }
+
+  .photo-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  .photo-title { font-size: 15px; color: var(--white); }
+  .photo-sub { font-size: 12px; color: var(--muted); }
+
+  .photo-preview { padding: 12px; }
+  .photo-preview img {
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+    border-radius: 2px;
+    display: block;
+    background: #000;
+  }
+  .photo-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  #photoName {
+    font-size: 12px;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .photo-remove {
+    background: none;
+    border: 0;
+    color: var(--gold);
+    font-size: 12px;
+    cursor: pointer;
+    padding: 4px 6px;
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+  }
+  .photo-remove:hover { color: var(--gold-light); }
+
+  /* Navigation */
+  .wiz-nav {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .wiz-advance { flex: 1; text-align: center; }
+  .wiz-back { flex-shrink: 0; }
+
+  .host-apply .form-error { animation: wizFade 0.25s ease; }
 </style>
 
 <script is:inline>
-  (function() {
+  (function () {
     var form = document.getElementById('hostForm');
     if (!form) return;
 
-    form.addEventListener('submit', function(e) {
+    var TOTAL_STEPS = 4;
+    var current = 1;
+    var photoDataUrl = null;
+
+    var $ = function (id) { return document.getElementById(id); };
+    var qsa = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+
+    var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+    // \u2500\u2500 Choice groups (single-select) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    qsa('.choice-group').forEach(function (group) {
+      group.addEventListener('click', function (e) {
+        var btn = e.target.closest('.choice');
+        if (!btn) return;
+        var active = btn.classList.contains('is-active');
+        qsa('.choice', group).forEach(function (b) {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        if (!active) {
+          btn.classList.add('is-active');
+          btn.setAttribute('aria-pressed', 'true');
+        }
+        if (group.getAttribute('data-name') === 'advertising') syncAdvFields();
+        clearError();
+      });
+    });
+
+    // \u2500\u2500 Tag groups (multi-select) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    qsa('.tag-group').forEach(function (group) {
+      group.addEventListener('click', function (e) {
+        var btn = e.target.closest('.tag');
+        if (!btn) return;
+        btn.classList.toggle('is-active');
+        btn.setAttribute('aria-pressed', btn.classList.contains('is-active') ? 'true' : 'false');
+      });
+    });
+
+    function getChoice(name) {
+      var el = document.querySelector('.choice-group[data-name="' + name + '"] .choice.is-active');
+      return el ? el.getAttribute('data-value') : '';
+    }
+    function getTags(name) {
+      return qsa('.tag-group[data-name="' + name + '"] .tag.is-active').map(function (b) {
+        return b.getAttribute('data-value');
+      });
+    }
+
+    function syncAdvFields() {
+      var v = getChoice('advertising');
+      $('advFields').hidden = !(v === 'yes' || v === 'maybe');
+    }
+
+    // \u2500\u2500 Photo upload + client-side compression \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    var input = $('hfPhoto');
+    var drop = $('photoDrop');
+
+    function compress(file) {
+      return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.onerror = function () { reject(new Error('read')); };
+        reader.onload = function (ev) {
+          var img = new Image();
+          img.onerror = function () {
+            // Can't decode (e.g. some HEIC) \u2014 fall back to the raw data URL if small enough.
+            if (typeof ev.target.result === 'string' && ev.target.result.length < 7000000) {
+              resolve(ev.target.result);
+            } else {
+              reject(new Error('decode'));
+            }
+          };
+          img.onload = function () {
+            var maxDim = 1600;
+            var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+            var w = Math.round(img.width * scale);
+            var h = Math.round(img.height * scale);
+            var canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            try {
+              resolve(canvas.toDataURL('image/jpeg', 0.82));
+            } catch (err) { reject(err); }
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function handleFile(file) {
+      if (!file || !/^image\//.test(file.type) && !/\.(jpe?g|png|heic|heif|webp)$/i.test(file.name)) {
+        showError('Please choose an image file (JPG, PNG, or HEIC).');
+        return;
+      }
+      drop.classList.remove('is-drag');
+      compress(file).then(function (dataUrl) {
+        photoDataUrl = dataUrl;
+        $('photoImg').src = dataUrl;
+        $('photoName').textContent = file.name;
+        $('photoEmpty').hidden = true;
+        $('photoPreview').hidden = false;
+        clearError();
+      }).catch(function () {
+        showError('Could not read that image. Try a JPG or PNG instead.');
+      });
+    }
+
+    input.addEventListener('change', function () {
+      if (input.files && input.files[0]) handleFile(input.files[0]);
+    });
+
+    $('photoRemove').addEventListener('click', function (e) {
       e.preventDefault();
-      var btn = document.getElementById('hfSubmit');
+      e.stopPropagation();
+      photoDataUrl = null;
+      input.value = '';
+      $('photoImg').removeAttribute('src');
+      $('photoPreview').hidden = true;
+      $('photoEmpty').hidden = false;
+    });
+
+    ['dragover', 'dragenter'].forEach(function (evt) {
+      drop.addEventListener(evt, function (e) { e.preventDefault(); drop.classList.add('is-drag'); });
+    });
+    ['dragleave', 'dragend'].forEach(function (evt) {
+      drop.addEventListener(evt, function () { drop.classList.remove('is-drag'); });
+    });
+    drop.addEventListener('drop', function (e) {
+      e.preventDefault();
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    });
+
+    // \u2500\u2500 Step navigation \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    function showError(msg) {
+      var el = $('hfStepError');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+    function clearError() { $('hfStepError').style.display = 'none'; }
+
+    function validateStep(n) {
+      if (n === 1) {
+        if (!$('hfName').value.trim()) return 'Please add your name.';
+        if (!EMAIL_RE.test($('hfEmail').value.trim())) return 'Please add a valid email.';
+        if (!$('hfLocation').value.trim()) return 'Where is the spot? Add a location.';
+        if (!getChoice('property')) return 'Pick your relationship to the property.';
+      } else if (n === 2) {
+        if (!photoDataUrl) return 'A photo of the view is required \u2014 it is how we evaluate the spot.';
+      } else if (n === 3) {
+        if (!getChoice('internet')) return "Let us know the spot's internet.";
+        if (!getChoice('power')) return 'Is there power near the mount point?';
+      }
+      return null;
+    }
+
+    function render() {
+      qsa('.wiz-step').forEach(function (s) {
+        s.classList.toggle('is-active', Number(s.getAttribute('data-step')) === current);
+      });
+      qsa('.wiz-stepname').forEach(function (s) {
+        var n = Number(s.getAttribute('data-for'));
+        s.classList.toggle('is-active', n === current);
+        s.classList.toggle('is-done', n < current);
+      });
+      $('wizBarFill').style.width = (current / TOTAL_STEPS * 100) + '%';
+      $('wizBack').hidden = current === 1;
+      $('wizNext').hidden = current === TOTAL_STEPS;
+      $('hfSubmit').hidden = current !== TOTAL_STEPS;
+      clearError();
+    }
+
+    function goTo(n) {
+      current = Math.max(1, Math.min(TOTAL_STEPS, n));
+      render();
+      var top = document.getElementById('apply');
+      if (top) top.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    $('wizNext').addEventListener('click', function () {
+      var err = validateStep(current);
+      if (err) { showError(err); return; }
+      goTo(current + 1);
+    });
+    $('wizBack').addEventListener('click', function () { goTo(current - 1); });
+
+    // \u2500\u2500 Prefill from CTA buttons (Premium / Sponsorship) \u2500
+    qsa('a[data-prefill-tier]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var tier = a.getAttribute('data-prefill-tier');
+        var btn = document.querySelector('.choice-group[data-name="tier"] .choice[data-value="' + tier + '"]');
+        if (btn) {
+          qsa('.choice-group[data-name="tier"] .choice').forEach(function (b) { b.classList.remove('is-active'); b.setAttribute('aria-pressed', 'false'); });
+          btn.classList.add('is-active'); btn.setAttribute('aria-pressed', 'true');
+        }
+        if (a.getAttribute('data-prefill-adv')) {
+          var adv = document.querySelector('.choice-group[data-name="advertising"] .choice[data-value="' + a.getAttribute('data-prefill-adv') + '"]');
+          if (adv) {
+            qsa('.choice-group[data-name="advertising"] .choice').forEach(function (b) { b.classList.remove('is-active'); b.setAttribute('aria-pressed', 'false'); });
+            adv.classList.add('is-active'); adv.setAttribute('aria-pressed', 'true');
+            syncAdvFields();
+          }
+        }
+      });
+    });
+
+    // \u2500\u2500 Submit \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // Re-validate every gated step in case of skips.
+      for (var s = 1; s <= TOTAL_STEPS; s++) {
+        var err = validateStep(s);
+        if (err) { goTo(s); showError(err); return; }
+      }
+
+      var btn = $('hfSubmit');
       btn.disabled = true;
       btn.textContent = 'Sending\u2026';
 
       var payload = {
-        name:     document.getElementById('hfName').value.trim(),
-        email:    document.getElementById('hfEmail').value.trim(),
-        location: document.getElementById('hfLocation').value.trim(),
-        tier:     document.getElementById('hfTier').value,
-        view:     document.getElementById('hfView').value.trim(),
-        message:  document.getElementById('hfMessage').value.trim()
+        name: $('hfName').value.trim(),
+        email: $('hfEmail').value.trim(),
+        phone: $('hfPhone').value.trim(),
+        location: $('hfLocation').value.trim(),
+        property_relationship: getChoice('property'),
+        view_photo: photoDataUrl || '',
+        view_tags: getTags('viewTags'),
+        view: $('hfView').value.trim(),
+        internet: getChoice('internet'),
+        power: getChoice('power'),
+        mount: getChoice('mount'),
+        tier: getChoice('tier') || 'free',
+        advertising: getChoice('advertising'),
+        business_name: $('hfBizName').value.trim(),
+        business_url: $('hfBizUrl').value.trim(),
+        message: $('hfMessage').value.trim()
       };
 
       fetch('/api/host-application', {
@@ -648,24 +1191,26 @@ import Layout from '../layouts/Layout.astro';
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
-      .then(function(res) {
-        if (res.ok) {
-          form.style.display = 'none';
-          var successEl = document.getElementById('hfSuccess');
-          successEl.style.display = 'block';
-          var confirmEmail = document.getElementById('hfConfirmEmail');
-          if (confirmEmail) confirmEmail.textContent = payload.email;
-        } else {
-          throw new Error('Server error');
-        }
-      })
-      .catch(function() {
-        var errEl = document.getElementById('hfError');
-        errEl.style.display = 'block';
-        errEl.textContent = 'Something went wrong. Email us directly at Portofcams@gmail.com';
-        btn.disabled = false;
-        btn.textContent = 'Submit Application';
-      });
+        .then(function (res) {
+          if (res.ok) {
+            form.style.display = 'none';
+            $('wizProgress').style.display = 'none';
+            $('hfSuccess').style.display = 'block';
+            var ce = $('hfConfirmEmail');
+            if (ce) ce.textContent = payload.email;
+          } else {
+            throw new Error('Server error');
+          }
+        })
+        .catch(function () {
+          var errEl = $('hfError');
+          errEl.style.display = 'block';
+          errEl.textContent = 'Something went wrong. Email us directly at Portofcams@gmail.com';
+          btn.disabled = false;
+          btn.textContent = 'Submit application';
+        });
     });
+
+    render();
   })();
 </script>
