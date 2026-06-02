@@ -1,0 +1,186 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HLSPlayer from '../components/HLSPlayer.astro';
+import HostWizard from '../components/HostWizard.astro';
+import { getCameraById } from '../data/cameras';
+
+const lewers = getCameraById('east-lewers-st')!;
+---
+
+<Layout
+  title="Apply to Host a Camera — Port of Cams"
+  description="Got a great view? We provide and install a professional streaming camera at your location — completely free. Apply to host a Port of Cams feed and get a complimentary premium account."
+  activeNav="host"
+  includeHls={true}
+>
+
+  <!-- Hero: live feed + pitch -->
+  <section class="apply-hero">
+    <div class="apply-hero-bg"></div>
+    <div class="apply-hero-inner">
+      <div class="apply-copy">
+        <div class="apply-tag mono">Now Accepting Applications</div>
+        <h1 class="display apply-title">
+          We install the camera.<br/>
+          <em class="display-italic" style="color: var(--gold)">You get premium for free.</em>
+        </h1>
+        <p class="apply-sub">
+          Got a great location? We provide and install a professional streaming camera — completely free —
+          then hand you a premium account, daily viewer analytics, and an embeddable live player.
+          It takes four quick steps.
+        </p>
+        <ul class="apply-points">
+          <li><span class="ap-check">&#10003;</span> We ship &amp; set up the hardware</li>
+          <li><span class="ap-check">&#10003;</span> Free premium account ($9.99/mo value)</li>
+          <li><span class="ap-check">&#10003;</span> 100% encrypted, embeddable live feed</li>
+        </ul>
+        <a href="#apply" class="btn-primary apply-cta">Apply now</a>
+      </div>
+
+      <div class="apply-feed">
+        <HLSPlayer hlsUrl={lewers.hlsUrl} cameraName={lewers.name} />
+        <p class="apply-feed-cap mono">
+          <span class="feed-dot"></span> Live now — {lewers.name}, {lewers.location}. One of our feeds.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- The wizard -->
+  <section class="apply-form-section" id="apply">
+    <div class="section-inner">
+      <div class="section-label">Get Started</div>
+      <h2 class="display" style="font-size: clamp(32px, 4vw, 52px); margin-bottom: 14px;">
+        Apply for a Camera <em class="display-italic" style="color: var(--gold)">Installation</em>
+      </h2>
+      <p style="color: rgba(245,240,232,0.65); font-size: 16px; margin-bottom: 44px; max-width: 520px; line-height: 1.7;">
+        We review every application, then ship and walk you through the hardware — you'll hear back within 48 hours.
+      </p>
+      <HostWizard />
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .apply-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 120px 0 64px;
+  }
+
+  .apply-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 70% 20%, rgba(201,168,76,0.08) 0%, transparent 70%),
+      linear-gradient(180deg, #080808 0%, #0a0905 100%);
+    z-index: 0;
+  }
+
+  .apply-hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 56px;
+    align-items: center;
+  }
+
+  .apply-tag {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 7px 18px;
+    border-radius: 1px;
+    margin-bottom: 24px;
+  }
+
+  .apply-title {
+    font-size: clamp(34px, 4.4vw, 60px);
+    line-height: 1.05;
+    margin-bottom: 22px;
+  }
+
+  .apply-sub {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 520px;
+    margin-bottom: 26px;
+  }
+
+  .apply-points {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .apply-points li {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-size: 14px;
+    color: rgba(245,240,232,0.78);
+  }
+
+  .ap-check { color: var(--gold); font-size: 13px; }
+
+  .apply-cta {
+    display: inline-block;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  .apply-feed { width: 100%; }
+
+  .apply-feed-cap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+
+  .feed-dot {
+    width: 7px;
+    height: 7px;
+    background: #e53e3e;
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: feedpulse 2s infinite;
+  }
+
+  @keyframes feedpulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(229,62,62,0.5); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 5px rgba(229,62,62,0); }
+  }
+
+  .apply-form-section {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+
+  @media (max-width: 900px) {
+    .apply-hero { padding-top: 100px; }
+    .apply-hero-inner {
+      grid-template-columns: 1fr;
+      gap: 36px;
+      padding: 0 24px;
+    }
+    .apply-feed { order: -1; }
+  }
+</style>
