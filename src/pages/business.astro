@@ -18,9 +18,9 @@ import Layout from '../layouts/Layout.astro';
           <em class="display-italic" style="color: var(--gold)">fills tables.</em>
         </h1>
         <p class="biz-sub">
-          A beautiful live camera of your view — co-branded with your logo, embeddable right on
-          venicebeachclubla.com, with a <b>Reserve</b> button on it. It turns browsers into bookings,
-          and the Rose Room books itself. We provide and install the camera; you go live.
+          We give you a <b>video player to embed on your own website</b> — your live view, your logo
+          and ours, with a <b>Reserve</b> button right on it. It turns browsers into bookings, and the
+          Rose Room books itself. We provide and install the camera; you just paste one line of code.
         </p>
         <div class="biz-cta-row">
           <button class="btn-primary biz-cta" data-checkout="business">Get started &mdash; $50/mo</button>
@@ -35,8 +35,11 @@ import Layout from '../layouts/Layout.astro';
           <img class="cobrand-bg" src="/img/vbc-preview.jpg" alt="Venice Beach Club live view" />
           <div class="cobrand-shade"></div>
           <div class="cobrand-top">
-            <span class="cb-logo-venue">Venice Beach Club</span>
-            <span class="cb-live"><span class="cb-dot"></span> LIVE</span>
+            <span class="cb-top-left">
+              <span class="cb-logo-venue">Venice Beach Club</span>
+              <span class="cb-live"><span class="cb-dot"></span> LIVE</span>
+            </span>
+            <span class="cb-sponsor-slot">+ Sponsor slot</span>
           </div>
           <div class="cobrand-bottom">
             <a class="cb-reserve" href="https://www.venicebeachclubla.com/reservations" target="_blank" rel="noopener">Reserve a table &rarr;</a>
@@ -99,6 +102,47 @@ import Layout from '../layouts/Layout.astro';
         <div class="how-step"><span class="how-n mono">02</span><div><h4>We ship &amp; install</h4><p>Your camera arrives configured. One cable; we walk you through it.</p></div></div>
         <div class="how-step"><span class="how-n mono">03</span><div><h4>You go live</h4><p>Your co-branded feed streams and embeds on your site with the Reserve button.</p></div></div>
         <div class="how-step"><span class="how-n mono">04</span><div><h4>Tables fill</h4><p>The view does the selling. Cancel anytime and the embed simply comes down.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Embed it on your site -->
+  <section class="biz-embed">
+    <div class="section-inner">
+      <div class="section-label">Your video player</div>
+      <h2 class="display" style="font-size: clamp(32px, 4vw, 52px); margin-bottom: 16px;">
+        One line of code on <em class="display-italic" style="color: var(--gold)">your</em> site.
+      </h2>
+      <p class="embed-lead">
+        You get a ready-made video player — your live view, your branding — that drops straight onto
+        venicebeachclubla.com. Paste it into a Squarespace Code block and you're done. It activates the
+        moment your camera's installed; nothing to change on your end.
+      </p>
+      <div class="embed-grid">
+        <div class="embed-code-card">
+          <div class="embed-code-head">
+            <span class="mono">Embed code</span>
+            <button class="embed-copy mono" id="embedCopy" type="button">Copy</button>
+          </div>
+          <pre class="embed-code"><code id="embedSnippet">&lt;div style="position:relative;padding-top:56.25%"&gt;
+  &lt;iframe src="https://pro.portofcams.com/embed/venice-beach-club"
+    style="position:absolute;inset:0;width:100%;height:100%;border:0"
+    allow="autoplay; fullscreen" loading="lazy"&gt;&lt;/iframe&gt;
+&lt;/div&gt;</code></pre>
+          <p class="embed-open mono"><a href="/embed/venice-beach-club" target="_blank" rel="noopener">Open the live player &rarr;</a></p>
+        </div>
+        <div class="embed-side">
+          <h3>Add it in Squarespace</h3>
+          <ol class="embed-steps">
+            <li>Edit your page, click an insert point, choose a <b>Code</b> block.</li>
+            <li>Paste the snippet.</li>
+            <li>Save &mdash; it's live and responsive on every screen.</li>
+          </ol>
+          <div class="embed-sponsor">
+            <span class="embed-sponsor-tag mono">Optional</span>
+            <p><b>Add a sponsor.</b> Let a local business put their logo in the corner of your feed (links to them). It can offset your $50 &mdash; or earn on top of it &mdash; and costs nothing extra to run.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -245,11 +289,43 @@ import Layout from '../layouts/Layout.astro';
   .rights-card li b { color: var(--white); }
   .rights-fine { font-size: 12px; color: var(--muted); font-style: italic; margin: 0; }
 
+  /* Sponsor slot (preview) */
+  .cb-top-left { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+  .cb-sponsor-slot {
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
+    color: rgba(255,255,255,0.7); border: 1px dashed rgba(255,255,255,0.4);
+    padding: 5px 10px; border-radius: 6px; background: rgba(0,0,0,0.3);
+  }
+
+  /* Embed section */
+  .biz-embed { border-top: 1px solid var(--border); background: var(--deep); }
+  .embed-lead { font-size: 16px; color: rgba(245,240,232,0.72); line-height: 1.75; max-width: 600px; margin: 0 0 36px; }
+  .embed-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px; align-items: start; }
+  .embed-code-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .embed-code-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .embed-code-head span { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+  .embed-copy { background: none; border: 1px solid var(--border); color: var(--muted); font-size: 11px; padding: 5px 13px; border-radius: 3px; cursor: pointer; }
+  .embed-copy:hover { border-color: var(--gold); color: var(--gold); }
+  .embed-copy.copied { border-color: rgba(126,224,166,0.5); color: #7ee0a6; }
+  .embed-code { margin: 0; padding: 18px 16px; overflow-x: auto; }
+  .embed-code code { font-family: 'DM Mono', monospace; font-size: 12px; line-height: 1.65; color: #cfc8ba; white-space: pre; }
+  .embed-open { margin: 0; padding: 0 16px 16px; }
+  .embed-open a { color: var(--gold); text-decoration: none; font-size: 12px; }
+  .embed-side h3 { font-size: 17px; font-weight: 500; margin: 0 0 14px; }
+  .embed-steps { margin: 0 0 22px; padding-left: 18px; display: flex; flex-direction: column; gap: 9px; }
+  .embed-steps li { font-size: 14px; color: rgba(245,240,232,0.78); line-height: 1.6; }
+  .embed-steps b { color: var(--white); }
+  .embed-sponsor { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0; padding: 16px 18px; }
+  .embed-sponsor-tag { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 6px; }
+  .embed-sponsor p { font-size: 13px; color: var(--muted); line-height: 1.65; margin: 0; }
+  .embed-sponsor b { color: var(--white); }
+
   @media (max-width: 900px) {
     .biz-hero-inner { grid-template-columns: 1fr; gap: 40px; }
     .incl-grid { grid-template-columns: 1fr; }
     .how-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
     .price-wrap { grid-template-columns: 1fr; }
+    .embed-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 560px) {
     .how-grid { grid-template-columns: 1fr; }
@@ -281,6 +357,29 @@ import Layout from '../layouts/Layout.astro';
           .catch(function () { window.location.href = PAY_LINK; });
       });
     }
+
+    var copyBtn = document.getElementById('embedCopy');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        var code = document.getElementById('embedSnippet');
+        var text = code ? code.textContent : '';
+        function done() {
+          copyBtn.textContent = 'Copied!';
+          copyBtn.classList.add('copied');
+          setTimeout(function () { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 1800);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(done);
+        } else {
+          var ta = document.createElement('textarea'); ta.value = text;
+          ta.style.position = 'fixed'; ta.style.left = '-9999px';
+          document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(ta); done();
+        }
+      });
+    }
+
     if (location.search.indexOf('checkout=success') !== -1) {
       var m = document.getElementById('bizCheckoutMsg');
       if (m) {

@@ -1,0 +1,137 @@
+---
+import { venues, getVenueById } from '../../data/venues';
+
+export function getStaticPaths() {
+  return venues.map((v) => ({ params: { venue: v.id } }));
+}
+
+const { venue: venueId } = Astro.params;
+const venue = getVenueById(venueId!)!;
+
+const isLive = venue.live && !!venue.hlsUrl;
+const streamUrl = venue.hlsUrl
+  ? (venue.hlsUrl.endsWith('/') ? venue.hlsUrl + 'index.m3u8' : venue.hlsUrl)
+  : '';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>{venue.name} — Live</title>
+  {isLive && (
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js" is:inline></script>
+  )}
+  <style define:vars={{ accent: venue.accent }}>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #000; overflow: hidden;
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+    .frame { position: relative; width: 100%; height: 100vh; overflow: hidden; }
+    .media { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .shade { position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, transparent 22%, transparent 62%, rgba(0,0,0,0.55) 100%); }
+    .row { position: absolute; left: 0; right: 0; display: flex; align-items: center;
+      justify-content: space-between; gap: 10px; padding: 14px 16px; }
+    .top { top: 0; } .bottom { bottom: 0; }
+    .left { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+    .venue { font-family: Georgia, 'Cormorant Garamond', 'Times New Roman', serif;
+      font-size: 21px; font-weight: 600; color: #fff; letter-spacing: 0.01em;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.55); white-space: nowrap; }
+    .venue-logo { height: 30px; width: auto; display: block;
+      filter: drop-shadow(0 1px 6px rgba(0,0,0,0.5)); }
+    .badge { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+      background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; font-size: 10px; letter-spacing: 0.14em; padding: 4px 9px;
+      border-radius: 100px; text-transform: uppercase; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #e53e3e; }
+    .badge.live .dot { animation: pulse 2s infinite; }
+    .badge.soon { color: #e8c97a; border-color: rgba(201,168,76,0.5); }
+    .badge.soon .dot { background: var(--accent); }
+    @keyframes pulse { 0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(229,62,62,0.6); }
+      50% { opacity: 0.6; box-shadow: 0 0 0 5px rgba(229,62,62,0); } }
+    .sponsor { display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+      background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.18);
+      padding: 5px 11px; border-radius: 6px; backdrop-filter: blur(4px); flex-shrink: 0; }
+    .sponsor-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6); }
+    .sponsor-name { font-size: 13px; font-weight: 600; color: #fff; }
+    .sponsor-logo { height: 22px; width: auto; display: block; }
+    .reserve { background: #c9a84c; color: #0a0a0a; font-weight: 600; font-size: 13px;
+      text-decoration: none; padding: 9px 17px; border-radius: 5px; white-space: nowrap;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35); }
+    .poc { font-size: 12px; letter-spacing: 0.1em; color: #fff; font-weight: 600;
+      text-decoration: none; text-shadow: 0 1px 6px rgba(0,0,0,0.6); flex-shrink: 0; }
+    .poc span { color: #c9a84c; }
+    .loading { position: absolute; inset: 0; display: flex; align-items: center;
+      justify-content: center; color: rgba(255,255,255,0.5); font-size: 12px;
+      letter-spacing: 0.12em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    {isLive ? (
+      <video id="poc-embed-video" class="media" data-hls={streamUrl}
+        playsinline muted autoplay loop poster={venue.posterUrl}></video>
+    ) : (
+      <img class="media" src={venue.posterUrl} alt={`${venue.name} live view`} />
+    )}
+    <div class="shade"></div>
+
+    <div class="row top">
+      <span class="left">
+        {venue.logoUrl
+          ? <img class="venue-logo" src={venue.logoUrl} alt={venue.name} />
+          : <span class="venue">{venue.logoText}</span>}
+        {isLive
+          ? <span class="badge live"><span class="dot"></span> Live</span>
+          : <span class="badge soon"><span class="dot"></span> Live soon</span>}
+      </span>
+      {venue.sponsor && (
+        <a class="sponsor" href={venue.sponsor.url} target="_blank" rel="noopener">
+          <span class="sponsor-label">Sponsored by</span>
+          {venue.sponsor.logoUrl
+            ? <img class="sponsor-logo" src={venue.sponsor.logoUrl} alt={venue.sponsor.name} />
+            : <span class="sponsor-name">{venue.sponsor.logoText || venue.sponsor.name}</span>}
+        </a>
+      )}
+    </div>
+
+    <div class="row bottom">
+      <a class="reserve" href={venue.reserveUrl} target="_blank" rel="noopener">{venue.reserveLabel} &rarr;</a>
+      <a class="poc" href="https://portofcams.com" target="_blank" rel="noopener">PORT<span>OF</span>CAMS</a>
+    </div>
+  </div>
+
+  {isLive && (
+    <script is:inline>
+      (function () {
+        var v = document.getElementById('poc-embed-video');
+        if (!v) return;
+        var url = v.getAttribute('data-hls');
+        if (!url) return;
+        function play() { v.play().catch(function () {}); }
+        function viaHls() {
+          var Hls = window.Hls;
+          if (Hls && Hls.isSupported()) {
+            var hls = new Hls({ lowLatencyMode: true, maxBufferLength: 10, maxMaxBufferLength: 20 });
+            hls.loadSource(url);
+            hls.attachMedia(v);
+            hls.on(Hls.Events.MANIFEST_PARSED, play);
+          }
+        }
+        if (v.canPlayType('application/vnd.apple.mpegurl')) {
+          // Native HLS (Safari/iOS)
+          v.src = url;
+          v.addEventListener('loadeddata', play, { once: true });
+        } else if (window.Hls) {
+          viaHls();
+        } else {
+          var s = document.querySelector('script[src*="hls.js"]');
+          if (s) s.addEventListener('load', viaHls, { once: true });
+        }
+      })();
+    </script>
+  )}
+</body>
+</html>
