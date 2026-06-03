@@ -259,37 +259,22 @@ import Layout from '../layouts/Layout.astro';
 
 <script is:inline>
   (function () {
-    function start(btn) {
-      var msg = document.getElementById('bizCheckoutMsg');
-      var original = btn.textContent;
-      btn.disabled = true; btn.textContent = 'Starting checkout…';
-      fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: 'business' })
-      })
-        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
-        .then(function (res) {
-          if (res.ok && res.d && res.d.url) { window.location.href = res.d.url; return; }
-          if (msg) {
-            msg.style.display = 'block';
-            msg.style.borderColor = 'rgba(201,168,76,0.4)';
-            msg.style.color = '#e8c97a';
-            msg.textContent = (res.d && res.d.error) ? res.d.error : 'Checkout is being set up — email portofcams@gmail.com and we’ll send a secure link.';
-          }
-          btn.disabled = false; btn.textContent = original;
-        })
-        .catch(function () {
-          if (msg) { msg.style.display = 'block'; msg.style.color = '#ef4444'; msg.textContent = 'Something went wrong. Email portofcams@gmail.com and we’ll send a secure link.'; }
-          btn.disabled = false; btn.textContent = original;
-        });
-    }
+    var PAY_LINK = 'https://buy.stripe.com/dRm9AU2qNgM4d6Q0PMejK00';
     var btns = document.querySelectorAll('[data-checkout="business"]');
-    for (var i = 0; i < btns.length; i++) btns[i].addEventListener('click', function () { start(this); });
-
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        this.textContent = 'Opening secure checkout…';
+        window.location.href = PAY_LINK;
+      });
+    }
     if (location.search.indexOf('checkout=success') !== -1) {
       var m = document.getElementById('bizCheckoutMsg');
-      if (m) { m.style.display = 'block'; m.style.borderColor = 'rgba(126,224,166,0.4)'; m.style.color = '#7ee0a6'; m.textContent = 'You’re in — thank you! We’ll be in touch within 48 hours to ship and install your camera.'; }
+      if (m) {
+        m.style.display = 'block';
+        m.style.borderColor = 'rgba(126,224,166,0.4)';
+        m.style.color = '#7ee0a6';
+        m.textContent = 'You’re in — thank you! We’ll be in touch within 48 hours to ship and install your camera.';
+      }
     }
   })();
 </script>
