@@ -42,7 +42,10 @@ import Layout from '../layouts/Layout.astro';
             <span class="cb-sponsor-slot">+ Sponsor slot</span>
           </div>
           <div class="cobrand-bottom">
-            <a class="cb-reserve" href="https://www.venicebeachclubla.com/reservations" target="_blank" rel="noopener">Reserve a table &rarr;</a>
+            <span class="cb-cta-group">
+              <a class="cb-menu" href="https://www.venicebeachclubla.com/menu" target="_blank" rel="noopener">Menu</a>
+              <a class="cb-reserve" href="https://www.venicebeachclubla.com/reservations" target="_blank" rel="noopener">Reserve a table &rarr;</a>
+            </span>
             <span class="cb-logo-poc mono">PORT<span>OF</span>CAMS</span>
           </div>
         </div>
@@ -71,8 +74,8 @@ import Layout from '../layouts/Layout.astro';
         </div>
         <div class="incl-card">
           <div class="incl-ic">&#10003;</div>
-          <h3>A <b>Reserve</b> button on the feed</h3>
-          <p>Viewers see the vibe, then tap straight through to reservations or a Rose Room event inquiry.</p>
+          <h3><b>Menu</b> + <b>Reserve</b> buttons on the feed</h3>
+          <p>Viewers see the vibe, then tap straight through to your menu, a table, or a Rose Room event.</p>
         </div>
         <div class="incl-card">
           <div class="incl-ic">&#9650;</div>
@@ -157,7 +160,7 @@ import Layout from '../layouts/Layout.astro';
           <ul class="price-list">
             <li><span class="pc">&#10003;</span> Camera provided &amp; installed</li>
             <li><span class="pc">&#10003;</span> Your-logo, ad-free embeddable player</li>
-            <li><span class="pc">&#10003;</span> Reserve / events button on the feed</li>
+            <li><span class="pc">&#10003;</span> Menu + Reserve buttons on the feed</li>
             <li><span class="pc">&#10003;</span> Daily viewer analytics</li>
             <li><span class="pc">&#10003;</span> Featured on the Port of Cams network</li>
             <li><span class="pc">&#10003;</span> Shared content rights</li>
@@ -244,6 +247,12 @@ import Layout from '../layouts/Layout.astro';
     position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 18px;
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
   }
+  .cb-cta-group { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+  .cb-menu {
+    background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.35); color: #fff;
+    font-weight: 500; font-size: 13px; text-decoration: none; padding: 8px 14px; border-radius: 4px;
+  }
+  .cb-menu:hover { border-color: #fff; }
   .cb-reserve {
     background: var(--gold); color: #0a0a0a; font-weight: 600; font-size: 13px;
     text-decoration: none; padding: 9px 16px; border-radius: 4px; white-space: nowrap;

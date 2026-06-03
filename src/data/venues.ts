@@ -17,6 +17,8 @@ export interface Venue {
   accent: string;        // venue brand color (e.g. VBC royal blue)
   reserveLabel: string;  // "Reserve a table"
   reserveUrl: string;    // booking/reservations URL
+  menuUrl?: string;      // optional menu link (secondary CTA on the player)
+  menuLabel?: string;    // defaults to "Menu"
   hlsUrl?: string;       // camera HLS once installed; empty => pre-install state
   posterUrl: string;     // shown pre-install + as the <video> poster
   live: boolean;         // flip true once the camera is installed
@@ -31,6 +33,7 @@ export const venues: Venue[] = [
     accent: "#1f57c4",
     reserveLabel: "Reserve a table",
     reserveUrl: "https://www.venicebeachclubla.com/reservations",
+    menuUrl: "https://www.venicebeachclubla.com/menu",
     hlsUrl: "", // her camera's HLS once installed (cams.portofcams.com/{slug}/)
     posterUrl: "/img/vbc-preview.jpg",
     live: false,

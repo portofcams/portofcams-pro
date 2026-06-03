@@ -57,6 +57,11 @@ const streamUrl = venue.hlsUrl
       color: rgba(255,255,255,0.6); }
     .sponsor-name { font-size: 13px; font-weight: 600; color: #fff; }
     .sponsor-logo { height: 22px; width: auto; display: block; }
+    .cta-group { display: inline-flex; align-items: center; gap: 9px; min-width: 0; }
+    .menu-link { background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.35);
+      color: #fff; font-weight: 500; font-size: 13px; text-decoration: none;
+      padding: 8px 15px; border-radius: 5px; white-space: nowrap; backdrop-filter: blur(4px); }
+    .menu-link:hover { border-color: #fff; }
     .reserve { background: #c9a84c; color: #0a0a0a; font-weight: 600; font-size: 13px;
       text-decoration: none; padding: 9px 17px; border-radius: 5px; white-space: nowrap;
       box-shadow: 0 2px 12px rgba(0,0,0,0.35); }
@@ -98,7 +103,12 @@ const streamUrl = venue.hlsUrl
     </div>
 
     <div class="row bottom">
-      <a class="reserve" href={venue.reserveUrl} target="_blank" rel="noopener">{venue.reserveLabel} &rarr;</a>
+      <span class="cta-group">
+        {venue.menuUrl && (
+          <a class="menu-link" href={venue.menuUrl} target="_blank" rel="noopener">{venue.menuLabel || 'Menu'}</a>
+        )}
+        <a class="reserve" href={venue.reserveUrl} target="_blank" rel="noopener">{venue.reserveLabel} &rarr;</a>
+      </span>
       <a class="poc" href="https://portofcams.com" target="_blank" rel="noopener">PORT<span>OF</span>CAMS</a>
     </div>
   </div>
