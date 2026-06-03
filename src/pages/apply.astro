@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import HLSPlayer from '../components/HLSPlayer.astro';
 import HostWizard from '../components/HostWizard.astro';
 import { getCameraById } from '../data/cameras';
 
@@ -11,7 +10,6 @@ const lewers = getCameraById('east-lewers-st')!;
   title="Apply to Host a Camera — Port of Cams"
   description="Got a great view? We provide and install a professional streaming camera at your location — completely free. Apply to host a Port of Cams feed and get a complimentary premium account."
   activeNav="host"
-  includeHls={true}
 >
 
   <!-- Hero: live feed + pitch -->
@@ -38,9 +36,16 @@ const lewers = getCameraById('east-lewers-st')!;
       </div>
 
       <div class="apply-feed">
-        <HLSPlayer hlsUrl={lewers.hlsUrl} cameraName={lewers.name} />
+        <div class="apply-feed-frame">
+          <video class="apply-feed-vid" autoplay muted loop playsinline preload="auto" poster="/clips/lewers-waikiki.jpg">
+            <source src="/clips/lewers-waikiki.mp4" type="video/mp4" />
+          </video>
+          <a class="apply-feed-badge mono" href="/camera/east-lewers-st">
+            <span class="feed-dot"></span> Watch live
+          </a>
+        </div>
         <p class="apply-feed-cap mono">
-          <span class="feed-dot"></span> Live now — {lewers.name}, {lewers.location}. One of our feeds.
+          {lewers.name}, {lewers.location} — a Port of Cams feed.
         </p>
       </div>
     </div>
@@ -59,6 +64,21 @@ const lewers = getCameraById('east-lewers-st')!;
       <HostWizard />
     </div>
   </section>
+
+  <script is:inline>
+    (function () {
+      var v = document.querySelector('.apply-feed-vid');
+      if (!v) return;
+      v.muted = true;
+      function go() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+      if (v.readyState >= 2) go(); else v.addEventListener('loadeddata', go, { once: true });
+      window.addEventListener('pageshow', go);
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) go(); });
+      ['click', 'touchstart', 'scroll', 'keydown'].forEach(function (ev) {
+        window.addEventListener(ev, go, { once: true, passive: true });
+      });
+    })();
+  </script>
 
 </Layout>
 
@@ -143,6 +163,45 @@ const lewers = getCameraById('east-lewers-st')!;
   }
 
   .apply-feed { width: 100%; }
+
+  .apply-feed-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .apply-feed-vid {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .apply-feed-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--white);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 11px;
+    border-radius: 2px;
+    text-decoration: none;
+    backdrop-filter: blur(4px);
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .apply-feed-badge:hover { border-color: var(--gold); color: var(--gold); }
 
   .apply-feed-cap {
     display: flex;
