@@ -263,8 +263,22 @@ import Layout from '../layouts/Layout.astro';
     var btns = document.querySelectorAll('[data-checkout="business"]');
     for (var i = 0; i < btns.length; i++) {
       btns[i].addEventListener('click', function () {
-        this.textContent = 'Opening secure checkout…';
-        window.location.href = PAY_LINK;
+        var btn = this;
+        btn.textContent = 'Opening secure checkout…';
+        // Prefer the create-checkout-session function (adds the cobranded_business
+        // metadata tag + promo codes). Fall back to the Stripe Payment Link if the
+        // function isn't configured yet (STRIPE_BUSINESS_PRICE_ID unset -> 503),
+        // so a working flow is never broken.
+        fetch('/api/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan: 'business' })
+        })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (data) {
+            window.location.href = (data && data.url) ? data.url : PAY_LINK;
+          })
+          .catch(function () { window.location.href = PAY_LINK; });
       });
     }
     if (location.search.indexOf('checkout=success') !== -1) {
