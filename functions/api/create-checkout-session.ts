@@ -20,6 +20,7 @@ interface Env {
   STRIPE_SECRET_KEY?: string;
   STRIPE_MONTHLY_PRICE_ID?: string;
   STRIPE_YEARLY_PRICE_ID?: string;
+  STRIPE_BUSINESS_PRICE_ID?: string; // co-branded business tier ($50/mo)
 }
 
 const ORIGIN = "https://pro.portofcams.com";
@@ -44,11 +45,16 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return json({ error: "Invalid request." }, 400);
   }
 
-  const plan = body?.plan === "yearly" ? "yearly" : "monthly";
+  const plan =
+    body?.plan === "yearly" ? "yearly" : body?.plan === "business" ? "business" : "monthly";
 
   const secret = env.STRIPE_SECRET_KEY;
   const priceId =
-    plan === "yearly" ? env.STRIPE_YEARLY_PRICE_ID : env.STRIPE_MONTHLY_PRICE_ID;
+    plan === "yearly"
+      ? env.STRIPE_YEARLY_PRICE_ID
+      : plan === "business"
+        ? env.STRIPE_BUSINESS_PRICE_ID
+        : env.STRIPE_MONTHLY_PRICE_ID;
 
   // Not configured yet — degrade gracefully (no crash, no charge).
   if (!secret || !priceId) {
@@ -64,8 +70,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   form.append("line_items[0][quantity]", "1");
   form.append("allow_promotion_codes", "true");
   form.append("billing_address_collection", "auto");
-  form.append("success_url", `${ORIGIN}/premium?checkout=success&session_id={CHECKOUT_SESSION_ID}`);
-  form.append("cancel_url", `${ORIGIN}/checkout?checkout=cancelled`);
+  const successPath = plan === "business" ? "/business?checkout=success" : "/premium?checkout=success";
+  const cancelPath = plan === "business" ? "/business?checkout=cancelled" : "/checkout?checkout=cancelled";
+  form.append("success_url", `${ORIGIN}${successPath}&session_id={CHECKOUT_SESSION_ID}`);
+  form.append("cancel_url", `${ORIGIN}${cancelPath}`);
+  if (plan === "business") {
+    form.append("subscription_data[metadata][tier]", "cobranded_business");
+  }
 
   let stripeRes: Response;
   try {

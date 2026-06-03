@@ -1,0 +1,295 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="A live feed that fills tables — Venice Beach Club × Port of Cams"
+  description="A co-branded live feed of your view, embeddable on your site with a Reserve button. We provide and install the camera. $50/mo — you and Port of Cams both own the content."
+>
+
+  <!-- Hero -->
+  <section class="biz-hero">
+    <div class="biz-hero-bg"></div>
+    <div class="biz-hero-inner">
+      <div class="biz-copy">
+        <div class="biz-tag mono">Venice Beach Club <span class="times">&times;</span> Port of Cams</div>
+        <h1 class="display biz-title">
+          A live feed that<br/>
+          <em class="display-italic" style="color: var(--gold)">fills tables.</em>
+        </h1>
+        <p class="biz-sub">
+          A beautiful live camera of your view — co-branded with your logo, embeddable right on
+          venicebeachclubla.com, with a <b>Reserve</b> button on it. It turns browsers into bookings,
+          and the Rose Room books itself. We provide and install the camera; you go live.
+        </p>
+        <div class="biz-cta-row">
+          <button class="btn-primary biz-cta" data-checkout="business">Get started &mdash; $50/mo</button>
+          <span class="biz-cta-note mono">Cancel anytime &middot; we ship after you subscribe</span>
+        </div>
+        <div id="bizCheckoutMsg" class="biz-msg" style="display:none;"></div>
+      </div>
+
+      <!-- Co-branded player preview -->
+      <div class="biz-preview">
+        <div class="cobrand-frame">
+          <img class="cobrand-bg" src="/img/vbc-preview.jpg" alt="Venice Beach Club live view" />
+          <div class="cobrand-shade"></div>
+          <div class="cobrand-top">
+            <span class="cb-logo-venue">Venice Beach Club</span>
+            <span class="cb-live"><span class="cb-dot"></span> LIVE</span>
+          </div>
+          <div class="cobrand-bottom">
+            <a class="cb-reserve" href="https://www.venicebeachclubla.com/reservations" target="_blank" rel="noopener">Reserve a table &rarr;</a>
+            <span class="cb-logo-poc mono">PORT<span>OF</span>CAMS</span>
+          </div>
+        </div>
+        <p class="biz-preview-cap mono">Co-branded &middot; embeddable on your site &middot; your live view replaces this once installed</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's included -->
+  <section class="biz-incl">
+    <div class="section-inner">
+      <div class="section-label">What you get</div>
+      <h2 class="display" style="font-size: clamp(32px, 4vw, 52px); margin-bottom: 48px;">
+        Your view, working for <em class="display-italic" style="color: var(--gold)">you.</em>
+      </h2>
+      <div class="incl-grid">
+        <div class="incl-card">
+          <div class="incl-ic">&#9737;</div>
+          <h3>We provide &amp; install the camera</h3>
+          <p>A professional streaming camera, shipped and set up once you're subscribed. No upfront hardware cost.</p>
+        </div>
+        <div class="incl-card">
+          <div class="incl-ic">&#9635;</div>
+          <h3>Your branded, embeddable player</h3>
+          <p>Your logo and ours on an ad-free live player you drop onto venicebeachclubla.com with one line of code.</p>
+        </div>
+        <div class="incl-card">
+          <div class="incl-ic">&#10003;</div>
+          <h3>A <b>Reserve</b> button on the feed</h3>
+          <p>Viewers see the vibe, then tap straight through to reservations or a Rose Room event inquiry.</p>
+        </div>
+        <div class="incl-card">
+          <div class="incl-ic">&#9650;</div>
+          <h3>Daily viewer analytics</h3>
+          <p>See how many people are watching, when, and where the clicks to book are coming from.</p>
+        </div>
+        <div class="incl-card">
+          <div class="incl-ic">&#9728;</div>
+          <h3>Featured on the network</h3>
+          <p>Your feed also lives on Port of Cams, putting your venue in front of a Venice-loving audience.</p>
+        </div>
+        <div class="incl-card">
+          <div class="incl-ic">&#9851;</div>
+          <h3>You own the content too</h3>
+          <p>Both of us hold rights to the live feed and recordings — use the footage freely in your own marketing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="biz-how">
+    <div class="section-inner">
+      <div class="section-label">How it works</div>
+      <div class="how-grid">
+        <div class="how-step"><span class="how-n mono">01</span><div><h4>Subscribe</h4><p>$50/mo. That's the green light — no contracts, cancel anytime.</p></div></div>
+        <div class="how-step"><span class="how-n mono">02</span><div><h4>We ship &amp; install</h4><p>Your camera arrives configured. One cable; we walk you through it.</p></div></div>
+        <div class="how-step"><span class="how-n mono">03</span><div><h4>You go live</h4><p>Your co-branded feed streams and embeds on your site with the Reserve button.</p></div></div>
+        <div class="how-step"><span class="how-n mono">04</span><div><h4>Tables fill</h4><p>The view does the selling. Cancel anytime and the embed simply comes down.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing + content rights -->
+  <section class="biz-price">
+    <div class="section-inner">
+      <div class="price-wrap">
+        <div class="price-card">
+          <div class="price-badge mono">Co-branded Business Feed</div>
+          <div class="price-amt display">$50<span class="price-per">/ month</span></div>
+          <ul class="price-list">
+            <li><span class="pc">&#10003;</span> Camera provided &amp; installed</li>
+            <li><span class="pc">&#10003;</span> Your-logo, ad-free embeddable player</li>
+            <li><span class="pc">&#10003;</span> Reserve / events button on the feed</li>
+            <li><span class="pc">&#10003;</span> Daily viewer analytics</li>
+            <li><span class="pc">&#10003;</span> Featured on the Port of Cams network</li>
+            <li><span class="pc">&#10003;</span> Shared content rights</li>
+            <li><span class="pc">&#10003;</span> Cancel anytime</li>
+          </ul>
+          <button class="btn-primary price-btn" data-checkout="business">Get started &mdash; $50/mo</button>
+          <p class="price-fine mono">Billed monthly via Stripe. We ship your camera after your first payment.</p>
+        </div>
+        <div class="rights-card">
+          <h3>Content &amp; rights</h3>
+          <p>Straightforward and fair, both ways:</p>
+          <ul>
+            <li><b>You own your content.</b> Venice Beach Club may use, display, and share the live feed and any recordings in your own marketing — your website, socials, in-venue screens — at no extra cost.</li>
+            <li><b>We do too.</b> Port of Cams may show your feed within our network and use clips to promote the platform, always crediting Venice Beach Club.</li>
+            <li><b>You're in control.</b> Cancel anytime; the embed comes down and we stop streaming. Recordings already shared stay as-is, but new capture stops.</li>
+          </ul>
+          <p class="rights-fine">Plain-language summary — a short written agreement confirms these terms before we ship.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  :root { --vbc: #1f57c4; }
+
+  /* Hero */
+  .biz-hero { position: relative; overflow: hidden; padding: 120px 0 64px; }
+  .biz-hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 50% 50% at 80% 20%, rgba(31,87,196,0.10) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 10% 60%, rgba(201,168,76,0.08) 0%, transparent 70%),
+      linear-gradient(180deg, #080808 0%, #0a0905 100%);
+  }
+  .biz-hero-inner {
+    position: relative; max-width: 1180px; margin: 0 auto; padding: 0 24px;
+    display: grid; grid-template-columns: 1fr 1.05fr; gap: 56px; align-items: center;
+  }
+  .biz-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); color: var(--white);
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 7px 16px; border-radius: 100px; margin-bottom: 26px;
+  }
+  .biz-tag .times { color: var(--gold); font-size: 14px; }
+  .biz-title { font-size: clamp(40px, 5.5vw, 72px); line-height: 1.02; margin: 0 0 22px; }
+  .biz-sub { font-size: 17px; color: rgba(245,240,232,0.72); line-height: 1.75; max-width: 520px; margin: 0 0 30px; }
+  .biz-cta-row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .biz-cta { font-size: 14px; }
+  .biz-cta-note { font-size: 12px; color: var(--muted); }
+  .biz-msg { margin-top: 16px; font-size: 14px; padding: 12px 16px; border-radius: 4px; border: 1px solid var(--border); }
+
+  /* Co-branded preview */
+  .biz-preview { width: 100%; }
+  .cobrand-frame {
+    position: relative; width: 100%; aspect-ratio: 16 / 9;
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  }
+  .cobrand-bg { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cobrand-shade {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, transparent 28%, transparent 62%, rgba(0,0,0,0.55) 100%);
+  }
+  .cobrand-top {
+    position: absolute; top: 0; left: 0; right: 0; padding: 16px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cb-logo-venue {
+    font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 22px; color: #fff;
+    letter-spacing: 0.02em; text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+  }
+  .cb-live {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; font-size: 11px; letter-spacing: 0.14em; padding: 5px 11px; border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+  }
+  .cb-dot { width: 7px; height: 7px; border-radius: 50%; background: #e53e3e; animation: cbpulse 2s infinite; }
+  @keyframes cbpulse { 0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(229,62,62,0.6);} 50% { opacity:.7; box-shadow:0 0 0 5px rgba(229,62,62,0);} }
+  .cobrand-bottom {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 18px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .cb-reserve {
+    background: var(--gold); color: #0a0a0a; font-weight: 600; font-size: 13px;
+    text-decoration: none; padding: 9px 16px; border-radius: 4px; white-space: nowrap;
+  }
+  .cb-reserve:hover { background: var(--gold-light); }
+  .cb-logo-poc { font-size: 13px; letter-spacing: 0.1em; color: #fff; font-weight: 600; text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
+  .cb-logo-poc span { color: var(--gold); }
+  .biz-preview-cap { font-size: 11px; color: var(--muted); text-align: center; margin-top: 12px; letter-spacing: 0.04em; }
+
+  /* What's included */
+  .biz-incl { border-top: 1px solid var(--border); background: var(--deep); }
+  .incl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .incl-card { background: var(--deep); padding: 34px 28px; }
+  .incl-ic { font-size: 24px; color: var(--gold); margin-bottom: 16px; }
+  .incl-card h3 { font-size: 16px; font-weight: 500; margin-bottom: 10px; }
+  .incl-card p { font-size: 14px; color: var(--muted); line-height: 1.75; }
+
+  /* How it works */
+  .biz-how { border-top: 1px solid var(--border); }
+  .how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 20px; }
+  .how-step { display: flex; gap: 14px; }
+  .how-n { font-size: 13px; color: var(--gold); padding-top: 3px; }
+  .how-step h4 { font-size: 16px; font-weight: 500; margin: 0 0 6px; }
+  .how-step p { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 0; }
+
+  /* Pricing + rights */
+  .biz-price { border-top: 1px solid var(--border); background: var(--deep); }
+  .price-wrap { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; align-items: start; }
+  .price-card { background: var(--surface); border: 1px solid var(--gold); border-radius: 4px; padding: 36px 32px; }
+  .price-badge { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+  .price-amt { font-size: 56px; font-weight: 300; line-height: 1; margin: 12px 0 20px; }
+  .price-per { font-size: 16px; color: var(--muted); font-family: 'DM Sans', sans-serif; }
+  .price-list { list-style: none; display: flex; flex-direction: column; gap: 11px; margin: 0 0 26px; padding: 0; }
+  .price-list li { font-size: 14px; color: rgba(245,240,232,0.85); display: flex; align-items: center; gap: 11px; }
+  .price-list .pc { color: var(--gold); flex-shrink: 0; }
+  .price-btn { width: 100%; text-align: center; }
+  .price-fine { font-size: 11px; color: var(--muted); text-align: center; margin-top: 14px; line-height: 1.5; }
+  .rights-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 36px 32px; }
+  .rights-card h3 { font-size: 19px; font-weight: 500; margin: 0 0 6px; }
+  .rights-card > p { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+  .rights-card ul { margin: 0 0 18px; padding-left: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .rights-card li { font-size: 14px; color: rgba(245,240,232,0.78); line-height: 1.65; }
+  .rights-card li b { color: var(--white); }
+  .rights-fine { font-size: 12px; color: var(--muted); font-style: italic; margin: 0; }
+
+  @media (max-width: 900px) {
+    .biz-hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .incl-grid { grid-template-columns: 1fr; }
+    .how-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .price-wrap { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .how-grid { grid-template-columns: 1fr; }
+    .cb-logo-venue { font-size: 18px; }
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    function start(btn) {
+      var msg = document.getElementById('bizCheckoutMsg');
+      var original = btn.textContent;
+      btn.disabled = true; btn.textContent = 'Starting checkout…';
+      fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: 'business' })
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (res.ok && res.d && res.d.url) { window.location.href = res.d.url; return; }
+          if (msg) {
+            msg.style.display = 'block';
+            msg.style.borderColor = 'rgba(201,168,76,0.4)';
+            msg.style.color = '#e8c97a';
+            msg.textContent = (res.d && res.d.error) ? res.d.error : 'Checkout is being set up — email portofcams@gmail.com and we’ll send a secure link.';
+          }
+          btn.disabled = false; btn.textContent = original;
+        })
+        .catch(function () {
+          if (msg) { msg.style.display = 'block'; msg.style.color = '#ef4444'; msg.textContent = 'Something went wrong. Email portofcams@gmail.com and we’ll send a secure link.'; }
+          btn.disabled = false; btn.textContent = original;
+        });
+    }
+    var btns = document.querySelectorAll('[data-checkout="business"]');
+    for (var i = 0; i < btns.length; i++) btns[i].addEventListener('click', function () { start(this); });
+
+    if (location.search.indexOf('checkout=success') !== -1) {
+      var m = document.getElementById('bizCheckoutMsg');
+      if (m) { m.style.display = 'block'; m.style.borderColor = 'rgba(126,224,166,0.4)'; m.style.color = '#7ee0a6'; m.textContent = 'You’re in — thank you! We’ll be in touch within 48 hours to ship and install your camera.'; }
+    }
+  })();
+</script>
