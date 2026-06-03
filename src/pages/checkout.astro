@@ -399,19 +399,33 @@ import Layout from '../layouts/Layout.astro';
       }
     }
 
-    // Placeholder: redirect to Stripe Checkout
+    // Create a Stripe Checkout Session and redirect to the hosted payment page.
     checkoutBtn.addEventListener('click', function() {
       var selectedPlan = selector.querySelector('input:checked').value;
-      // TODO: Replace with actual Stripe Checkout redirect
-      // fetch('/api/create-checkout-session', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ plan: selectedPlan })
-      // })
-      // .then(r => r.json())
-      // .then(data => window.location.href = data.url);
+      var original = checkoutBtn.textContent;
+      checkoutBtn.disabled = true;
+      checkoutBtn.textContent = 'Redirecting…';
 
-      alert('Stripe checkout integration coming soon. Selected plan: ' + selectedPlan);
+      fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: selectedPlan })
+      })
+        .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+        .then(function(res) {
+          if (res.ok && res.data && res.data.url) {
+            window.location.href = res.data.url;
+            return;
+          }
+          checkoutBtn.disabled = false;
+          checkoutBtn.textContent = original;
+          alert((res.data && res.data.error) || 'Checkout is temporarily unavailable. Please try again later.');
+        })
+        .catch(function() {
+          checkoutBtn.disabled = false;
+          checkoutBtn.textContent = original;
+          alert('Checkout is temporarily unavailable. Please try again later.');
+        });
     });
   })();
 </script>
