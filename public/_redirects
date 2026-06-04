@@ -2,6 +2,7 @@
 # Per-venue friendly slugs first, then a generic token passthrough.
 /welcome/christian  https://ai.portofcams.com/api/host-applications/onboard/onb-8fda5e3f3aaf95cd  302
 /welcome/april      https://ai.portofcams.com/api/host-applications/onboard/onb-ce4b2913f24e5a5b  302
+/welcome/laura      https://ai.portofcams.com/api/host-applications/onboard/onb-8e5a0f6baa2a4a5f  302
 /welcome/:token     https://ai.portofcams.com/api/host-applications/onboard/:token  302
 # Tokenless fallback — a /welcome with no/empty token (e.g. a legacy email built
 # before the token was minted) lands on /host instead of a dead 404.
