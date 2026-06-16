@@ -1,0 +1,209 @@
+---
+import { getToursForRegion, viatorLink, type PocViatorTour } from '../data/viator-tours';
+
+interface Props {
+  region: string;
+}
+
+const { region } = Astro.props;
+const tours = getToursForRegion(region);
+---
+
+{tours.length > 0 && (
+  <section class="viator-section">
+    <div class="section-inner">
+      <div class="section-label">Experiences</div>
+      <h2 class="display viator-heading">
+        Book an <em class="display-italic" style="color: var(--gold)">adventure</em> nearby
+      </h2>
+      <div class="viator-grid">
+        {tours.map((tour: PocViatorTour) => (
+          <a
+            href={viatorLink(tour)}
+            target="_blank"
+            rel="noopener sponsored"
+            class="viator-card"
+          >
+            <div class="viator-img-wrap">
+              <img
+                src={tour.image}
+                alt={tour.title}
+                loading="lazy"
+                class="viator-img"
+              />
+              <div class="viator-img-overlay"></div>
+              <div class="viator-price mono">From ${tour.priceFrom}</div>
+            </div>
+            <div class="viator-body">
+              <div class="viator-meta mono">
+                <span class="viator-rating">★ {tour.rating}</span>
+                <span class="viator-reviews">({tour.reviewCount.toLocaleString()})</span>
+              </div>
+              <h3 class="viator-title">{tour.title}</h3>
+              <p class="viator-desc">{tour.description}</p>
+              <div class="viator-cta mono">Book on Viator →</div>
+            </div>
+          </a>
+        ))}
+      </div>
+      <p class="viator-disclosure mono">
+        Affiliate links — we may earn a commission at no extra cost to you.
+      </p>
+    </div>
+  </section>
+)}
+
+<style>
+  .viator-section {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+    padding: 60px 0 80px;
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .viator-heading {
+    font-size: clamp(28px, 3vw, 40px);
+    margin-bottom: 40px;
+  }
+
+  .viator-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  .viator-card {
+    background: var(--deep);
+    text-decoration: none;
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    transition: background 0.3s;
+  }
+
+  .viator-card:hover {
+    background: var(--surface);
+  }
+
+  .viator-img-wrap {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+
+  .viator-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .viator-card:hover .viator-img {
+    transform: scale(1.04);
+  }
+
+  .viator-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.45) 100%);
+  }
+
+  .viator-price {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    background: rgba(0,0,0,0.65);
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  .viator-body {
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .viator-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .viator-rating {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  .viator-reviews {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .viator-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    transition: color 0.3s;
+  }
+
+  .viator-card:hover .viator-title {
+    color: var(--gold);
+  }
+
+  .viator-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    flex: 1;
+    margin-bottom: 14px;
+  }
+
+  .viator-cta {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    transition: color 0.3s;
+  }
+
+  .viator-card:hover .viator-cta {
+    color: var(--gold-light);
+  }
+
+  .viator-disclosure {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--faint);
+  }
+
+  @media (max-width: 768px) {
+    .section-inner { padding: 0 24px; }
+    .viator-grid { grid-template-columns: 1fr; }
+  }
+</style>
