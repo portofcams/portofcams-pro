@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import HLSPlayer from '../../components/HLSPlayer.astro';
 import ViatorTours from '../../components/ViatorTours.astro';
+import HotelCards from '../../components/HotelCards.astro';
 import { cameras, getCameraById, getRelatedCameras } from '../../data/cameras';
 
 export function getStaticPaths() {
@@ -114,6 +115,9 @@ const related = getRelatedCameras(id!, 4);
 
   <!-- Viator Tours -->
   <ViatorTours region={camera.region} />
+
+  <!-- Hotel Cards -->
+  <HotelCards location={camera.location} />
 
   <!-- Related Cameras -->
   {related.length > 0 && (

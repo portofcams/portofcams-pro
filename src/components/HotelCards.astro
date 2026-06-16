@@ -1,0 +1,180 @@
+---
+import { getHotelCards, bookingLink } from '../data/hotels';
+
+interface Props {
+  location: string;
+}
+
+const { location } = Astro.props;
+const cards = getHotelCards(location);
+---
+
+<section class="hotel-section">
+  <div class="section-inner">
+    <div class="section-label">Accommodations</div>
+    <h2 class="display hotel-heading">
+      Find a place to <em class="display-italic" style="color: var(--gold)">stay</em>
+    </h2>
+    <div class="hotel-grid">
+      {cards.map((card) => (
+        <a
+          href={bookingLink(location, card.stars)}
+          target="_blank"
+          rel="noopener sponsored"
+          class="hotel-card"
+        >
+          <div class="hotel-img-wrap">
+            <img src={card.image} alt={card.label} loading="lazy" class="hotel-img" />
+            <div class="hotel-img-overlay"></div>
+            <div class="hotel-tier mono">{card.tier}</div>
+          </div>
+          <div class="hotel-body">
+            <div class="hotel-price mono">{card.priceHint}</div>
+            <h3 class="hotel-title">{card.label}</h3>
+            <p class="hotel-desc">{card.description}</p>
+            <div class="hotel-cta mono">Search on Booking.com →</div>
+          </div>
+        </a>
+      ))}
+    </div>
+    <p class="hotel-disclosure mono">
+      Affiliate links — we may earn a commission at no extra cost to you.
+    </p>
+  </div>
+</section>
+
+<style>
+  .hotel-section {
+    border-top: 1px solid var(--border);
+    background: var(--black);
+    padding: 60px 0 80px;
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .hotel-heading {
+    font-size: clamp(28px, 3vw, 40px);
+    margin-bottom: 40px;
+  }
+
+  .hotel-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  .hotel-card {
+    background: var(--deep);
+    text-decoration: none;
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    transition: background 0.3s;
+  }
+
+  .hotel-card:hover { background: var(--surface); }
+
+  .hotel-img-wrap {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+
+  .hotel-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .hotel-card:hover .hotel-img { transform: scale(1.04); }
+
+  .hotel-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.5) 100%);
+  }
+
+  .hotel-tier {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: rgba(0,0,0,0.65);
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  .hotel-body {
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .hotel-price {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .hotel-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    transition: color 0.3s;
+  }
+
+  .hotel-card:hover .hotel-title { color: var(--gold); }
+
+  .hotel-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    flex: 1;
+    margin-bottom: 14px;
+  }
+
+  .hotel-cta {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    transition: color 0.3s;
+  }
+
+  .hotel-card:hover .hotel-cta { color: var(--gold-light); }
+
+  .hotel-disclosure {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--faint);
+  }
+
+  @media (max-width: 900px) {
+    .hotel-grid { grid-template-columns: 1fr; }
+    .section-inner { padding: 0 24px; }
+  }
+</style>
