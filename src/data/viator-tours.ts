@@ -55,7 +55,7 @@ export const toursByRegion: Partial<Record<string, PocViatorTour[]>> = {
       rating: 4.9,
       reviewCount: 1800,
       description: "Soar over volcanoes, sea cliffs, and emerald valleys on a thrilling doors-off helicopter flight over the Big Island or Kauai.",
-      image: u("1553083568-2470bb1f9702"),
+      image: u("1437719417032-8595fd9e9dc6"),
     },
     {
       title: "Molokini Snorkel & Whale Watch",
@@ -66,7 +66,7 @@ export const toursByRegion: Partial<Record<string, PocViatorTour[]>> = {
       rating: 4.7,
       reviewCount: 2600,
       description: "Snorkel the crystal-clear crater of Molokini Atoll, then cruise for whales and sea turtles on the way back to Maalaea.",
-      image: u("1469854523086-cc02fe5d8800"),
+      image: u("1544551763-46a013bb70d5"),
     },
   ],
 
@@ -80,7 +80,7 @@ export const toursByRegion: Partial<Record<string, PocViatorTour[]>> = {
       rating: 4.9,
       reviewCount: 3400,
       description: "Cruise Kenai Fjords National Park past calving tidewater glaciers, orcas, sea otters, and tens of thousands of seabirds.",
-      image: u("1573491601995-695e5154f91b"),
+      image: u("1464822759023-fed622ff2c3b"),
     },
     {
       title: "Glacier Flightseeing & Denali Overflight",
@@ -91,7 +91,7 @@ export const toursByRegion: Partial<Record<string, PocViatorTour[]>> = {
       rating: 4.9,
       reviewCount: 980,
       description: "Fly low over the Chugach glaciers and circle Denali's south face — North America's highest peak seen from a small plane.",
-      image: u("1553083568-2470bb1f9702"),
+      image: u("1506905925346-21bda4d32df4"),
     },
     {
       title: "Tracy Arm Fjord Glacier Cruise",
@@ -102,7 +102,7 @@ export const toursByRegion: Partial<Record<string, PocViatorTour[]>> = {
       rating: 4.7,
       reviewCount: 2100,
       description: "Cruise through the dramatic ice-filled passage of Tracy Arm Fjord to reach the twin Sawyer Glaciers — a bucket-list Alaska experience.",
-      image: u("1489392191049-fc10c97e64b6"),
+      image: u("1519451241324-20b4ea2c4220"),
     },
     {
       title: "Northern Lights Chase from Fairbanks",
@@ -127,7 +127,7 @@ export const toursByRegion: Partial<Record<string, PocViatorTour[]>> = {
       rating: 4.7,
       reviewCount: 5200,
       description: "Circle the Bay under the Golden Gate Bridge, past Alcatraz Island, and along the Marin headlands on this classic SF cruise.",
-      image: u("1506126613408-eca07ce68773"),
+      image: u("1449034446853-66c86144b0ad"),
     },
     {
       title: "San Diego Whale Watching",
@@ -149,7 +149,7 @@ export const toursByRegion: Partial<Record<string, PocViatorTour[]>> = {
       rating: 4.8,
       reviewCount: 1200,
       description: "Fly over the Hollywood Hills, Santa Monica Pier, and Malibu coastline on a private helicopter tour above Los Angeles.",
-      image: u("1519046904884-53103b34b206"),
+      image: u("1580655653885-65763b2597d0"),
     },
     {
       title: "Napa Valley Wine Country Day Trip from SF",
@@ -174,7 +174,7 @@ export const toursByRegion: Partial<Record<string, PocViatorTour[]>> = {
       rating: 4.8,
       reviewCount: 2300,
       description: "Day cruise from Seattle to the San Juan Islands to spot orca pods, humpbacks, and Dall's porpoise in the Salish Sea.",
-      image: u("1477959858617-67f85cf4f1df"),
+      image: u("1501785888041-af3ef285b470"),
     },
     {
       title: "Mount Rainier National Park Day Trip",
