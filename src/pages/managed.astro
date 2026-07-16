@@ -1,0 +1,258 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Managed Marketing Cam — the premium, done-for-you tier ABOVE the $50/mo co-branded host program.
+// Buyer: revenue-driven Hawaii venues (hotels, marinas, resorts, beachfront F&B) that want it handled,
+// broadcast-grade, with monthly social content — not the DIY plug-it-in-yourself host.
+const tiers = [
+  {
+    name: 'Vista', price: '149', install: '1,490', badge: false,
+    lens: 'Single 4K marine-rated camera', best: 'Storefronts, beach bars, single-slip marina views',
+    feats: [
+      'Broadcast-grade 4K camera, marine-sealed for salt air',
+      'Professional install — we mount and aim it, you touch nothing',
+      '24/7 hosting on our Hawaii streaming network',
+      'One-line co-branded player for your own website',
+      'A featured page on the Port of Cams network',
+    ],
+  },
+  {
+    name: 'Panorama', price: '199', install: '1,790', badge: true,
+    lens: 'Dual-lens 180° camera', best: 'Resorts, harbors, wide bays and beachfronts',
+    feats: [
+      'Everything in Vista, plus:',
+      'Dual-lens 180° sweep — whole bay, one feed',
+      'Priority placement on the network',
+      'Monthly social clip pack included by default',
+    ],
+  },
+];
+const includedAll = [
+  ['Pro install', 'A person comes, mounts a marine-rated camera the right way, and aims it. No cable in a box for your staff to figure out.'],
+  ['Managed hosting', 'Runs on the same Hawaii streaming stack behind PortOfCams. Uptime watched. If it drops, we know before you do.'],
+  ['Your player, your site', 'A co-branded live player embeds on your website with one line of code. Your brand and ours.'],
+  ['Monthly social clips', 'We cut branded timelapses and short reels from your feed every month — ready to post. Sunset over the harbor, surf filling in, the room at golden hour.'],
+  ['Salt-air service', 'Quarterly on-site check. Hardware swap-not-fix — if a camera fails, it gets replaced, not diagnosed for a week.'],
+  ['Network exposure', 'Your view joins the Port of Cams network — a live backlink to your site and a stream of new eyes from people watching the islands.'],
+];
+const faqs = [
+  ['How is this different from the $50/mo co-branded host?', 'The co-branded plan is set-it-up-yourself: we ship a camera, you plug it in, we host the feed. Managed is done-for-you and broadcast-grade — a professional marine camera we install and maintain, plus monthly social content and on-site service. Two different products for two different venues. If you want the lighter option, start on the Host page.'],
+  ['What does the pilot cost?', 'A pilot is $490 to install, then 90 days at the monthly rate. If you keep it, the $490 credits toward your full install. If you cancel inside 90 days, we take the camera back and you owe nothing further.'],
+  ['Where can the camera point?', 'Public views only — your beach, your harbor, your storefront, the surf. We do not point cameras at anything privacy-sensitive, and the view is yours to approve before we mount anything.'],
+  ['Do we own the footage?', 'You and Port of Cams both hold rights to the live feed, recordings, and timelapses. Use the footage freely in your own marketing — that is the point.'],
+  ['What if our IT locks down the network?', 'The camera can run fully off your network on its own cellular or Starlink connection — nothing to route, nothing for your IT to approve. Add-on at hardware cost plus $49/mo.'],
+];
+---
+
+<Layout
+  title="Managed Marketing Cam — Port of Cams Pro"
+  description="A broadcast-grade live camera on your Hawaii waterfront, installed and maintained for you, with monthly social clips. For hotels, marinas, and resorts. From $149/mo."
+  activeNav=""
+>
+  <main class="mgd">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow mono">Port of Cams Pro &middot; Managed</div>
+        <h1>Your Hawaiʻi view,<br /><em>broadcast-grade</em> and handled for you.</h1>
+        <p class="lede">
+          A professional live camera on your waterfront — installed, hosted, and maintained by us,
+          with fresh social clips every month. Built for hotels, marinas, and resorts that would
+          rather run their business than run a webcam.
+        </p>
+        <div class="hero-cta">
+          <a href="#pilot" class="btn-gold">Start a 90-day pilot</a>
+          <a href="#included" class="btn-ghost">What's included</a>
+        </div>
+        <div class="hero-note mono">Prefer to set it up yourself? The <a href="/host">$50/mo co-branded host</a> plan has you covered.</div>
+      </div>
+    </section>
+
+    <!-- Proof strip -->
+    <section class="strip">
+      <div class="strip-item"><span class="sv">4K</span><span class="sl mono">Marine-sealed</span></div>
+      <div class="strip-div"></div>
+      <div class="strip-item"><span class="sv">Done</span><span class="sl mono">For you</span></div>
+      <div class="strip-div"></div>
+      <div class="strip-item"><span class="sv">Monthly</span><span class="sl mono">Social clips</span></div>
+      <div class="strip-div"></div>
+      <div class="strip-item"><span class="sv">90 days</span><span class="sl mono">Cancel &amp; we remove it</span></div>
+    </section>
+
+    <!-- Why -->
+    <section class="why">
+      <h2>A live cam is the cheapest salesperson your view will ever hire.</h2>
+      <p>
+        People book the ocean they can see. A live feed of your beach, your harbor, or your break
+        turns a browser into a booking — and turns your best asset, the view you already own, into
+        marketing that runs 24 hours a day. The only reason more Hawaiʻi venues don't have one is
+        that the good ones are a hassle to buy, install, and keep alive in the salt.
+      </p>
+      <p class="why-kick">That's the whole job we take off your plate.</p>
+    </section>
+
+    <!-- Tiers -->
+    <section class="tiers" id="pricing">
+      <div class="sec-head"><span class="mono tag">Two cameras</span><h2>Pick the view.</h2></div>
+      <div class="tier-grid">
+        {tiers.map((t) => (
+          <div class:list={["tier", { feature: t.badge }]}>
+            {t.badge && <div class="tier-badge mono">Most popular</div>}
+            <div class="tier-name">{t.name}</div>
+            <div class="tier-lens mono">{t.lens}</div>
+            <div class="tier-price">
+              <span class="tp-amt">${t.price}</span><span class="tp-per">/mo</span>
+            </div>
+            <div class="tier-install mono">+ ${t.install} one-time pro install</div>
+            <div class="tier-best">{t.best}</div>
+            <ul class="tier-feats">
+              {t.feats.map((f) => <li>{f}</li>)}
+            </ul>
+            <a href="#pilot" class="tier-btn">Start with a pilot</a>
+          </div>
+        ))}
+      </div>
+      <p class="tier-fine mono">Off-grid cellular / Starlink option: hardware cost + $49/mo. No long contracts — monthly, cancel anytime after the pilot.</p>
+    </section>
+
+    <!-- Included -->
+    <section class="included" id="included">
+      <div class="sec-head"><span class="mono tag">Every plan</span><h2>What "managed" actually means.</h2></div>
+      <div class="inc-grid">
+        {includedAll.map(([h, b], i) => (
+          <div class="inc">
+            <div class="inc-n mono">{String(i + 1).padStart(2, '0')}</div>
+            <h3>{h}</h3>
+            <p>{b}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Who -->
+    <section class="who">
+      <div class="sec-head"><span class="mono tag">Built for</span><h2>Venues with a view worth watching.</h2></div>
+      <div class="who-row">
+        <div class="who-card"><h3>Hotels &amp; resorts</h3><p>A live beachfront on your homepage — the booking-page hero that never needs a photographer.</p></div>
+        <div class="who-card"><h3>Marinas &amp; harbors</h3><p>Slip-holders check conditions, visitors watch the boats, and your marina stays top-of-mind.</p></div>
+        <div class="who-card"><h3>Surf &amp; dive shops</h3><p>A live look at the break is the reason surfers open your site every morning before dawn.</p></div>
+        <div class="who-card"><h3>Beachfront F&amp;B</h3><p>Sunset over your lanai, streaming. The table books itself.</p></div>
+      </div>
+    </section>
+
+    <!-- Pilot / CTA -->
+    <section class="pilot" id="pilot">
+      <div class="pilot-inner">
+        <div class="mono tag gold">The offer</div>
+        <h2>Try it for 90 days. Keep it or we take it back.</h2>
+        <p>
+          $490 to install, then 90 days at your plan rate. Love it, the $490 credits toward the full
+          install and you're live. Don't, we remove the camera and you owe nothing more. No contract,
+          no risk to your view — just a live feed working for you by the end of the month.
+        </p>
+        <div class="pilot-cta">
+          <a href="mailto:portofcams@gmail.com?subject=Managed%20Marketing%20Cam%20pilot&amp;body=Venue%20name%3A%0AView%20we'd%20film%3A%0ABest%20contact%3A" class="btn-gold">Request a pilot</a>
+          <a href="tel:+18085918888" class="btn-ghost">Talk to us</a>
+        </div>
+        <div class="pilot-fine mono">Serving Oʻahu now &middot; neighbor islands by arrangement &middot; a Port of Cams Pro service</div>
+      </div>
+    </section>
+
+  </main>
+
+  <style>
+    .mgd { --edge: rgba(245,240,232,0.10); color: var(--white); overflow: hidden; }
+    .mgd section { padding-left: 24px; padding-right: 24px; }
+    .mgd h1, .mgd h2, .mgd h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; letter-spacing: -0.01em; }
+    .mgd .mono { font-family: 'DM Mono', monospace; }
+    .mgd p, .mgd li, .mgd .tier-best, .mgd .who-card p { font-family: 'DM Sans', system-ui, sans-serif; }
+    .mgd em { font-style: italic; color: var(--gold); }
+
+    /* Hero */
+    .hero { padding-top: 132px; padding-bottom: 40px; max-width: 1000px; margin: 0 auto; }
+    .eyebrow { font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; }
+    .hero h1 { font-size: clamp(40px, 8vw, 76px); line-height: 1.02; margin: 0; text-wrap: balance; }
+    .lede { font-size: clamp(17px, 2.4vw, 20px); line-height: 1.6; color: rgba(245,240,232,0.72); max-width: 60ch; margin: 26px 0 0; }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 34px 0 0; }
+    .hero-note { font-size: 12.5px; color: var(--muted); margin-top: 20px; }
+    .hero-note a { color: var(--gold); }
+
+    .btn-gold { background: var(--gold); color: #1a1508; text-decoration: none; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; padding: 14px 26px; border-radius: 8px; transition: transform .15s, box-shadow .15s; }
+    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 8px 24px var(--gold-dim); }
+    .btn-ghost { border: 1px solid var(--edge); color: var(--white); text-decoration: none; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; padding: 14px 26px; border-radius: 8px; }
+    .btn-ghost:hover { border-color: var(--gold); }
+
+    /* Strip */
+    .strip { display: flex; align-items: center; justify-content: center; gap: clamp(14px, 4vw, 46px); max-width: 1000px; margin: 0 auto; padding-top: 34px; padding-bottom: 34px; border-top: 1px solid var(--edge); border-bottom: 1px solid var(--edge); flex-wrap: wrap; }
+    .strip-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .strip .sv { font-family: 'Cormorant Garamond', serif; font-size: 30px; color: var(--gold); line-height: 1; }
+    .strip .sl { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .strip-div { width: 1px; height: 34px; background: var(--edge); }
+
+    /* Why */
+    .why { max-width: 780px; margin: 0 auto; padding-top: 88px; text-align: center; }
+    .why h2 { font-size: clamp(28px, 5vw, 44px); line-height: 1.1; margin: 0 auto; max-width: 16ch; text-wrap: balance; }
+    .why p { font-size: 17px; line-height: 1.65; color: rgba(245,240,232,0.68); max-width: 58ch; margin: 22px auto 0; }
+    .why-kick { color: var(--gold) !important; font-weight: 500; }
+
+    .sec-head { max-width: 1000px; margin: 0 auto 34px; text-align: center; }
+    .sec-head .tag { display: inline-block; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+    .sec-head h2 { font-size: clamp(28px, 5vw, 44px); margin: 0; }
+
+    /* Tiers */
+    .tiers { padding-top: 96px; }
+    .tier-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 860px; margin: 0 auto; }
+    .tier { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px 28px; position: relative; }
+    .tier.feature { border-color: var(--gold); box-shadow: 0 20px 60px -30px var(--gold-dim); }
+    .tier-badge { position: absolute; top: -11px; left: 28px; background: var(--gold); color: #1a1508; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+    .tier-name { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 600; }
+    .tier-lens { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .tier-price { margin: 20px 0 2px; display: flex; align-items: baseline; gap: 3px; }
+    .tp-amt { font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 600; color: var(--gold); line-height: 1; }
+    .tp-per { color: var(--muted); font-family: 'DM Sans', sans-serif; }
+    .tier-install { font-size: 12.5px; color: rgba(245,240,232,0.55); }
+    .tier-best { font-size: 13.5px; color: rgba(245,240,232,0.6); margin: 16px 0; padding-bottom: 16px; border-bottom: 1px solid var(--border); font-style: italic; }
+    .tier-feats { list-style: none; padding: 0; margin: 0 0 26px; display: grid; gap: 11px; }
+    .tier-feats li { font-size: 14px; line-height: 1.45; color: rgba(245,240,232,0.82); padding-left: 22px; position: relative; }
+    .tier-feats li::before { content: "›"; position: absolute; left: 4px; color: var(--gold); }
+    .tier-btn { display: block; text-align: center; background: transparent; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14.5px; padding: 12px; border-radius: 8px; transition: background .15s, color .15s; }
+    .tier.feature .tier-btn { background: var(--gold); color: #1a1508; }
+    .tier-btn:hover { background: var(--gold); color: #1a1508; }
+    .tier-fine { text-align: center; font-size: 12px; color: var(--muted); max-width: 620px; margin: 26px auto 0; line-height: 1.6; }
+
+    /* Included */
+    .included { padding-top: 100px; }
+    .inc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; max-width: 1000px; margin: 0 auto; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .inc { background: var(--deep); padding: 30px 26px; }
+    .inc-n { font-size: 12px; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 14px; }
+    .inc h3 { font-size: 21px; margin: 0 0 8px; }
+    .inc p { font-size: 14px; line-height: 1.55; color: rgba(245,240,232,0.62); margin: 0; }
+
+    /* Who */
+    .who { padding-top: 100px; }
+    .who-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1000px; margin: 0 auto; }
+    .who-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px 22px; }
+    .who-card h3 { font-size: 20px; margin: 0 0 8px; color: var(--gold-light); }
+    .who-card p { font-size: 13.5px; line-height: 1.5; color: rgba(245,240,232,0.6); margin: 0; }
+
+    /* Pilot */
+    .pilot { padding-top: 104px; padding-bottom: 100px; }
+    .pilot-inner { max-width: 720px; margin: 0 auto; background: linear-gradient(160deg, var(--surface), var(--deep)); border: 1px solid var(--gold); border-radius: 20px; padding: 48px 40px; text-align: center; box-shadow: 0 30px 80px -40px var(--gold-dim); }
+    .pilot .tag { display: inline-block; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .pilot h2 { font-size: clamp(28px, 5vw, 42px); margin: 0 0 16px; text-wrap: balance; }
+    .pilot p { font-size: 16px; line-height: 1.6; color: rgba(245,240,232,0.72); max-width: 54ch; margin: 0 auto 28px; }
+    .pilot-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .pilot-fine { font-size: 12px; color: var(--muted); margin-top: 22px; }
+
+    @media (max-width: 780px) {
+      .tier-grid, .inc-grid, .who-row { grid-template-columns: 1fr; }
+      .inc-grid { border-radius: 12px; }
+      .hero { padding-top: 108px; }
+      .strip { gap: 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .btn-gold { transition: none; }
+    }
+  </style>
+</Layout>
