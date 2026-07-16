@@ -1,0 +1,195 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="PortOfCams Pro Blog — Live Streaming Guides for Venues & Destinations"
+  description="Guides, case studies, and how-tos for venues, resorts, and destinations using live streaming and webcams to grow their audience."
+  activeNav="">
+
+  <style>
+    .blog-index-hero {
+      padding: 160px 48px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .blog-index-hero .label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .blog-index-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 600;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+    .blog-index-hero p {
+      color: var(--muted);
+      font-size: 18px;
+      max-width: 500px;
+      line-height: 1.7;
+    }
+    .blog-grid-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 48px 120px;
+    }
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+    }
+    .blog-card {
+      display: block;
+      padding: 40px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      transition: background 0.2s;
+      color: inherit;
+    }
+    .blog-card:hover { background: var(--surface); }
+    .card-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 12px;
+    }
+    .blog-card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .blog-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .card-read {
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+    @media (max-width: 768px) {
+      .blog-index-hero { padding: 120px 24px 60px; }
+      .blog-grid-wrap { padding: 0 0 80px; }
+      .blog-card { padding: 28px 24px; }
+    }
+  </style>
+
+  <div class="blog-index-hero">
+    <div class="label">Resources</div>
+    <h1>The Live Streaming <em style="font-style: italic; color: var(--gold)">playbook</em></h1>
+    <p>Guides for venues, resorts, and destinations using live cameras to grow their audience and drive more business.</p>
+  </div>
+
+  <div class="blog-grid-wrap">
+    <div class="blog-grid">
+    <a href="/blog/why-your-venue-needs-a-live-camera/" class="blog-card">
+      <span class="card-label">Strategy</span>
+      <h2>Why Every Bar and Venue Needs a Live Camera in 2026</h2>
+      <p>A live camera is the one marketing channel that never sleeps. See how venues use 24/7 live streaming to fill seats, build FOMO, an…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/live-streaming-for-bars-restaurants/" class="blog-card">
+      <span class="card-label">Venues & Bars</span>
+      <h2>How Bars and Restaurants Use Live Cameras to Fill Tables on Slow Nights</h2>
+      <p>Live cameras solve the slow-night problem — showing real-time crowd energy that no promotion or discount can replicate. Here's how…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/beach-resort-live-cam-marketing/" class="blog-card">
+      <span class="card-label">Hospitality</span>
+      <h2>How Beach Resorts Use Live Cameras to Drive More Direct Bookings</h2>
+      <p>Live webcams are one of the most powerful booking conversion tools a beach resort can deploy. Here's how resorts use live streams …</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/live-streaming-for-events-festivals/" class="blog-card">
+      <span class="card-label">Events</span>
+      <h2>Using Live Streaming to Sell Out Your Next Event or Festival</h2>
+      <p>How event organizers use live cameras to build FOMO, boost ticket sales, and create a permanent content archive from every event.…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/tourism-destination-live-cam-guide/" class="blog-card">
+      <span class="card-label">Tourism</span>
+      <h2>Live Webcams for Tourism Destinations: A Marketing Guide</h2>
+      <p>How tourism destinations, CVBs, and landmark operators use live webcams to drive visitor intent, improve search visibility, and cr…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/live-camera-fomo-foot-traffic/" class="blog-card">
+      <span class="card-label">Strategy</span>
+      <h2>How a Live Camera Creates FOMO and Drives Foot Traffic to Your Venue</h2>
+      <p>The psychology behind live venue cameras — how real-time streaming converts passive viewers into active customers through social p…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/embed-live-cam-your-website/" class="blog-card">
+      <span class="card-label">Technical</span>
+      <h2>How to Embed a Live Camera on Your Website (And Why It Matters for SEO)</h2>
+      <p>Step-by-step guide to embedding a live camera player on your website, plus how live streams improve dwell time, search rankings, a…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/live-streaming-vs-prerecorded-venue-marketing/" class="blog-card">
+      <span class="card-label">Strategy</span>
+      <h2>Live Streaming vs. Pre-Recorded Video: What Actually Works for Venue Marketing</h2>
+      <p>A practical comparison of live streaming and pre-recorded video for bars, restaurants, and hospitality venues — when each approach…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/live-cam-surf-spots-outdoor-recreation/" class="blog-card">
+      <span class="card-label">Outdoor & Recreation</span>
+      <h2>How Surf Spots and Outdoor Recreation Areas Use Live Webcams</h2>
+      <p>Live cameras at surf breaks, ski areas, parks, and trails give visitors real-time conditions information — and turn casual web vis…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/live-camera-roi-for-venues/" class="blog-card">
+      <span class="card-label">Strategy</span>
+      <h2>The ROI of a Live Camera: How Venues Turn Viewers into Customers</h2>
+      <p>A practical breakdown of how venues measure ROI from live streaming — covering foot traffic attribution, social media growth, book…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/live-cameras-for-marinas-harbors/" class="blog-card">
+      <span class="card-label">Marine</span>
+      <h2>Live Cameras for Marinas and Harbors: More Bookings, Better Safety</h2>
+      <p>How marina operators and harbormaster offices use live cameras to show slip conditions, drive transient bookings, and support safe…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/live-streaming-for-ski-resorts/" class="blog-card">
+      <span class="card-label">Outdoor & Recreation</span>
+      <h2>How Ski Resorts Use Live Webcams to Drive Season Pass Sales and Day Tickets</h2>
+      <p>Live ski cams are one of the highest-converting marketing tools a mountain can deploy. Here's how ski resorts use real-time camera…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/timelapse-social-media-strategy/" class="blog-card">
+      <span class="card-label">Marketing</span>
+      <h2>How Automated Timelapse Replaces Your Venue's Social Media Team</h2>
+      <p>PortOfCams generates daily timelapse clips from your live camera and posts them automatically to YouTube, Instagram, and TikTok. H…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/live-streaming-for-hotels-resorts/" class="blog-card">
+      <span class="card-label">Hospitality</span>
+      <h2>Live Streaming for Hotels: How Webcams Influence Booking Decisions</h2>
+      <p>Hotels that embed live cameras on their booking pages see higher direct booking conversion and lower OTA dependence. Here's how ho…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    <a href="/blog/how-hls-live-streaming-works/" class="blog-card">
+      <span class="card-label">Technical</span>
+      <h2>How HLS Live Streaming Works: A Plain-English Guide for Venue Owners</h2>
+      <p>HLS (HTTP Live Streaming) is the technology behind venue webcams and live streaming platforms. Here's how it works, why it matters…</p>
+      <span class="card-read">Read article →</span>
+    </a>
+    </div>
+  </div>
+
+</Layout>

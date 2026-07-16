@@ -1,0 +1,66 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+---
+
+<BlogLayout
+  title="How to Embed a Live Camera on Your Website (And Why It Matters for SEO)"
+  description="Step-by-step guide to embedding a live camera player on your website, plus how live streams improve dwell time, search rankings, and direct booking conversion."
+  category="Technical"
+  slug="embed-live-cam-your-website"
+>
+
+<p>Embedding a live camera on your website is one of the highest-leverage technical improvements a venue, resort, or destination can make. It simultaneously improves user experience, increases the time visitors spend on your site, and creates a page type that earns organic search traffic over time.</p>
+
+<h2>How PortOfCams Embedding Works</h2>
+
+<p>PortOfCams provides each camera host with a co-branded embed player — a lightweight iframe that streams your live feed directly on any web page. Setup requires two steps:</p>
+
+<ol>
+  <li>Copy the embed code from your PortOfCams dashboard</li>
+  <li>Paste it into your website's HTML where you want the player to appear</li>
+</ol>
+
+<p>The embed code looks like this:</p>
+<pre style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 16px; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 13px; overflow-x: auto; margin: 20px 0;">&lt;iframe
+  src="https://pro.portofcams.com/embed/your-camera-slug"
+  width="100%"
+  height="480"
+  frameborder="0"
+  allowfullscreen
+&gt;&lt;/iframe&gt;</pre>
+
+<p>No JavaScript SDK, no API keys, no ongoing maintenance. The player handles HLS stream delivery, mobile compatibility, and fallback behavior automatically.</p>
+
+<h2>Where to Place the Embed</h2>
+
+<h3>Homepage</h3>
+<p>A live camera embed above the fold on your homepage makes an immediate impression on first-time visitors. Position it prominently — ideally replacing or complementing a hero image. A live stream of your venue or destination converts better than a static photo because it immediately communicates authenticity.</p>
+
+<h3>Booking or Reservations Page</h3>
+<p>This is the highest-value placement for conversion. A traveler or diner who's considering a booking and encounters a live view of your property in good conditions is more likely to commit and more likely to book directly rather than through a third-party platform.</p>
+
+<h3>Dedicated Webcam or Live Conditions Page</h3>
+<p>Creating a dedicated page for your live camera — at a URL like <code>/live</code> or <code>/webcam</code> — creates a target for organic search. People search for live cameras at specific destinations. A dedicated, well-optimized page capturing that search intent can earn consistent organic traffic.</p>
+
+<div class="callout">
+  <strong>SEO mechanism:</strong> Live camera pages attract dwell time — visitors stay on the page watching. High dwell time signals to search engines that the page is satisfying user intent, which improves organic ranking over time for relevant search terms.
+</div>
+
+<h2>SEO Considerations for Live Camera Pages</h2>
+
+<p>A live camera page earns search traffic through a combination of factors:</p>
+
+<h3>Target the right keywords</h3>
+<p>People search for "[location] live cam," "[beach/destination] webcam," "[venue name] live stream," and "[location] weather cam." Optimize your page title, heading, and meta description around these terms.</p>
+
+<h3>Add supporting content</h3>
+<p>A page that's only an embed won't rank well. Surround the player with useful context: current weather, conditions, hours, and links to booking or reservations. This gives search engines indexable content to evaluate and gives visitors a reason to engage beyond just watching.</p>
+
+<h3>Keep the page fast</h3>
+<p>The PortOfCams embed player is lightweight and loads asynchronously, so it doesn't block page rendering. Ensure the rest of your page — images, scripts, fonts — is optimized so the overall page loads quickly. Page speed is a ranking factor.</p>
+
+<h2>Mobile Optimization</h2>
+
+<p>The majority of live stream viewers on venue and destination pages are on mobile devices, often checking conditions on the go before deciding to visit. The PortOfCams embed player is fully responsive and works on all mobile browsers without additional configuration. Set the iframe width to 100% and let height scale proportionally for the best mobile experience.</p>
+
+</BlogLayout>

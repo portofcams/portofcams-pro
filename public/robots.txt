@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://portofcams.com/sitemap.xml
+Sitemap: https://pro.portofcams.com/sitemap.xml

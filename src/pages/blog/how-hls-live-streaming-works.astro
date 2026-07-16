@@ -1,0 +1,55 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+---
+
+<BlogLayout
+  title="How HLS Live Streaming Works: A Plain-English Guide for Venue Owners"
+  description="HLS (HTTP Live Streaming) is the technology behind venue webcams and live streaming platforms. Here's how it works, why it matters, and what it means for your live camera setup."
+  category="Technical"
+  slug="how-hls-live-streaming-works"
+>
+
+<p>When your venue's live camera reaches a viewer's browser or phone, it arrives through a technology called HLS — HTTP Live Streaming. You don't need to understand the technical details to run a live camera, but knowing the basics helps you understand why live streaming works the way it does and what to expect from your setup.</p>
+
+<h2>What HLS Is</h2>
+
+<p>HLS is the dominant live streaming protocol on the internet, developed by Apple and now an industry standard. When your IP camera captures video and sends it to PortOfCams' servers, the video is processed and converted into HLS format — small video segments, typically 2–6 seconds long, packaged with a playlist file that tells the viewer's device which segment to play next.</p>
+
+<p>Your viewer's browser or app downloads these segments sequentially. As long as the segments arrive faster than they're played, the stream appears continuous. When you watch a live stream and notice it's "a few seconds behind real time," that's the HLS buffering pipeline — each segment takes time to capture, encode, and deliver.</p>
+
+<h2>Why HLS Is Used for Venue Live Streaming</h2>
+
+<h3>Universal compatibility</h3>
+<p>HLS plays natively in every major web browser, iOS, Android, and smart TV. No plugins, no special software, no download required. This is the defining reason HLS won the streaming protocol wars — it works everywhere without friction.</p>
+
+<h3>Adaptive bitrate</h3>
+<p>HLS automatically adjusts video quality based on the viewer's connection speed. A viewer on fast fiber gets full HD. A viewer on a weak mobile connection gets a lower-resolution version that plays without buffering. The viewer doesn't control this — the protocol handles it transparently.</p>
+
+<h3>CDN delivery</h3>
+<p>HLS works naturally with content delivery networks. PortOfCams delivers your live stream through a CDN, meaning the video segments are served from servers geographically close to each viewer. A viewer in Tokyo and a viewer in Miami both get the same stream, delivered locally rather than from a single origin server.</p>
+
+<div class="callout">
+  <strong>Latency note:</strong> HLS typically has 10–30 seconds of latency — the live stream is that far behind real time. This is normal and acceptable for venue live streaming. If you need sub-second latency (for interactive applications), different protocols are used. For live cameras showing venue conditions, 10–30 seconds is imperceptible.
+</div>
+
+<h2>What This Means for Your Camera Setup</h2>
+
+<p>PortOfCams handles all the HLS infrastructure — encoding, segment generation, CDN delivery, and the embed player. As a venue operator, the only component you manage is the camera itself: keeping it powered, connected to the network, and pointed at the right thing.</p>
+
+<p>The cameras PortOfCams installs support RTSP output — a protocol for capturing raw video from the camera. PortOfCams' encoding pipeline converts the RTSP stream to HLS for delivery. You don't interact with any of this; it happens automatically.</p>
+
+<h2>Monitoring Stream Health</h2>
+
+<p>Your PortOfCams dashboard shows stream health in real time — whether the camera is online, the current bitrate, viewer count, and any connection interruptions. Common issues and their causes:</p>
+
+<ul>
+  <li><strong>Stream offline:</strong> Camera lost power or network connection. Check the physical camera and network switch.</li>
+  <li><strong>Degraded quality:</strong> Network bandwidth at the venue is saturated. The camera should have a dedicated network path with at least 5Mbps upload reserved for the stream.</li>
+  <li><strong>Intermittent drops:</strong> Usually a Wi-Fi signal strength issue if the camera is connected wirelessly. Moving the camera closer to the access point or switching to wired connection resolves this.</li>
+</ul>
+
+<h2>What Viewers Experience</h2>
+
+<p>When someone opens your live camera — on PortOfCams, on your website embed, or via a direct link — the PortOfCams player loads the HLS playlist, buffers the first few segments, and begins playback. On a modern connection, playback starts in under 3 seconds. The player automatically adjusts quality as conditions change, so viewers rarely experience rebuffering unless their connection is genuinely too slow for the minimum quality tier.</p>
+
+</BlogLayout>
