@@ -1,6 +1,8 @@
-// Booking.com affiliate ID — replace with your real aid from CJ once approved:
+// Booking.com affiliate ID — set your real aid from CJ once approved:
 // https://signup.cj.com/member/signup/publisher/?cid=4297311
-export const BOOKING_AID = "YOUR_AID_HERE";
+// While empty, links are plain (non-affiliate) Booking.com searches and the
+// cards show a neutral disclosure instead of an affiliate one.
+export const BOOKING_AID = "";
 
 const u = (id: string) =>
   `https://images.unsplash.com/photo-${id}?w=600&h=400&fit=crop&q=80&auto=format`;
@@ -18,7 +20,6 @@ export interface HotelCard {
   description: string;
   image: string;
   stars: string; // Booking.com nflt star filter
-  priceHint: string;
 }
 
 export function getHotelCards(location: string): HotelCard[] {
@@ -30,7 +31,6 @@ export function getHotelCards(location: string): HotelCard[] {
       description: `Comfortable, well-reviewed hotels near the heart of ${city} without the resort price tag.`,
       image: HOTEL_IMAGES.value,
       stars: "class%3D2%3Bclass%3D3",
-      priceHint: "From ~$80/night",
     },
     {
       label: `Popular Picks in ${city}`,
@@ -38,7 +38,6 @@ export function getHotelCards(location: string): HotelCard[] {
       description: `Top-rated 3- and 4-star hotels in ${city} — great amenities, prime locations.`,
       image: HOTEL_IMAGES.mid,
       stars: "class%3D3%3Bclass%3D4",
-      priceHint: "From ~$150/night",
     },
     {
       label: `Luxury Stays in ${city}`,
@@ -46,7 +45,6 @@ export function getHotelCards(location: string): HotelCard[] {
       description: `Five-star resorts and boutique luxury properties for the ultimate ${city} experience.`,
       image: HOTEL_IMAGES.luxury,
       stars: "class%3D4%3Bclass%3D5",
-      priceHint: "From ~$300/night",
     },
   ];
 }
@@ -54,5 +52,6 @@ export function getHotelCards(location: string): HotelCard[] {
 export function bookingLink(location: string, stars: string): string {
   const city = location.split(",")[0].trim();
   const q = encodeURIComponent(city);
-  return `https://www.booking.com/searchresults.html?aid=${BOOKING_AID}&ss=${q}&nflt=${stars}`;
+  const aid = BOOKING_AID ? `aid=${BOOKING_AID}&` : "";
+  return `https://www.booking.com/searchresults.html?${aid}ss=${q}&nflt=${stars}`;
 }

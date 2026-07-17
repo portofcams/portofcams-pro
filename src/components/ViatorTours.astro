@@ -32,16 +32,12 @@ const tours = getToursForRegion(region);
                 class="viator-img"
               />
               <div class="viator-img-overlay"></div>
-              <div class="viator-price mono">From ${tour.priceFrom}</div>
             </div>
             <div class="viator-body">
-              <div class="viator-meta mono">
-                <span class="viator-rating">★ {tour.rating}</span>
-                <span class="viator-reviews">({tour.reviewCount.toLocaleString()})</span>
-              </div>
+              <div class="viator-meta mono">{tour.destination}</div>
               <h3 class="viator-title">{tour.title}</h3>
               <p class="viator-desc">{tour.description}</p>
-              <div class="viator-cta mono">Book on Viator →</div>
+              <div class="viator-cta mono">Browse on Viator →</div>
             </div>
           </a>
         ))}
@@ -125,18 +121,6 @@ const tours = getToursForRegion(region);
     background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.45) 100%);
   }
 
-  .viator-price {
-    position: absolute;
-    bottom: 10px;
-    left: 12px;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--white);
-    background: rgba(0,0,0,0.65);
-    padding: 4px 10px;
-    border-radius: 2px;
-  }
-
   .viator-body {
     padding: 18px 20px 20px;
     display: flex;
@@ -145,22 +129,11 @@ const tours = getToursForRegion(region);
   }
 
   .viator-meta {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 8px;
-  }
-
-  .viator-rating {
     font-size: 11px;
     color: var(--gold);
-    letter-spacing: 0.05em;
-  }
-
-  .viator-reviews {
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
   }
 
   .viator-title {

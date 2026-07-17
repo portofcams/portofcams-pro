@@ -1,5 +1,5 @@
 ---
-import { getHotelCards, bookingLink } from '../data/hotels';
+import { getHotelCards, bookingLink, BOOKING_AID } from '../data/hotels';
 
 interface Props {
   location: string;
@@ -29,7 +29,6 @@ const cards = getHotelCards(location);
             <div class="hotel-tier mono">{card.tier}</div>
           </div>
           <div class="hotel-body">
-            <div class="hotel-price mono">{card.priceHint}</div>
             <h3 class="hotel-title">{card.label}</h3>
             <p class="hotel-desc">{card.description}</p>
             <div class="hotel-cta mono">Search on Booking.com →</div>
@@ -38,7 +37,9 @@ const cards = getHotelCards(location);
       ))}
     </div>
     <p class="hotel-disclosure mono">
-      Affiliate links — we may earn a commission at no extra cost to you.
+      {BOOKING_AID
+        ? 'Affiliate links — we may earn a commission at no extra cost to you.'
+        : 'Links open Booking.com search results for this area.'}
     </p>
   </div>
 </section>
@@ -129,13 +130,6 @@ const cards = getHotelCards(location);
     display: flex;
     flex-direction: column;
     flex: 1;
-  }
-
-  .hotel-price {
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--gold);
-    margin-bottom: 8px;
   }
 
   .hotel-title {
