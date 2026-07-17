@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Page Not Found — PortOfCams" description="This page does not exist. Browse our live cameras instead." noindex={true}>
+  <section class="nf-section">
+    <div class="section-inner nf-inner">
+      <p class="section-label">404</p>
+      <h1 class="display" style="font-size: clamp(36px, 5vw, 64px);">
+        This view is <em class="display-italic" style="color: var(--gold)">offline</em>
+      </h1>
+      <p class="nf-sub">
+        The page you are looking for does not exist — it may have been retired when we cleaned up the camera roster.
+      </p>
+      <div class="nf-actions">
+        <a href="/browse" class="btn-primary">Browse Live Cameras</a>
+        <a href="/" class="btn-secondary">Back Home</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .nf-section {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+  }
+  .nf-inner {
+    padding-top: 120px;
+    padding-bottom: 120px;
+  }
+  .nf-sub {
+    color: var(--muted);
+    max-width: 460px;
+    line-height: 1.7;
+    margin: 16px 0 32px;
+  }
+  .nf-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+</style>
