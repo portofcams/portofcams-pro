@@ -15,6 +15,7 @@ export function getStaticPaths() {
     { params: { archetype: 'dive' } },
     { params: { archetype: 'club' } },
     { params: { archetype: 'venue' } },
+    { params: { archetype: 'rental' } },
   ];
 }
 
@@ -90,6 +91,17 @@ const CONTENT: Record<string, {
     ],
     caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your grounds stream exactly like this — co-branded, on your own site. The exact frame is approved by your team before anything is mounted.',
   },
+  'rental': {
+    eyebrow: 'Prepared for Hawaiʻi vacation rental & villa portfolios',
+    h1: ['Every listing shows the same photos.', 'Yours can show the real thing, live.'],
+    lede: 'A guest choosing between listings has only photos to go on — and every listing has good photos. A live view of the actual lanai, pool, or beach access says something a photo never can: this is real, and it looks like this right now. Add it once per property and every listing that carries it gets a quiet edge over the ones that don\'t.',
+    points: [
+      ['Proof, not just a photo', 'Anyone can stage a photo shoot. A live feed can only show what\'s actually there, at this hour, in this weather — which is exactly why it\'s convincing.'],
+      ['It scales with the portfolio', 'The deal isn\'t one camera — it\'s a program. As many of your listings as you want carrying a live view, one relationship, one invoice, one point of contact for install and service across every property.'],
+      ['Fewer "is this really it" messages', 'Guests who watch the feed before check-in arrive already sold. That\'s fewer anxious pre-arrival questions for your reservations team and fewer surprised guests at the door.'],
+    ],
+    caption: 'Live right now from our camera at Lewers Street, Waikīkī. One of your properties\' lanai, pool, or beach access streams exactly like this — co-branded, on that listing\'s own page.',
+  },
 };
 
 const c = CONTENT[archetype!];
@@ -107,6 +119,7 @@ const titles: Record<string, string> = {
   'dive': 'Live Cam Demo for Dive & Charter Operations — Port of Cams Pro',
   'club': 'Live Cam Demo for Ocean & Yacht Clubs — Port of Cams Pro',
   'venue': 'Live Cam Demo for Wedding, Luau & Event Venues — Port of Cams Pro',
+  'rental': 'Live Cam Demo for Vacation Rental & Villa Portfolios — Port of Cams Pro',
 };
 ---
 
