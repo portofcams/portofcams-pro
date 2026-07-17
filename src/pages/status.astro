@@ -96,11 +96,13 @@ cameras.forEach(c => {
             </div>
             <div class="td-stream">
               <span class="stream-type mono">{
-                cam.hlsUrl.includes('youtube.com') || cam.hlsUrl.includes('youtu.be')
-                  ? 'YouTube'
-                  : /\.(jpe?g|png|gif|webp|bmp)(\?|$)/i.test(cam.hlsUrl)
-                    ? 'Image'
-                    : 'HLS'
+                cam.source === 'windy'
+                  ? 'Windy'
+                  : cam.hlsUrl.includes('youtube.com') || cam.hlsUrl.includes('youtu.be')
+                    ? 'YouTube'
+                    : /\.(jpe?g|png|gif|webp|bmp)(\?|$)/i.test(cam.hlsUrl)
+                      ? 'Image'
+                      : 'HLS'
               }</span>
             </div>
             <div class="td-checked">
@@ -575,6 +577,11 @@ cameras.forEach(c => {
     async function checkCamera(camId, hlsUrl) {
       setCameraStatus(camId, 'checking');
       const streamType = getStreamType(hlsUrl);
+
+      // Windy embeds have no direct stream URL — not client-checkable, assume up
+      if (!hlsUrl) {
+        return 'live';
+      }
 
       // YouTube streams — we can't reliably check from client-side, assume live
       if (streamType === 'youtube') {

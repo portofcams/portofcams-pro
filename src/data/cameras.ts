@@ -8,12 +8,17 @@ export interface Camera {
   tags: string[];
   coordinates: { lat: number; lng: number };
   isLive: boolean;
-  source?: 'native' | 'windy';
+  source?: 'native' | 'windy' | 'youtube';
   embedUrl?: string;
   windyId?: number;
 }
 
+// Every entry verified against its actual source (HLS 200, YouTube oembed,
+// or Windy embed player title) on 2026-07-17. Windy embeds use the /day
+// player, which shows an auto-updating day timelapse loop, not live video —
+// hence isLive: false on all of them.
 export const cameras: Camera[] = [
+  // === NATIVE HLS — our own streams ===
   {
     id: "east-lewers-st",
     name: "East Lewers Street",
@@ -25,66 +30,23 @@ export const cameras: Camera[] = [
     tags: ["street", "nightlife", "urban"],
     coordinates: { lat: 21.2769, lng: -157.8268 },
     isLive: true,
+    source: "native",
   },
+
+  // === YOUTUBE LIVE — public 24/7 streams, credited to their operators ===
   {
-    id: "kalakaua-ave",
-    name: "Kalakaua Avenue",
-    location: "Waikiki, HI",
+    id: "banzai-pipeline",
+    name: "Banzai Pipeline",
+    location: "North Shore, HI",
     region: "Hawaii",
     description:
-      "Panoramic view of Kalakaua Avenue, the main strip running through Waikiki. See the palm trees, shops, and constant flow of visitors along this famous boulevard.",
-    hlsUrl: "https://cams.portofcams.com/kalakaua-ave/",
-    tags: ["street", "shopping", "urban"],
-    coordinates: { lat: 21.2793, lng: -157.8292 },
+      "Live surf cam at the Banzai Pipeline on Oahu's North Shore, one of the most famous waves on the planet. Watch swells roll in over the shallow reef. Stream courtesy of EXPLORE.org on YouTube.",
+    hlsUrl: "https://www.youtube.com/embed/VI8Wj5EwoRM",
+    tags: ["surf", "beach", "ocean"],
+    coordinates: { lat: 21.6654, lng: -158.0521 },
     isLive: true,
-  },
-  {
-    id: "waikiki-beach",
-    name: "Waikiki Beach",
-    location: "Waikiki, HI",
-    region: "Hawaii",
-    description:
-      "Iconic Waikiki Beach with Diamond Head in the background. Watch surfers, sunbathers, and stunning Pacific sunsets from this world-famous shoreline.",
-    hlsUrl: "https://cams.portofcams.com/waikiki-beach/",
-    tags: ["beach", "surf", "ocean"],
-    coordinates: { lat: 21.2766, lng: -157.8278 },
-    isLive: true,
-  },
-  {
-    id: "times-square",
-    name: "Times Square",
-    location: "New York, NY",
-    region: "International",
-    description:
-      "The crossroads of the world. Watch the dazzling lights, massive billboards, and endless foot traffic of Manhattan's most famous intersection.",
-    hlsUrl: "https://cams.portofcams.com/times-square/",
-    tags: ["urban", "nightlife", "landmark"],
-    coordinates: { lat: 40.758, lng: -73.9855 },
-    isLive: true,
-  },
-  {
-    id: "shibuya-crossing",
-    name: "Shibuya Crossing",
-    location: "Tokyo, Japan",
-    region: "International",
-    description:
-      "The world's busiest pedestrian crossing. Watch thousands of people navigate this iconic Tokyo intersection during each signal change.",
-    hlsUrl: "https://cams.portofcams.com/shibuya-crossing/",
-    tags: ["urban", "traffic", "landmark"],
-    coordinates: { lat: 35.6595, lng: 139.7004 },
-    isLive: true,
-  },
-  {
-    id: "abbey-road",
-    name: "Abbey Road Crossing",
-    location: "London, UK",
-    region: "International",
-    description:
-      "The legendary Abbey Road zebra crossing made famous by The Beatles. Watch visitors recreate the iconic album cover walk throughout the day.",
-    hlsUrl: "https://cams.portofcams.com/abbey-road/",
-    tags: ["landmark", "street", "music"],
-    coordinates: { lat: 51.5321, lng: -0.1779 },
-    isLive: true,
+    source: "youtube",
+    embedUrl: "https://www.youtube.com/embed/VI8Wj5EwoRM",
   },
   {
     id: "jackson-hole-town-square",
@@ -92,113 +54,58 @@ export const cameras: Camera[] = [
     location: "Jackson, WY",
     region: "US Mainland",
     description:
-      "The famous elk-antler arches of Jackson Hole Town Square. Watch the charming mountain town activity with the Teton Range as a backdrop.",
-    hlsUrl: "https://cams.portofcams.com/jackson-hole-town-square/",
+      "The famous elk-antler arches of Jackson Hole Town Square. Watch the charming mountain town activity around the square in all seasons. Stream courtesy of SeeJH.com on YouTube.",
+    hlsUrl: "https://www.youtube.com/embed/1EiC9bvVGnk",
     tags: ["landmark", "mountain", "town"],
     coordinates: { lat: 43.4799, lng: -110.7624 },
     isLive: true,
+    source: "youtube",
+    embedUrl: "https://www.youtube.com/embed/1EiC9bvVGnk",
   },
   {
-    id: "bourbon-street",
-    name: "Bourbon Street",
-    location: "New Orleans, LA",
+    id: "grand-teton-dornans",
+    name: "Grand Teton from Dornan's",
+    location: "Moose, WY",
     region: "US Mainland",
     description:
-      "The heart of the French Quarter. Experience the nonstop energy of New Orleans with live music spilling out of clubs and the famous Bourbon Street nightlife.",
-    hlsUrl: "https://cams.portofcams.com/bourbon-street/",
-    tags: ["nightlife", "music", "street"],
-    coordinates: { lat: 29.9584, lng: -90.0654 },
+      "The Teton Range from Dornan's in Moose, Wyoming, inside Grand Teton National Park. Watch light and weather sweep across one of America's most dramatic mountain fronts. Stream courtesy of SeeJH.com on YouTube.",
+    hlsUrl: "https://www.youtube.com/embed/o4fKtgPVpoU",
+    tags: ["mountain", "scenic", "landmark"],
+    coordinates: { lat: 43.6558, lng: -110.7139 },
     isLive: true,
+    source: "youtube",
+    embedUrl: "https://www.youtube.com/embed/o4fKtgPVpoU",
   },
   {
-    id: "south-beach-miami",
-    name: "South Beach",
-    location: "Miami, FL",
-    region: "US Mainland",
+    id: "venice-beach-boardwalk",
+    name: "Venice Beach Boardwalk",
+    location: "Los Angeles, CA",
+    region: "California",
     description:
-      "Sun-soaked South Beach in Miami. Watch the colorful Art Deco backdrop, beachgoers on the white sand, and the turquoise Atlantic waters.",
-    hlsUrl: "https://cams.portofcams.com/south-beach-miami/",
-    tags: ["beach", "ocean", "urban"],
-    coordinates: { lat: 25.7826, lng: -80.1341 },
+      "The north Venice Beach boardwalk, live around the clock: skaters, street performers, beach cruisers, and Pacific sunsets. Stream courtesy of the Ready When You're Ready channel on YouTube.",
+    hlsUrl: "https://www.youtube.com/embed/98jOtUeM3m8",
+    tags: ["beach", "street", "urban"],
+    coordinates: { lat: 33.985, lng: -118.4695 },
     isLive: true,
+    source: "youtube",
+    embedUrl: "https://www.youtube.com/embed/98jOtUeM3m8",
   },
   {
-    id: "venice-grand-canal",
-    name: "Grand Canal",
-    location: "Venice, Italy",
-    region: "International",
+    id: "monterey-sea-otters",
+    name: "Monterey Bay Sea Otters",
+    location: "Monterey, CA",
+    region: "California",
     description:
-      "The main waterway of Venice. Watch gondolas, water taxis, and vaporetti navigate the stunning Grand Canal lined with centuries-old palaces.",
-    hlsUrl: "https://cams.portofcams.com/venice-grand-canal/",
-    tags: ["landmark", "water", "urban"],
-    coordinates: { lat: 45.4371, lng: 12.3327 },
+      "Live sea otter cam over Monterey Bay. Watch wild otters raft in the kelp beds along one of California's richest stretches of coastline. Stream courtesy of the Monterey Bay Aquarium on YouTube.",
+    hlsUrl: "https://www.youtube.com/embed/abbR-Ttd-cA",
+    tags: ["wildlife", "ocean", "scenic"],
+    coordinates: { lat: 36.6182, lng: -121.9018 },
     isLive: true,
-  },
-  {
-    id: "santorini-caldera",
-    name: "Santorini Caldera",
-    location: "Santorini, Greece",
-    region: "International",
-    description:
-      "Breathtaking view of the Santorini caldera with its iconic white and blue buildings cascading down volcanic cliffs above the deep blue Aegean Sea.",
-    hlsUrl: "https://cams.portofcams.com/santorini-caldera/",
-    tags: ["ocean", "landmark", "scenic"],
-    coordinates: { lat: 36.4166, lng: 25.4321 },
-    isLive: true,
-  },
-  {
-    id: "i-h1-east",
-    name: "H-1 Freeway East",
-    location: "Honolulu, HI",
-    region: "Hawaii",
-    description:
-      "Live traffic view of the H-1 Freeway heading east through Honolulu. Monitor commute conditions and traffic flow on Oahu's main highway.",
-    hlsUrl: "https://cams.portofcams.com/i-h1-east/",
-    tags: ["traffic", "highway"],
-    coordinates: { lat: 21.3156, lng: -157.859 },
-    isLive: true,
-  },
-  {
-    id: "i-h1-west",
-    name: "H-1 Freeway West",
-    location: "Honolulu, HI",
-    region: "Hawaii",
-    description:
-      "Live traffic view of the H-1 Freeway heading west from Honolulu toward Pearl City. Check westbound commute conditions in real time.",
-    hlsUrl: "https://cams.portofcams.com/i-h1-west/",
-    tags: ["traffic", "highway"],
-    coordinates: { lat: 21.3245, lng: -157.876 },
-    isLive: true,
-  },
-  {
-    id: "santa-monica-pier",
-    name: "Santa Monica Pier",
-    location: "Santa Monica, CA",
-    region: "US Mainland",
-    description:
-      "The iconic Santa Monica Pier with its famous Ferris wheel and Pacific Park. Watch the sunset over the Pacific Ocean from this beloved California landmark.",
-    hlsUrl: "https://cams.portofcams.com/santa-monica-pier/",
-    tags: ["beach", "landmark", "ocean"],
-    coordinates: { lat: 34.0086, lng: -118.4981 },
-    isLive: true,
+    source: "youtube",
+    embedUrl: "https://www.youtube.com/embed/abbR-Ttd-cA",
   },
 
-  // === WINDY CAMS — Hawaii ===
-  {
-    id: "ala-moana-beach",
-    name: "Ala Moana Beach Park",
-    location: "Honolulu, HI",
-    region: "Hawaii",
-    description:
-      "Panoramic view of Ala Moana Beach Park, one of Oahu's most popular local beaches. Watch outrigger canoes, paddleboarders, and the turquoise waters of this urban paradise.",
-    hlsUrl: "",
-    tags: ["beach", "ocean", "scenic"],
-    coordinates: { lat: 21.2889, lng: -157.8477 },
-    isLive: false,
-    source: "windy",
-    embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1471450467/day",
-    windyId: 1471450467,
-  },
+  // === WINDY DAY-LOOP EMBEDS — Hawaii ===
   {
     id: "kahala-resort",
     name: "Kahala Resort",
@@ -220,11 +127,11 @@ export const cameras: Camera[] = [
     location: "Kihei, Maui",
     region: "Hawaii",
     description:
-      "Live view of Charley Young Beach in Kihei on Maui's south shore. A local favorite for swimming and sunset watching with views across Ma'alaea Bay.",
+      "View of Charley Young Beach in Kihei on Maui's south shore. A local favorite for swimming and sunset watching with views across Ma'alaea Bay.",
     hlsUrl: "",
     tags: ["beach", "surf", "ocean"],
     coordinates: { lat: 20.7362, lng: -156.4508 },
-    isLive: true,
+    isLive: false,
     source: "windy",
     embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1793876400/day",
     windyId: 1793876400,
@@ -280,7 +187,7 @@ export const cameras: Camera[] = [
     location: "Big Island, HI",
     region: "Hawaii",
     description:
-      "View from the summit of Mauna Kea at 13,796 feet, home to some of the world's most powerful telescopes. Often above the clouds with stunning views of the volcanic landscape.",
+      "Northeast view from the summit of Mauna Kea at 13,796 feet, home to some of the world's most powerful telescopes. Often above the clouds with stunning views of the volcanic landscape.",
     hlsUrl: "",
     tags: ["mountain", "scenic", "landmark"],
     coordinates: { lat: 19.8207, lng: -155.4681 },
@@ -290,17 +197,17 @@ export const cameras: Camera[] = [
     windyId: 1299010708,
   },
 
-  // === WINDY CAMS — Alaska ===
+  // === WINDY DAY-LOOP EMBEDS — Alaska ===
   {
-    id: "anchorage-skyline",
-    name: "Anchorage Skyline",
+    id: "ship-creek-boat-launch",
+    name: "Ship Creek Boat Launch",
     location: "Anchorage, AK",
     region: "Alaska",
     description:
-      "Panoramic view of the Anchorage skyline with the Chugach Mountains in the background. Watch the dramatic Alaska weather, northern lights season, and the city's changing seasons.",
+      "View over the Ship Creek small boat launch on the north edge of downtown Anchorage, where the creek meets the tidal flats of Knik Arm. Watch boats, tides, and dramatic Alaska weather.",
     hlsUrl: "",
-    tags: ["urban", "mountain", "scenic"],
-    coordinates: { lat: 61.2181, lng: -149.9003 },
+    tags: ["water", "scenic", "urban"],
+    coordinates: { lat: 61.2286, lng: -149.8783 },
     isLive: false,
     source: "windy",
     embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1675825714/day",
@@ -338,11 +245,11 @@ export const cameras: Camera[] = [
   },
   {
     id: "juneau-harbor",
-    name: "Juneau Harbor",
+    name: "Juneau",
     location: "Juneau, AK",
     region: "Alaska",
     description:
-      "View of Juneau's harbor, Alaska's capital city accessible only by air or sea. Watch cruise ships, float planes, and the stunning Gastineau Channel backed by mountains and glaciers.",
+      "Webcam view over Juneau, Alaska's capital city, wedged between steep mountains and the Gastineau Channel and reachable only by air or sea.",
     hlsUrl: "",
     tags: ["water", "urban", "scenic"],
     coordinates: { lat: 58.3005, lng: -134.4197 },
@@ -357,7 +264,7 @@ export const cameras: Camera[] = [
     location: "Fairbanks, AK",
     region: "Alaska",
     description:
-      "View along Airport Way in Fairbanks, the Golden Heart City. Experience extreme Alaska conditions from -40F winters to midnight sun summers in the interior.",
+      "View along Airport Way in South Fairbanks, the Golden Heart City. Experience extreme Alaska conditions from -40F winters to midnight sun summers in the interior.",
     hlsUrl: "",
     tags: ["traffic", "urban", "scenic"],
     coordinates: { lat: 64.8378, lng: -147.7164 },
@@ -367,18 +274,18 @@ export const cameras: Camera[] = [
     windyId: 1738676898,
   },
 
-  // === WINDY CAMS — California ===
+  // === WINDY DAY-LOOP EMBEDS — California ===
   {
     id: "la-i110-wilshire",
     name: "I-110 at Wilshire Blvd",
     location: "Los Angeles, CA",
     region: "California",
     description:
-      "Live traffic camera on the I-110 freeway at Wilshire Blvd in downtown Los Angeles. Monitor real-time traffic conditions on one of LA's busiest corridors.",
+      "Traffic camera on the I-110 freeway at Wilshire Blvd near Bunker Hill in downtown Los Angeles. Monitor conditions on one of LA's busiest corridors.",
     hlsUrl: "",
     tags: ["traffic", "highway", "urban"],
     coordinates: { lat: 34.0522, lng: -118.2668 },
-    isLive: true,
+    isLive: false,
     source: "windy",
     embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1709835159/day",
     windyId: 1709835159,
@@ -389,26 +296,26 @@ export const cameras: Camera[] = [
     location: "Los Angeles, CA",
     region: "California",
     description:
-      "Live traffic camera on the I-10 freeway near downtown Los Angeles. Watch the constant flow of traffic through one of America's busiest highway interchanges.",
+      "Traffic camera on the I-10 freeway near Griffith Ave and San Pedro St on the west side of downtown Los Angeles. Watch the constant flow through one of America's busiest corridors.",
     hlsUrl: "",
     tags: ["traffic", "highway", "urban"],
     coordinates: { lat: 34.0407, lng: -118.2468 },
-    isLive: true,
+    isLive: false,
     source: "windy",
     embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1709835270/day",
     windyId: 1709835270,
   },
   {
     id: "san-diego-bay",
-    name: "San Diego Bay",
+    name: "San Diego Bayfront",
     location: "San Diego, CA",
     region: "California",
     description:
-      "Live view of San Diego Bay with the city skyline and Coronado Bridge. Watch sailboats, naval vessels, and stunning sunsets over one of California's most beautiful harbors.",
+      "View over San Diego's downtown bayfront near the Convention Center, the Rady Shell at Jacobs Park, and the Embarcadero. Watch boats on the bay and sunsets over the skyline.",
     hlsUrl: "",
     tags: ["ocean", "urban", "scenic"],
     coordinates: { lat: 32.7157, lng: -117.1611 },
-    isLive: true,
+    isLive: false,
     source: "windy",
     embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1649778683/day",
     windyId: 1649778683,
@@ -419,17 +326,17 @@ export const cameras: Camera[] = [
     location: "San Francisco, CA",
     region: "California",
     description:
-      "Live traffic camera on US-101 at Octavia Street in San Francisco. Monitor traffic flow near the Central Freeway and Hayes Valley neighborhood.",
+      "Traffic camera on US-101 at Octavia Street in San Francisco. Monitor traffic flow near the Central Freeway and Hayes Valley neighborhood.",
     hlsUrl: "",
     tags: ["traffic", "highway", "urban"],
     coordinates: { lat: 37.7749, lng: -122.4241 },
-    isLive: true,
+    isLive: false,
     source: "windy",
     embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1596825917/day",
     windyId: 1596825917,
   },
 
-  // === WINDY CAMS — Pacific NW ===
+  // === WINDY DAY-LOOP EMBEDS — Pacific NW ===
   {
     id: "seattle-columbia-center",
     name: "Columbia Center Skyline",
@@ -439,7 +346,7 @@ export const cameras: Camera[] = [
       "View from near the Columbia Center, Seattle's tallest building. Watch the city skyline with views toward Puget Sound, the Olympic Mountains, and Mount Rainier on clear days.",
     hlsUrl: "",
     tags: ["urban", "scenic", "landmark"],
-    coordinates: { lat: 47.6047, lng: -122.3310 },
+    coordinates: { lat: 47.6047, lng: -122.331 },
     isLive: false,
     source: "windy",
     embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1345843224/day",
@@ -447,20 +354,19 @@ export const cameras: Camera[] = [
   },
   {
     id: "portland-i405",
-    name: "Portland - I-405",
+    name: "Portland - SW 6th at I-405",
     location: "Portland, OR",
     region: "Pacific NW",
     description:
-      "Traffic view along I-405 in Portland, Oregon. Watch the flow of traffic through the Rose City with views of the West Hills and downtown skyline.",
+      "Traffic view at SW 6th Avenue and I-405 in Portland, Oregon. Watch the flow of traffic through the Rose City with views of the West Hills and downtown.",
     hlsUrl: "",
     tags: ["traffic", "highway", "urban"],
-    coordinates: { lat: 45.5155, lng: -122.6870 },
+    coordinates: { lat: 45.5155, lng: -122.687 },
     isLive: false,
     source: "windy",
     embedUrl: "https://webcams.windy.com/webcams/public/embed/player/1513199656/day",
     windyId: 1513199656,
   },
-
 ];
 
 export const regions = [...new Set(cameras.map((c) => c.region))].sort();

@@ -19,7 +19,7 @@ const related = getRelatedCameras(id!, 4);
 <Layout
   title={`${camera.name} — Live Camera | PortOfCams`}
   description={camera.description}
-  includeHls={camera.source !== 'windy'}
+  includeHls={camera.source !== 'windy' && camera.source !== 'youtube'}
 >
 
   <!-- Breadcrumb + Camera Header -->
@@ -48,6 +48,19 @@ const related = getRelatedCameras(id!, 4);
           ></iframe>
           <div class="windy-attribution mono">
             Powered by <a href="https://www.windy.com" target="_blank" rel="noopener">Windy.com</a>
+          </div>
+        </div>
+      ) : camera.source === 'youtube' && camera.embedUrl ? (
+        <div class="windy-embed-wrapper">
+          <iframe
+            src={camera.embedUrl}
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+            title={`${camera.name} live stream`}
+          ></iframe>
+          <div class="windy-attribution mono">
+            Streaming via <a href="https://www.youtube.com" target="_blank" rel="noopener">YouTube</a>
           </div>
         </div>
       ) : (
@@ -99,13 +112,13 @@ const related = getRelatedCameras(id!, 4);
           <div class="meta-card">
             <div class="meta-label mono">Stream</div>
             <div class="meta-value mono" style="font-size: 13px;">
-              {camera.source === 'windy' ? 'Windy Embed' : 'HLS / Adaptive'}
+              {camera.source === 'windy' ? 'Windy Embed' : camera.source === 'youtube' ? 'YouTube Live' : 'HLS / Adaptive'}
             </div>
           </div>
           <div class="meta-card">
             <div class="meta-label mono">Status</div>
             <div class="meta-value" style="color: var(--gold);">
-              {camera.isLive ? 'Online' : 'Offline'}
+              {camera.source === 'windy' ? 'Auto-updating' : camera.isLive ? 'Online' : 'Offline'}
             </div>
           </div>
         </div>

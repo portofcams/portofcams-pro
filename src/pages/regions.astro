@@ -11,13 +11,14 @@ const regionData = regions.map(r => ({
 
 const regionDescriptions: Record<string, string> = {
   'Hawaii': 'Tropical island cameras from Oahu, Maui, and the Big Island.',
-  'California': 'Scenic highway and coastal cameras across the Golden State.',
-  'Pacific NW': 'Mountain passes, river valleys, and city views from Washington and Oregon.',
-  'International': 'Iconic locations and wildlife cameras from around the world.',
+  'Alaska': 'City, creek, and channel views from Anchorage, Fairbanks, and Juneau.',
+  'California': 'Beach, wildlife, and highway cameras across the Golden State.',
+  'Pacific NW': 'City skylines and traffic views from Washington and Oregon.',
+  'US Mainland': 'Mountain-town views from Jackson Hole and Grand Teton country.',
 };
 ---
 
-<Layout title="Regions — Port of Cams" description="Explore live cameras organized by region. Hawaii, California, Pacific Northwest, and International.">
+<Layout title="Regions — Port of Cams" description="Explore live cameras organized by region. Hawaii, Alaska, California, the Pacific Northwest, and the Mountain West.">
   <section class="regions-hero">
     <div class="section-inner">
       <p class="section-label">Explore</p>
@@ -43,7 +44,7 @@ const regionDescriptions: Record<string, string> = {
               id={cam.id}
               name={cam.name}
               location={cam.location}
-              streamType="hls"
+              streamType={cam.source === 'windy' ? 'embed' : cam.source === 'youtube' ? 'youtube' : 'hls'}
               tags={cam.tags}
               isLive={cam.isLive}
             />
