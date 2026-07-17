@@ -14,6 +14,7 @@ export function getStaticPaths() {
     { params: { archetype: 'surf-shop' } },
     { params: { archetype: 'dive' } },
     { params: { archetype: 'club' } },
+    { params: { archetype: 'venue' } },
   ];
 }
 
@@ -78,6 +79,17 @@ const CONTENT: Record<string, {
     ],
     caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your club\'s water streams exactly like this — co-branded, on your own site. Public ocean view only: the camera sees the water, never the clubhouse, deck, or members.',
   },
+  'venue': {
+    eyebrow: 'Prepared for Hawaiʻi wedding, luau & event venues',
+    h1: ['They\'re deciding by photo.', 'Let them decide by the real thing.'],
+    lede: 'Every couple and every planner comparing venues is picturing the same evening: the light, the grounds, the water. A live view of your setting — on your own site — replaces a staged photo gallery with the actual place, right now, exactly as it looks tonight. It\'s the difference between "here\'s what it can look like" and "here\'s what it looks like."',
+    points: [
+      ['Decide by the real thing', 'Photos are curated; a live feed isn\'t. Couples and planners comparing venues see your grounds as they actually are, at the hour they\'re actually considering.'],
+      ['Sell tomorrow tonight', 'A live sunset feed the evening before is the best advertisement your next event will ever get — the exact experience, streaming, before anyone commits.'],
+      ['A portfolio that builds itself', 'Every month we cut branded clips from the feed — golden hour on the grounds, guests arriving — ready for your own marketing, no photographer on retainer.'],
+    ],
+    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your grounds stream exactly like this — co-branded, on your own site. The exact frame is approved by your team before anything is mounted.',
+  },
 };
 
 const c = CONTENT[archetype!];
@@ -94,6 +106,7 @@ const titles: Record<string, string> = {
   'surf-shop': 'Live Cam Demo for Surf & Dive Shops — Port of Cams Pro',
   'dive': 'Live Cam Demo for Dive & Charter Operations — Port of Cams Pro',
   'club': 'Live Cam Demo for Ocean & Yacht Clubs — Port of Cams Pro',
+  'venue': 'Live Cam Demo for Wedding, Luau & Event Venues — Port of Cams Pro',
 };
 ---
 
