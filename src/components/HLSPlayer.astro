@@ -236,37 +236,46 @@ const { hlsUrl, cameraName } = Astro.props;
         if (errorEl) errorEl.style.display = 'none';
       }
 
+      function tryHlsJs(): boolean {
+        const Hls = (window as any).Hls;
+        if (!Hls || !Hls.isSupported()) return false;
+        const hls = new Hls({
+          enableWorker: true,
+          lowLatencyMode: true,
+          maxBufferLength: 10,
+          maxMaxBufferLength: 20,
+        });
+        hls.loadSource(streamUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          hideLoading();
+          video.play().catch(() => {});
+        });
+        hls.on(Hls.Events.ERROR, (_: any, data: any) => {
+          if (data.fatal) {
+            showError();
+          }
+        });
+        return true;
+      }
+
       function loadStream() {
         if (loading) loading.style.display = 'flex';
         if (errorEl) errorEl.style.display = 'none';
 
         if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          // Native HLS (Safari)
+          // Native HLS (Safari) — but some WebKit views claim support and
+          // fail to play; fall back to hls.js before surfacing an error.
           video.src = streamUrl;
           video.addEventListener('loadeddata', hideLoading, { once: true });
-          video.addEventListener('error', showError, { once: true });
+          video.addEventListener('error', () => {
+            video.removeAttribute('src');
+            video.load();
+            if (!tryHlsJs()) showError();
+          }, { once: true });
           video.play().catch(() => {});
         } else if ((window as any).Hls) {
-          const Hls = (window as any).Hls;
-          if (Hls.isSupported()) {
-            const hls = new Hls({
-              enableWorker: true,
-              lowLatencyMode: true,
-              maxBufferLength: 10,
-              maxMaxBufferLength: 20,
-            });
-            hls.loadSource(streamUrl);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-              hideLoading();
-              video.play().catch(() => {});
-            });
-            hls.on(Hls.Events.ERROR, (_: any, data: any) => {
-              if (data.fatal) {
-                showError();
-              }
-            });
-          } else {
+          if (!tryHlsJs()) {
             showError();
           }
         } else {

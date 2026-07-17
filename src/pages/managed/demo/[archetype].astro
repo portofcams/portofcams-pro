@@ -1,0 +1,180 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import HLSPlayer from '../../../components/HLSPlayer.astro';
+
+// Pitch-aid demo pages for the Managed Marketing Cam tier — one per venue archetype.
+// noindex: these are walk-in / warm-email leave-behinds, not SEO surface.
+// Every asset shown is ours and real: the live Lewers St feed + clips cut by the
+// same pipeline that would serve the venue. No client names — landmarks only.
+
+export function getStaticPaths() {
+  return [
+    { params: { archetype: 'hotel' } },
+    { params: { archetype: 'marina' } },
+    { params: { archetype: 'surf-shop' } },
+  ];
+}
+
+const { archetype } = Astro.params;
+
+const CONTENT: Record<string, {
+  eyebrow: string; h1: [string, string]; lede: string;
+  points: [string, string][]; caption: string;
+}> = {
+  'hotel': {
+    eyebrow: 'Prepared for Waikīkī hotels & resorts',
+    h1: ['Your beachfront,', 'live on your booking page.'],
+    lede: 'People book the ocean they can see. A live view of your stretch of sand — on your own site, under your own brand — is the booking-page hero that never needs a photographer, a reshoot, or a sunny day scheduled in advance.',
+    points: [
+      ['The view sells the room', 'Guests deciding between two properties pick the one whose ocean they just watched. Your view becomes a reason to book direct instead of through an OTA.'],
+      ['Fresh social, zero effort', 'Every month we cut branded sunset and golden-hour clips from your feed — ready for your Instagram, no content team required.'],
+      ['Handled end to end', 'We mount it, aim it, host it, watch it, and swap it if the salt wins. Your staff never touches a cable.'],
+    ],
+    caption: 'Live right now from our camera at Lewers Street, Waikīkī — two blocks from the sand. Your beachfront drops into your website exactly like this, co-branded.',
+  },
+  'marina': {
+    eyebrow: 'Prepared for Oʻahu marinas & harbors',
+    h1: ['Slip-holders check the harbor', 'before they drive down.'],
+    lede: 'A live harbor cam is the page your slip-holders open every morning — wind on the water, space at the fuel dock, whether the fleet is in. That daily habit keeps your marina top-of-mind, and puts transient moorage in front of every visiting boater who finds the feed.',
+    points: [
+      ['The daily-check habit', 'Conditions, chop, and traffic at a glance. Your website becomes the first tab of every boat owner’s morning.'],
+      ['Transient moorage marketing', 'Visiting boaters watch the harbor before they commit. A live view answers the question every one of them has: what does it actually look like in there?'],
+      ['Office sees what members see', 'The same feed works as a casual eye on the docks after hours — not a security system, but a public view that never blinks.'],
+    ],
+    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your fairway, fuel dock, or mooring field streams exactly like this, co-branded on your own site.',
+  },
+  'surf-shop': {
+    eyebrow: 'Prepared for Oʻahu surf & dive shops',
+    h1: ['Dawn patrol checks your break —', 'on your site, not someone else’s.'],
+    lede: 'Every surfer on this island checks a cam before they drive. Right now they check someone else’s. A live view of the break out front makes your shop the morning ritual — and the person watching your wave is one scroll from your board rack, your rentals, and your lesson calendar.',
+    points: [
+      ['Become the morning ritual', 'The break check is the highest-frequency visit in surf retail. Own it and you own the first screen of the day.'],
+      ['Traffic that converts', 'The cam page cross-sells rentals, lessons, and wax — to exactly the person about to paddle out in front of your door.'],
+      ['Clips your followers share', 'When it’s firing, we cut the timelapse. Your shop’s name rides every share of that swell.'],
+    ],
+    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your break streams exactly like this — co-branded, on your own site, working before sunrise.',
+  },
+};
+
+const c = CONTENT[archetype!];
+const refSlug = `demo-${archetype}`;
+const CLIP_BASE = 'https://ai.portofcams.com/static/clips';
+const clips = [
+  { src: `${CLIP_BASE}/demo-lewers-showcase.mp4`, label: 'Branded showcase clip — cut by the same pipeline that would serve your venue' },
+  { src: `${CLIP_BASE}/demo-kilauea-east.mp4`, label: 'Kīlauea eruption timelapse — the network’s reach beyond Waikīkī' },
+];
+
+const titles: Record<string, string> = {
+  'hotel': 'Live Cam Demo for Hotels & Resorts — Port of Cams Pro',
+  'marina': 'Live Cam Demo for Marinas & Harbors — Port of Cams Pro',
+  'surf-shop': 'Live Cam Demo for Surf & Dive Shops — Port of Cams Pro',
+};
+---
+
+<Layout title={titles[archetype!]} description="A live demonstration of the Managed Marketing Cam — what your venue's view looks like on your own website." noindex={true} includeHls={true} activeNav="">
+  <main class="demo">
+
+    <section class="d-hero">
+      <div class="eyebrow mono">{c.eyebrow}</div>
+      <h1>{c.h1[0]}<br /><em>{c.h1[1]}</em></h1>
+      <p class="lede">{c.lede}</p>
+    </section>
+
+    <section class="d-live">
+      <div class="d-live-tag mono">Live demonstration</div>
+      <HLSPlayer hlsUrl="https://cams.portofcams.com/east-lewers-st/" cameraName="East Lewers Street, Waikīkī" />
+      <p class="d-caption">{c.caption}</p>
+    </section>
+
+    <section class="d-points">
+      {c.points.map(([h, b], i) => (
+        <div class="d-point">
+          <div class="d-n mono">{String(i + 1).padStart(2, '0')}</div>
+          <h3>{h}</h3>
+          <p>{b}</p>
+        </div>
+      ))}
+    </section>
+
+    <section class="d-clips">
+      <div class="sec-head"><span class="mono tag">Included monthly</span><h2>Clips we cut from feeds like yours.</h2></div>
+      <div class="d-clip-grid">
+        {clips.map((clip) => (
+          <figure class="d-clip">
+            <video controls preload="metadata" playsinline src={clip.src}></video>
+            <figcaption class="mono">{clip.label}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <section class="d-terms">
+      <div class="d-term"><span class="tv">$490</span><span class="tl mono">90-day pilot install</span></div>
+      <div class="d-term"><span class="tv">$149&ndash;199</span><span class="tl mono">per month, managed</span></div>
+      <div class="d-term"><span class="tv">$0</span><span class="tl mono">owed if you cancel in the pilot</span></div>
+    </section>
+
+    <section class="d-cta">
+      <a href={`/managed?ref=${refSlug}#pilot`} class="btn-gold">Start the 90-day pilot</a>
+      <a href="/managed" class="btn-ghost">Everything that&rsquo;s included</a>
+      <div class="d-fine mono">pro.portofcams.com/managed &middot; portofcams@gmail.com &middot; Serving Oʻahu now</div>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+  .demo { color: var(--white); overflow: hidden; padding-left: 24px; padding-right: 24px; }
+  .demo h1, .demo h2, .demo h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; }
+  .demo .mono { font-family: 'DM Mono', monospace; }
+  .demo p { font-family: 'DM Sans', system-ui, sans-serif; }
+  .demo em { font-style: italic; color: var(--gold); }
+
+  .d-hero { max-width: 860px; margin: 0 auto; padding-top: 132px; text-align: center; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; }
+  .d-hero h1 { font-size: clamp(34px, 6vw, 60px); line-height: 1.05; margin: 0; text-wrap: balance; }
+  .lede { font-size: clamp(16px, 2.2vw, 18.5px); line-height: 1.65; color: rgba(245,240,232,0.72); max-width: 62ch; margin: 24px auto 0; }
+
+  .d-live { max-width: 860px; margin: 0 auto; padding-top: 54px; }
+  .d-live-tag { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; text-align: center; }
+  .d-caption { font-size: 13.5px; line-height: 1.6; color: rgba(245,240,232,0.6); max-width: 68ch; margin: 14px auto 0; text-align: center; }
+
+  .d-points { max-width: 1000px; margin: 0 auto; padding-top: 72px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .d-point { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 26px 24px; }
+  .d-n { font-size: 12px; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 12px; }
+  .d-point h3 { font-size: 21px; margin: 0 0 8px; }
+  .d-point p { font-size: 14px; line-height: 1.55; color: rgba(245,240,232,0.62); margin: 0; }
+
+  .d-clips { padding-top: 84px; }
+  .sec-head { max-width: 1000px; margin: 0 auto 30px; text-align: center; }
+  .sec-head .tag { display: inline-block; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .sec-head h2 { font-size: clamp(26px, 4.5vw, 40px); margin: 0; }
+  .d-clip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 900px; margin: 0 auto; }
+  .d-clip { margin: 0; }
+  .d-clip video { width: 100%; border-radius: 12px; border: 1px solid var(--border); background: #000; aspect-ratio: 16/9; }
+  .d-clip figcaption { font-size: 11.5px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+
+  .d-terms { display: flex; justify-content: center; gap: clamp(20px, 5vw, 60px); flex-wrap: wrap; max-width: 860px; margin: 0 auto; padding-top: 72px; }
+  .d-term { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .tv { font-family: 'Cormorant Garamond', serif; font-size: 40px; color: var(--gold); line-height: 1; }
+  .tl { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+  .d-cta { text-align: center; padding: 60px 0 100px; }
+  .d-cta .btn-gold, .d-cta .btn-ghost { display: inline-block; margin: 0 6px; }
+  .btn-gold { background: var(--gold); color: #1a1508; text-decoration: none; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; padding: 14px 26px; border-radius: 8px; }
+  .btn-ghost { border: 1px solid rgba(245,240,232,0.2); color: var(--white); text-decoration: none; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; padding: 14px 26px; border-radius: 8px; }
+  .btn-ghost:hover { border-color: var(--gold); }
+  .d-fine { font-size: 12px; color: var(--muted); margin-top: 20px; }
+
+  @media (max-width: 780px) {
+    .d-points, .d-clip-grid { grid-template-columns: 1fr; }
+    .d-hero { padding-top: 108px; }
+  }
+
+  /* Leave-behind: printing collapses players into the essentials */
+  @media print {
+    .d-live, .d-clips { display: none; }
+    .demo { color: #000; }
+    .d-cta .btn-gold, .d-cta .btn-ghost { border: 1px solid #000; color: #000; background: none; }
+  }
+</style>

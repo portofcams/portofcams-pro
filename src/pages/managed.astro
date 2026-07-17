@@ -41,6 +41,7 @@ const faqs = [
   ['Where can the camera point?', 'Public views only — your beach, your harbor, your storefront, the surf. We do not point cameras at anything privacy-sensitive, and the view is yours to approve before we mount anything.'],
   ['Do we own the footage?', 'You and Port of Cams both hold rights to the live feed, recordings, and timelapses. Use the footage freely in your own marketing — that is the point.'],
   ['What if our IT locks down the network?', 'The camera can run fully off your network on its own cellular or Starlink connection — nothing to route, nothing for your IT to approve. Add-on at hardware cost plus $49/mo.'],
+  ['Already have a camera on the property?', 'If a working RTSP-capable camera is already mounted — many venues have one left over from an AV project — we can ingest, brand, host, and monitor that feed for $99/mo with no install at all. Mention the model in your pilot request and we will confirm compatibility.'],
 ];
 ---
 
@@ -141,6 +142,19 @@ const faqs = [
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+      <div class="sec-head"><span class="mono tag">Questions</span><h2>Fair questions, straight answers.</h2></div>
+      <div class="faq-list">
+        {faqs.map(([q, a]) => (
+          <details class="faq-item">
+            <summary>{q}</summary>
+            <p>{a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
     <!-- Pilot / CTA -->
     <section class="pilot" id="pilot">
       <div class="pilot-inner">
@@ -151,11 +165,57 @@ const faqs = [
           install and you're live. Don't, we remove the camera and you owe nothing more. No contract,
           no risk to your view — just a live feed working for you by the end of the month.
         </p>
-        <div class="pilot-cta">
-          <a href="mailto:portofcams@gmail.com?subject=Managed%20Marketing%20Cam%20pilot&amp;body=Venue%20name%3A%0AView%20we'd%20film%3A%0ABest%20contact%3A" class="btn-gold">Request a pilot</a>
-          <a href="tel:+18085918888" class="btn-ghost">Talk to us</a>
+
+        <form id="pilotForm" class="pform" novalidate>
+          <div class="pform-row">
+            <div class="pform-field">
+              <label for="pfVenue" class="mono">Venue</label>
+              <input id="pfVenue" name="business_name" type="text" required maxlength="120" placeholder="Venue or business name" />
+            </div>
+            <div class="pform-field">
+              <label for="pfName" class="mono">Your name</label>
+              <input id="pfName" name="name" type="text" required maxlength="120" placeholder="First and last" />
+            </div>
+          </div>
+          <div class="pform-row">
+            <div class="pform-field">
+              <label for="pfEmail" class="mono">Email</label>
+              <input id="pfEmail" name="email" type="email" required maxlength="200" placeholder="you@yourvenue.com" />
+            </div>
+            <div class="pform-field">
+              <label for="pfPhone" class="mono">Phone <span class="opt">optional</span></label>
+              <input id="pfPhone" name="phone" type="tel" maxlength="40" placeholder="(808) ..." />
+            </div>
+          </div>
+          <div class="pform-row">
+            <div class="pform-field">
+              <label for="pfLocation" class="mono">Where is the view?</label>
+              <input id="pfLocation" name="location" type="text" required maxlength="200" placeholder="e.g. Ala Wai Harbor, Waikīkī" />
+            </div>
+            <div class="pform-field">
+              <label for="pfPlan" class="mono">Plan</label>
+              <select id="pfPlan" name="plan">
+                <option value="not-sure" selected>Not sure yet — advise me</option>
+                <option value="vista">Vista — $149/mo</option>
+                <option value="panorama">Panorama — $199/mo</option>
+                <option value="byo-cam">I already have a camera — $99/mo hosting</option>
+              </select>
+            </div>
+          </div>
+          <div class="pform-field">
+            <label for="pfView" class="mono">What should the camera see? <span class="opt">optional</span></label>
+            <input id="pfView" name="view" type="text" maxlength="300" placeholder="e.g. the break off our seawall, the fuel dock, sunset over the lanai" />
+          </div>
+          <button type="submit" class="btn-gold pform-btn" id="pfSubmit">Request the pilot</button>
+          <div class="pform-error mono" id="pfError" hidden></div>
+        </form>
+
+        <div class="pform-success" id="pfSuccess" hidden>
+          <h3>Got it — mahalo.</h3>
+          <p>Your pilot request is in. A real person (the one who installs the cameras) will reply within one business day.</p>
         </div>
-        <div class="pilot-fine mono">Serving Oʻahu now &middot; neighbor islands by arrangement &middot; a Port of Cams Pro service</div>
+
+        <div class="pilot-fine mono">Prefer email? <a href="mailto:portofcams@gmail.com?subject=Managed%20Marketing%20Cam%20pilot">portofcams@gmail.com</a> &middot; Serving Oʻahu now &middot; neighbor islands by arrangement &middot; a Port of Cams Pro service</div>
       </div>
     </section>
 
@@ -236,23 +296,101 @@ const faqs = [
     .who-card h3 { font-size: 20px; margin: 0 0 8px; color: var(--gold-light); }
     .who-card p { font-size: 13.5px; line-height: 1.5; color: rgba(245,240,232,0.6); margin: 0; }
 
+    /* FAQ */
+    .faq { padding-top: 100px; }
+    .faq-list { max-width: 720px; margin: 0 auto; display: grid; gap: 10px; }
+    .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0 22px; }
+    .faq-item summary { cursor: pointer; list-style: none; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15.5px; color: var(--white); padding: 18px 0; position: relative; padding-right: 28px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: "+"; position: absolute; right: 2px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 20px; font-family: 'DM Mono', monospace; }
+    .faq-item[open] summary::after { content: "–"; }
+    .faq-item p { font-size: 14.5px; line-height: 1.6; color: rgba(245,240,232,0.68); margin: 0; padding: 0 0 18px; }
+
     /* Pilot */
     .pilot { padding-top: 104px; padding-bottom: 100px; }
     .pilot-inner { max-width: 720px; margin: 0 auto; background: linear-gradient(160deg, var(--surface), var(--deep)); border: 1px solid var(--gold); border-radius: 20px; padding: 48px 40px; text-align: center; box-shadow: 0 30px 80px -40px var(--gold-dim); }
     .pilot .tag { display: inline-block; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
     .pilot h2 { font-size: clamp(28px, 5vw, 42px); margin: 0 0 16px; text-wrap: balance; }
     .pilot p { font-size: 16px; line-height: 1.6; color: rgba(245,240,232,0.72); max-width: 54ch; margin: 0 auto 28px; }
-    .pilot-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
     .pilot-fine { font-size: 12px; color: var(--muted); margin-top: 22px; }
+    .pilot-fine a { color: var(--gold); }
+
+    /* Pilot form */
+    .pform { text-align: left; max-width: 560px; margin: 0 auto; display: grid; gap: 14px; }
+    .pform-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .pform-field { display: grid; gap: 6px; }
+    .pform-field label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .pform-field label .opt { text-transform: none; letter-spacing: 0; opacity: 0.6; }
+    .pform-field input, .pform-field select { background: var(--deep); border: 1px solid var(--border); border-radius: 8px; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 15px; padding: 12px 14px; width: 100%; }
+    .pform-field input:focus, .pform-field select:focus { outline: none; border-color: var(--gold); }
+    .pform-field input::placeholder { color: rgba(245,240,232,0.3); }
+    .pform-btn { width: 100%; border: none; cursor: pointer; margin-top: 4px; }
+    .pform-btn[disabled] { opacity: 0.6; cursor: wait; transform: none; }
+    .pform-error { color: #e08a7a; font-size: 13px; text-align: center; }
+    .pform-success { max-width: 480px; margin: 0 auto; padding: 28px 0 6px; }
+    .pform-success h3 { font-size: 26px; margin: 0 0 8px; color: var(--gold); }
+    .pform-success p { font-size: 15px; color: rgba(245,240,232,0.72); margin: 0; }
 
     @media (max-width: 780px) {
       .tier-grid, .inc-grid, .who-row { grid-template-columns: 1fr; }
       .inc-grid { border-radius: 12px; }
       .hero { padding-top: 108px; }
       .strip { gap: 18px; }
+      .pform-row { grid-template-columns: 1fr; }
     }
     @media (prefers-reduced-motion: reduce) {
       .btn-gold { transition: none; }
     }
   </style>
+
+  <script>
+    const form = document.getElementById('pilotForm') as HTMLFormElement | null;
+    if (form) {
+      const errEl = document.getElementById('pfError') as HTMLElement;
+      const okEl = document.getElementById('pfSuccess') as HTMLElement;
+      const btn = document.getElementById('pfSubmit') as HTMLButtonElement;
+      const ref = (new URLSearchParams(window.location.search).get('ref') || '').slice(0, 64);
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errEl.hidden = true;
+        if (!form.reportValidity()) return;
+
+        const fd = new FormData(form);
+        const plan = String(fd.get('plan') || 'not-sure');
+        const payload = {
+          name: String(fd.get('name') || '').trim(),
+          email: String(fd.get('email') || '').trim(),
+          location: String(fd.get('location') || '').trim(),
+          business_name: String(fd.get('business_name') || '').trim(),
+          phone: String(fd.get('phone') || '').trim() || undefined,
+          view: String(fd.get('view') || '').trim() || undefined,
+          tier: 'managed-pilot',
+          message: `Managed pilot request — plan: ${plan}${ref ? ` · ref: ${ref}` : ''}`,
+        };
+
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+        try {
+          const res = await fetch('/api/host-application', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json().catch(() => ({ success: false }));
+          if (res.ok && data.success !== false) {
+            form.hidden = true;
+            okEl.hidden = false;
+          } else {
+            throw new Error(data.error || 'submit failed');
+          }
+        } catch {
+          errEl.textContent = 'That didn’t go through — email portofcams@gmail.com and we’ll take it from there.';
+          errEl.hidden = false;
+          btn.disabled = false;
+          btn.textContent = 'Request the pilot';
+        }
+      });
+    }
+  </script>
 </Layout>
