@@ -13,6 +13,7 @@ export function getStaticPaths() {
     { params: { archetype: 'marina' } },
     { params: { archetype: 'surf-shop' } },
     { params: { archetype: 'dive' } },
+    { params: { archetype: 'club' } },
   ];
 }
 
@@ -66,6 +67,17 @@ const CONTENT: Record<string, {
     ],
     caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your dock, your harbor, or your reef-front streams exactly like this — co-branded, on your own site.',
   },
+  'club': {
+    eyebrow: 'Prepared for Oʻahu ocean & yacht clubs',
+    h1: ['Your members check the water', 'before they leave the house.'],
+    lede: 'A club lives on its stretch of water. A live view of it — on the club\'s own site, behind nothing — is the page members open with their coffee: what the break is doing, how the fairway looks, whether the racing will be good. It keeps the club in every member\'s morning, wherever in the world they are.',
+    points: [
+      ['The morning ritual', 'Conditions at a glance before the drive — paddlers, sailors, and swimmers check the water first. Your site becomes the first tab of the day.'],
+      ['Race days, witnessed', 'Regattas and races stream live — family on the beach lawn, mainland members, and reciprocal-club friends all watching your water.'],
+      ['Clips for the newsletter', 'Every month we cut branded timelapses from your feed — golden-hour water, canoes going out — ready for the club newsletter and social pages.'],
+    ],
+    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your club\'s water streams exactly like this — co-branded, on your own site. Public ocean view only: the camera sees the water, never the clubhouse, deck, or members.',
+  },
 };
 
 const c = CONTENT[archetype!];
@@ -81,6 +93,7 @@ const titles: Record<string, string> = {
   'marina': 'Live Cam Demo for Marinas & Harbors — Port of Cams Pro',
   'surf-shop': 'Live Cam Demo for Surf & Dive Shops — Port of Cams Pro',
   'dive': 'Live Cam Demo for Dive & Charter Operations — Port of Cams Pro',
+  'club': 'Live Cam Demo for Ocean & Yacht Clubs — Port of Cams Pro',
 };
 ---
 
