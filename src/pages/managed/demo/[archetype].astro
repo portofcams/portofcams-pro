@@ -123,6 +123,19 @@ const titles: Record<string, string> = {
   </main>
 </Layout>
 
+<script>
+  // Per-prospect attribution: /managed/demo/hotel?ref=twin-fin rewrites the
+  // CTA's default archetype ref so the pilot form logs the prospect slug.
+  const ref = (new URLSearchParams(window.location.search).get('ref') || '').slice(0, 64);
+  if (ref) {
+    document.querySelectorAll<HTMLAnchorElement>('a[href*="ref="]').forEach((a) => {
+      const u = new URL(a.href);
+      u.searchParams.set('ref', ref);
+      a.href = u.toString();
+    });
+  }
+</script>
+
 <style>
   .demo { color: var(--white); overflow: hidden; padding-left: 24px; padding-right: 24px; }
   .demo h1, .demo h2, .demo h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; }
