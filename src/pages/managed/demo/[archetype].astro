@@ -12,6 +12,7 @@ export function getStaticPaths() {
     { params: { archetype: 'hotel' } },
     { params: { archetype: 'marina' } },
     { params: { archetype: 'surf-shop' } },
+    { params: { archetype: 'dive' } },
   ];
 }
 
@@ -54,6 +55,17 @@ const CONTENT: Record<string, {
     ],
     caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your break streams exactly like this — co-branded, on your own site, working before sunrise.',
   },
+  'dive': {
+    eyebrow: 'Prepared for Oʻahu dive & charter operations',
+    h1: ['Divers check conditions', 'before they commit to the drive.'],
+    lede: 'Every diver and every student wants the same thing before a boat day: to see the water. A live view of your harbor or your departure dock answers the morning question — and the person watching it is one scroll from your charter calendar, your certification courses, and your rental counter.',
+    points: [
+      ['The boat-day check', 'Chop, wind on the water, what the fleet is doing — your customers see it live on your site instead of texting the shop at 6am.'],
+      ['Conditions build trust', 'Showing the real water, live, says more than any brochure photo. Confident divers book; nervous students show up already reassured.'],
+      ['Clips of every departure', 'We cut monthly branded clips from your feed — boats heading out at golden hour is exactly the content your Instagram wants.'],
+    ],
+    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your dock, your harbor, or your reef-front streams exactly like this — co-branded, on your own site.',
+  },
 };
 
 const c = CONTENT[archetype!];
@@ -68,6 +80,7 @@ const titles: Record<string, string> = {
   'hotel': 'Live Cam Demo for Hotels & Resorts — Port of Cams Pro',
   'marina': 'Live Cam Demo for Marinas & Harbors — Port of Cams Pro',
   'surf-shop': 'Live Cam Demo for Surf & Dive Shops — Port of Cams Pro',
+  'dive': 'Live Cam Demo for Dive & Charter Operations — Port of Cams Pro',
 };
 ---
 
