@@ -37,11 +37,11 @@ const includedAll = [
 ];
 const faqs = [
   ['How is this different from the $50/mo co-branded host?', 'The co-branded plan is set-it-up-yourself: we ship a camera, you plug it in, we host the feed. Managed is done-for-you and broadcast-grade — a professional marine camera we install and maintain, plus monthly social content and on-site service. Two different products for two different venues. If you want the lighter option, start on the Host page.'],
-  ['What does the pilot cost?', 'A pilot is $490 to install, then 90 days at the monthly rate. If you keep it, the $490 credits toward your full install. If you cancel inside 90 days, we take the camera back and you owe nothing further.'],
+  ['What does it cost to start?', 'Professional install is $1,490 for Vista or $1,790 for Panorama, billed at signup along with your first month. After that it\'s simple month-to-month at your plan rate — cancel anytime with 30 days\' notice.'],
   ['Where can the camera point?', 'Public views only — your beach, your harbor, your storefront, the surf. We do not point cameras at anything privacy-sensitive, and the view is yours to approve before we mount anything.'],
   ['Do we own the footage?', 'You and Port of Cams both hold rights to the live feed, recordings, and timelapses. Use the footage freely in your own marketing — that is the point.'],
   ['What if our IT locks down the network?', 'The camera can run fully off your network on its own cellular or Starlink connection — nothing to route, nothing for your IT to approve. Add-on at hardware cost plus $49/mo.'],
-  ['Already have a camera on the property?', 'If a working RTSP-capable camera is already mounted — many venues have one left over from an AV project — we can ingest, brand, host, and monitor that feed for $99/mo with no install at all. Mention the model in your pilot request and we will confirm compatibility.'],
+  ['Already have a camera on the property?', 'If a working RTSP-capable camera is already mounted — many venues have one left over from an AV project — we can ingest, brand, host, and monitor that feed for $99/mo with no install at all. Mention the model when you reach out and we will confirm compatibility.'],
 ];
 ---
 
@@ -63,7 +63,7 @@ const faqs = [
           rather run their business than run a webcam.
         </p>
         <div class="hero-cta">
-          <a href="#pilot" class="btn-gold">Start a 90-day pilot</a>
+          <a href="#pilot" class="btn-gold">Get started</a>
           <a href="#included" class="btn-ghost">What's included</a>
         </div>
         <div class="hero-note mono">Prefer to set it up yourself? The <a href="/host">$50/mo co-branded host</a> plan has you covered.</div>
@@ -78,7 +78,7 @@ const faqs = [
       <div class="strip-div"></div>
       <div class="strip-item"><span class="sv">Monthly</span><span class="sl mono">Social clips</span></div>
       <div class="strip-div"></div>
-      <div class="strip-item"><span class="sv">90 days</span><span class="sl mono">Cancel &amp; we remove it</span></div>
+      <div class="strip-item"><span class="sv">No lock-in</span><span class="sl mono">Month-to-month</span></div>
     </section>
 
     <!-- Why -->
@@ -110,11 +110,11 @@ const faqs = [
             <ul class="tier-feats">
               {t.feats.map((f) => <li>{f}</li>)}
             </ul>
-            <a href="#pilot" class="tier-btn">Start with a pilot</a>
+            <a href="#pilot" class="tier-btn">Get started</a>
           </div>
         ))}
       </div>
-      <p class="tier-fine mono">Off-grid cellular / Starlink option: hardware cost + $49/mo. No long contracts — monthly, cancel anytime after the pilot.</p>
+      <p class="tier-fine mono">Off-grid cellular / Starlink option: hardware cost + $49/mo. No long contracts — monthly, cancel anytime.</p>
     </section>
 
     <!-- Included -->
@@ -155,15 +155,15 @@ const faqs = [
       </div>
     </section>
 
-    <!-- Pilot / CTA -->
+    <!-- Signup / CTA -->
     <section class="pilot" id="pilot">
       <div class="pilot-inner">
-        <div class="mono tag gold">The offer</div>
-        <h2>Try it for 90 days. Keep it or we take it back.</h2>
+        <div class="mono tag gold">Get started</div>
+        <h2>Ready to go live? We install this week.</h2>
         <p>
-          $490 to install, then 90 days at your plan rate. Love it, the $490 credits toward the full
-          install and you're live. Don't, we remove the camera and you owe nothing more. No contract,
-          no risk to your view — just a live feed working for you by the end of the month.
+          Professional install and your first month are billed at signup — $1,490 for Vista or $1,790
+          for Panorama, plus your plan rate. Most venues are live within a week. After that it's simple
+          month-to-month — cancel anytime with 30 days' notice.
         </p>
 
         <form id="pilotForm" class="pform" novalidate>
@@ -206,16 +206,16 @@ const faqs = [
             <label for="pfView" class="mono">What should the camera see? <span class="opt">optional</span></label>
             <input id="pfView" name="view" type="text" maxlength="300" placeholder="e.g. the break off our seawall, the fuel dock, sunset over the lanai" />
           </div>
-          <button type="submit" class="btn-gold pform-btn" id="pfSubmit">Request the pilot</button>
+          <button type="submit" class="btn-gold pform-btn" id="pfSubmit">Get started</button>
           <div class="pform-error mono" id="pfError" hidden></div>
         </form>
 
         <div class="pform-success" id="pfSuccess" hidden>
           <h3>Got it — mahalo.</h3>
-          <p>Your pilot request is in. A real person (the one who installs the cameras) will reply within one business day.</p>
+          <p>Your request is in. A real person (the one who installs the cameras) will reply within one business day.</p>
         </div>
 
-        <div class="pilot-fine mono">Prefer email? <a href="mailto:portofcams@gmail.com?subject=Managed%20Marketing%20Cam%20pilot">portofcams@gmail.com</a> &middot; Serving Oʻahu now &middot; neighbor islands by arrangement &middot; a Port of Cams Pro service</div>
+        <div class="pilot-fine mono">Prefer email? <a href="mailto:portofcams@gmail.com?subject=Managed%20Marketing%20Cam%20inquiry">portofcams@gmail.com</a> &middot; Serving Oʻahu now &middot; neighbor islands by arrangement &middot; a Port of Cams Pro service</div>
       </div>
     </section>
 
@@ -230,11 +230,12 @@ const faqs = [
     .mgd em { font-style: italic; color: var(--gold); }
 
     /* Hero */
-    .hero { padding-top: 132px; padding-bottom: 40px; max-width: 1000px; margin: 0 auto; }
+    .hero { padding-top: 132px; padding-bottom: 40px; max-width: 1000px; margin: 0 auto; text-align: center; }
+    .hero-inner { display: flex; flex-direction: column; align-items: center; }
     .eyebrow { font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; }
     .hero h1 { font-size: clamp(40px, 8vw, 76px); line-height: 1.02; margin: 0; text-wrap: balance; }
     .lede { font-size: clamp(17px, 2.4vw, 20px); line-height: 1.6; color: rgba(245,240,232,0.72); max-width: 60ch; margin: 26px 0 0; }
-    .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 34px 0 0; }
+    .hero-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 34px 0 0; }
     .hero-note { font-size: 12.5px; color: var(--muted); margin-top: 20px; }
     .hero-note a { color: var(--gold); }
 
@@ -365,8 +366,8 @@ const faqs = [
           business_name: String(fd.get('business_name') || '').trim(),
           phone: String(fd.get('phone') || '').trim() || undefined,
           view: String(fd.get('view') || '').trim() || undefined,
-          tier: 'managed-pilot',
-          message: `Managed pilot request — plan: ${plan}${ref ? ` · ref: ${ref}` : ''}`,
+          tier: 'managed-signup',
+          message: `Managed signup — plan: ${plan}${ref ? ` · ref: ${ref}` : ''}`,
         };
 
         btn.disabled = true;
@@ -388,7 +389,7 @@ const faqs = [
           errEl.textContent = 'That didn’t go through — email portofcams@gmail.com and we’ll take it from there.';
           errEl.hidden = false;
           btn.disabled = false;
-          btn.textContent = 'Request the pilot';
+          btn.textContent = 'Get started';
         }
       });
     }
