@@ -57,7 +57,7 @@ const faqs = [
     <section class="hero">
       <div class="hero-inner">
         <div class="eyebrow mono">Port of Cams Pro &middot; Managed</div>
-        <h1>Your Hawaiʻi view,<br /><em>broadcast-grade</em> and handled for you.</h1>
+        <h1>Your Hawaiʻi view,<br /><em>broadcast-grade</em> and handled for&nbsp;you.</h1>
         <p class="lede">
           A professional live camera on your waterfront — installed, hosted, and maintained by us,
           with fresh social clips every month. Built for hotels, marinas, and resorts that would
@@ -268,7 +268,7 @@ const faqs = [
     /* Tiers */
     .tiers { padding-top: 96px; }
     .tier-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 860px; margin: 0 auto; }
-    .tier { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px 28px; position: relative; }
+    .tier { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px 28px; position: relative; display: flex; flex-direction: column; }
     .tier.feature { border-color: var(--gold); box-shadow: 0 20px 60px -30px var(--gold-dim); }
     .tier-badge { position: absolute; top: -11px; left: 28px; background: var(--gold); color: #1a1508; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
     .tier-name { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 600; }
@@ -281,7 +281,7 @@ const faqs = [
     .tier-feats { list-style: none; padding: 0; margin: 0 0 26px; display: grid; gap: 11px; }
     .tier-feats li { font-size: 14px; line-height: 1.45; color: rgba(245,240,232,0.82); padding-left: 22px; position: relative; }
     .tier-feats li::before { content: "›"; position: absolute; left: 4px; color: var(--gold); }
-    .tier-btn { display: block; text-align: center; background: transparent; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14.5px; padding: 12px; border-radius: 8px; transition: background .15s, color .15s; }
+    .tier-btn { display: block; margin-top: auto; text-align: center; background: transparent; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14.5px; padding: 12px; border-radius: 8px; transition: background .15s, color .15s; }
     .tier.feature .tier-btn { background: var(--gold); color: #1a1508; }
     .tier-btn:hover { background: var(--gold); color: #1a1508; }
     .tier-fine { text-align: center; font-size: 12px; color: var(--muted); max-width: 620px; margin: 26px auto 0; line-height: 1.6; }
