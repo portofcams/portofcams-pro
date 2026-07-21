@@ -134,8 +134,7 @@
             <div class="form-group">
               <label class="form-label mono">Which are you interested in?</label>
               <div class="choice-group" data-name="tier">
-                <button type="button" class="choice is-active" data-value="free" aria-pressed="true">Free listing</button>
-                <button type="button" class="choice" data-value="premium">Premium host</button>
+                <button type="button" class="choice is-active" data-value="premium" aria-pressed="true">Co-branded host — $50/mo</button>
                 <button type="button" class="choice" data-value="sponsorship">Sponsorship</button>
               </div>
             </div>
@@ -730,7 +729,7 @@
         internet: getChoice('internet'),
         power: getChoice('power'),
         mount: getChoice('mount'),
-        tier: getChoice('tier') || 'free',
+        tier: getChoice('tier') || 'premium',
         advertising: getChoice('advertising'),
         business_name: $('hfBizName').value.trim(),
         business_url: $('hfBizUrl').value.trim(),

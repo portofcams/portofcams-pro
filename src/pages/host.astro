@@ -5,7 +5,7 @@ import HostWizard from '../components/HostWizard.astro';
 
 <Layout
   title="Host a Live Cam, Anywhere — Port of Cams"
-  description="Put a live camera on your waterfront — anywhere on the coast, no install trip needed. Ship-and-mount or bring your own camera; we host it and embed a co-branded player on your site. Free listing (one-time $99 camera) or co-branded for $50/mo. Want it fully handled? See Managed."
+  description="Put a live camera on your waterfront — anywhere on the coast, no install trip needed. Ship-and-mount a plug-and-play camera (included) or bring your own; we host it and embed a co-branded player on your site for $50/mo. Want it fully handled with pro install? See Managed."
   activeNav="host"
 >
 
@@ -20,7 +20,7 @@ import HostWizard from '../components/HostWizard.astro';
       </h1>
       <p class="host-subtitle">
         We ship a plug-and-play streaming camera; you (or a local handyman) mount it — or bring a camera you already have. We host it, brand it, and embed a live player on your own website. No install crew to fly out, so it works on any coast, not just ours.
-        Start free — a one-time $99 for the camera, yours to keep — or go co-branded at $50/mo. Want it fully handled with pro install? <a href="/managed" style="color:var(--gold);">See Managed</a>.
+        It's $50/mo — camera included, cancel anytime. Want it fully handled with pro install and monthly social clips? <a href="/managed" style="color:var(--gold);">See Managed</a>.
       </p>
       <a href="#apply" class="btn-primary">Apply Now</a>
     </div>
@@ -40,7 +40,7 @@ import HostWizard from '../components/HostWizard.astro';
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
           </div>
           <h3>Ship-and-mount, no crew</h3>
-          <p>We send a plug-and-play streaming camera — included on co-branded, a one-time $99 on the free listing. You mount it (or hand a local handyman 20 minutes) and plug it in. No install crew to schedule or fly out — which is how we cover any coast, not just Hawaiʻi.</p>
+          <p>We send a plug-and-play streaming camera — included with your plan. You mount it (or hand a local handyman 20 minutes) and plug it in. No install crew to schedule or fly out — which is how we cover any coast, not just Hawaiʻi.</p>
         </div>
 
         <div class="why-card">
@@ -123,29 +123,11 @@ import HostWizard from '../components/HostWizard.astro';
     <div class="section-inner">
       <div class="section-label">What You Get</div>
       <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 60px;">
-        Free vs. <em class="display-italic" style="color: var(--gold)">Co-branded</em> Hosting
+        One plan. <em class="display-italic" style="color: var(--gold)">Camera included.</em>
       </h2>
 
       <div class="tier-grid">
-        <!-- Free -->
-        <div class="tier-card">
-          <div class="tier-header">
-            <span class="tier-label mono">Free Listing</span>
-            <div class="tier-price display">$0 <span class="tier-period">/ month</span></div>
-            <p class="tier-desc">Get listed and start streaming. One-time $99 for the camera — yours to keep.</p>
-          </div>
-          <ul class="tier-features">
-            <li><span class="check">&#10003;</span> Pro streaming camera — $99 one-time, yours to keep</li>
-            <li><span class="check">&#10003;</span> Listed on the public cameras page</li>
-            <li><span class="check">&#10003;</span> Unlimited live streaming hours</li>
-            <li><span class="check">&#10003;</span> Basic viewer count stats</li>
-            <li><span class="check">&#10003;</span> Standard HLS stream delivery</li>
-            <li><span class="check">&#10003;</span> No monthly fee</li>
-          </ul>
-          <a href="#apply" class="btn-secondary tier-btn">Apply Free</a>
-        </div>
-
-        <!-- Premium -->
+        <!-- Co-branded -->
         <div class="tier-card featured">
           <div class="tier-badge mono">Co-branded</div>
           <div class="tier-header">
@@ -360,11 +342,12 @@ import HostWizard from '../components/HostWizard.astro';
 
   .tier-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 1px;
     background: var(--border);
     border: 1px solid var(--border);
-    max-width: 800px;
+    max-width: 440px;
+    margin: 0 auto;
   }
 
   .tier-card {
