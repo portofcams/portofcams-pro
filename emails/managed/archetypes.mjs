@@ -172,3 +172,45 @@ export function buildArchetypeEmail(archetype, ctx = {}) {
 
   return { subject: a.subject(ctx), html };
 }
+
+// ---- Plain-text variant (cold first-touch → lands in Primary, not Promotions) ----
+const TEXT_HOOKS = {
+  fb: 'The idea: a live feed of that view on your own site, so people can see your sunset before they pick where to eat — plus a branded golden-hour clip each month for your socials. We mount it, host it, and handle everything. Runs about $149/mo, month to month.',
+};
+
+/**
+ * Short, personal, text-only version — reads like a 1:1 note from John, so Gmail
+ * files it in Primary instead of Promotions. Returns { subject, text }.
+ */
+export function buildArchetypeTextEmail(archetype, ctx = {}) {
+  const a = ARCHETYPES[archetype];
+  if (!a) throw new Error(`Unknown archetype "${archetype}". Valid: ${ARCHETYPE_KEYS.join(', ')}`);
+  const ref = ctx.refSlug || `demo-${archetype}`;
+  const ctaUrl = `${SITE}/managed/demo/${archetype}?ref=${encodeURIComponent(ref)}`;
+  const name = ctx.firstName || 'there';
+  const venue = ctx.venueName || 'your place';
+  const hook = TEXT_HOOKS[archetype] || 'The idea: a live feed of your view on your own site, working as marketing that runs 24/7 — installed, hosted, and handled by us. Runs about $149/mo, month to month.';
+  const closer = ctx.viewLine
+    ? `Worth a quick look? I can point it right at ${ctx.viewLine}.`
+    : 'Worth a quick look? Happy to send a couple of angles we could point the camera.';
+  const eyecatch = ctx.venueName
+    ? `${ctx.venueName}${ctx.viewLine ? ` — with that view of ${ctx.viewLine} —` : ''} caught my eye`
+    : 'your waterfront view caught my eye';
+
+  const text = `Hi ${name},
+
+I run Port of Cams — we set up live cameras on Hawaiʻi waterfront spots, and ${eyecatch}.
+
+${hook}
+
+Here's a 30-second live demo of what it would look like on your own site:
+${ctaUrl}
+
+${closer}
+
+John
+Port of Cams
+portofcams@gmail.com`;
+
+  return { subject: `quick idea for ${venue}`, text };
+}

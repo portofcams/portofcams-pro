@@ -18,7 +18,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { ARCHETYPE_KEYS, buildArchetypeEmail } from './archetypes.mjs';
+import { ARCHETYPE_KEYS, buildArchetypeEmail, buildArchetypeTextEmail } from './archetypes.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -27,6 +27,7 @@ const args = process.argv.slice(2);
 const has = (f) => args.includes(f);
 const val = (f, d) => { const i = args.indexOf(f); return i >= 0 && args[i + 1] ? args[i + 1] : d; };
 const DRY = has('--dry-run');
+const TEXT_MODE = has('--text');
 const TEST = val('--test', null);
 const ONLY = val('--only', null);
 const LIMIT = parseInt(val('--limit', '0'), 10) || 0;
@@ -60,8 +61,13 @@ const jobs = [];
 for (const r of recipients) {
   if (!r.email || !r.archetype) { console.warn('skip (missing email/archetype):', JSON.stringify(r)); continue; }
   if (!ARCHETYPE_KEYS.includes(r.archetype)) { console.warn(`skip (unknown archetype "${r.archetype}"):`, r.email); continue; }
-  const { subject, html } = buildArchetypeEmail(r.archetype, r);
-  jobs.push({ email: r.email, archetype: r.archetype, subject, html });
+  if (TEXT_MODE) {
+    const { subject, text } = buildArchetypeTextEmail(r.archetype, r);
+    jobs.push({ email: r.email, archetype: r.archetype, subject, text });
+  } else {
+    const { subject, html } = buildArchetypeEmail(r.archetype, r);
+    jobs.push({ email: r.email, archetype: r.archetype, subject, html });
+  }
 }
 
 if (!jobs.length) { console.error('No valid emails to send.'); process.exit(1); }
@@ -72,8 +78,8 @@ if (DRY) {
   const outDir = join(here, 'preview');
   mkdirSync(outDir, { recursive: true });
   for (const j of jobs) {
-    const f = `send-${j.archetype}-${j.email.replace(/[^a-z0-9]/gi, '_')}.html`;
-    writeFileSync(join(outDir, f), j.html);
+    const f = `send-${j.archetype}-${j.email.replace(/[^a-z0-9]/gi, '_')}.${j.text ? 'txt' : 'html'}`;
+    writeFileSync(join(outDir, f), j.text || j.html);
     console.log(`  • ${j.email.padEnd(30)} ${j.archetype.padEnd(10)} "${j.subject}"  -> preview/${f}`);
   }
   console.log('\nNo emails sent (--dry-run). Review the files in emails/managed/preview/.');
@@ -95,7 +101,7 @@ for (const j of jobs) {
       to: j.email,
       replyTo: REPLY_TO,
       subject: j.subject,
-      html: j.html,
+      ...(j.text ? { text: j.text } : { html: j.html }),
     });
     if (error) throw error;
     ok++;
