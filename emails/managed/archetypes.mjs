@@ -178,6 +178,11 @@ const TEXT_HOOKS = {
   fb: 'The idea: a live feed of that view on your own site, so people can see your sunset before they pick where to eat — plus a branded golden-hour clip each month for your socials. We mount it, host it, and handle everything. Runs about $149/mo, month to month.',
 };
 
+// Self-serve ($50/mo) hooks — the /host tier: ship-and-mount, any coast, no install trip.
+const TEXT_HOOKS_SELFSERVE = {
+  fb: "The idea: a live feed of that view on your own site, so people can see your sunset before they pick where to eat — plus a branded golden-hour clip each month for your socials. It's self-serve: we ship a plug-and-play camera, you (or a local) mount it, and we host and brand it. $50/mo, no install visit, cancel anytime.",
+};
+
 /**
  * Short, personal, text-only version — reads like a 1:1 note from John, so Gmail
  * files it in Primary instead of Promotions. Returns { subject, text }.
@@ -185,11 +190,19 @@ const TEXT_HOOKS = {
 export function buildArchetypeTextEmail(archetype, ctx = {}) {
   const a = ARCHETYPES[archetype];
   if (!a) throw new Error(`Unknown archetype "${archetype}". Valid: ${ARCHETYPE_KEYS.join(', ')}`);
+  const selfServe = !!ctx.selfServe;
   const ref = ctx.refSlug || `demo-${archetype}`;
-  const ctaUrl = `${SITE}/managed/demo/${archetype}?ref=${encodeURIComponent(ref)}`;
+  const ctaUrl = selfServe
+    ? `${SITE}/host?ref=${encodeURIComponent(ref)}`
+    : `${SITE}/managed/demo/${archetype}?ref=${encodeURIComponent(ref)}`;
+  const ctaLine = selfServe
+    ? "Here's how it works (and what it costs):"
+    : "Here's a 30-second live demo of what it would look like on your own site:";
   const name = ctx.firstName || 'there';
   const venue = ctx.venueName || 'your place';
-  const hook = TEXT_HOOKS[archetype] || 'The idea: a live feed of your view on your own site, working as marketing that runs 24/7 — installed, hosted, and handled by us. Runs about $149/mo, month to month.';
+  const hook = selfServe
+    ? (TEXT_HOOKS_SELFSERVE[archetype] || "The idea: a live feed of your view on your own site — self-serve. We ship a plug-and-play camera, you mount it, we host and brand it. $50/mo, no install visit, cancel anytime.")
+    : (TEXT_HOOKS[archetype] || 'The idea: a live feed of your view on your own site, working as marketing that runs 24/7 — installed, hosted, and handled by us. Runs about $149/mo, month to month.');
   const closer = ctx.viewLine
     ? `Worth a quick look? I can point it right at ${ctx.viewLine}.`
     : 'Worth a quick look? Happy to send a couple of angles we could point the camera.';
@@ -203,7 +216,7 @@ I run Port of Cams — we set up live cameras on Hawaiʻi waterfront spots, and 
 
 ${hook}
 
-Here's a 30-second live demo of what it would look like on your own site:
+${ctaLine}
 ${ctaUrl}
 
 ${closer}

@@ -28,6 +28,7 @@ const has = (f) => args.includes(f);
 const val = (f, d) => { const i = args.indexOf(f); return i >= 0 && args[i + 1] ? args[i + 1] : d; };
 const DRY = has('--dry-run');
 const TEXT_MODE = has('--text');
+const SELF_SERVE = has('--selfserve');
 const TEST = val('--test', null);
 const ONLY = val('--only', null);
 const LIMIT = parseInt(val('--limit', '0'), 10) || 0;
@@ -62,7 +63,7 @@ for (const r of recipients) {
   if (!r.email || !r.archetype) { console.warn('skip (missing email/archetype):', JSON.stringify(r)); continue; }
   if (!ARCHETYPE_KEYS.includes(r.archetype)) { console.warn(`skip (unknown archetype "${r.archetype}"):`, r.email); continue; }
   if (TEXT_MODE) {
-    const { subject, text } = buildArchetypeTextEmail(r.archetype, r);
+    const { subject, text } = buildArchetypeTextEmail(r.archetype, { ...r, selfServe: SELF_SERVE });
     jobs.push({ email: r.email, archetype: r.archetype, subject, text });
   } else {
     const { subject, html } = buildArchetypeEmail(r.archetype, r);
