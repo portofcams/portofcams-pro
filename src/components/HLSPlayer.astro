@@ -2,16 +2,20 @@
 interface Props {
   hlsUrl: string;
   cameraName: string;
+  /** Still shown before play + whenever the feed drops, so the view is never a dead grey box. */
+  poster?: string;
 }
 
-const { hlsUrl, cameraName } = Astro.props;
+const { hlsUrl, cameraName, poster = '' } = Astro.props;
 ---
 
-<div class="hls-player-wrap" data-hls-url={hlsUrl}>
+<div class="hls-player-wrap" data-hls-url={hlsUrl} aria-label={cameraName}>
+  <video class="hls-video" playsinline muted autoplay poster={poster}></video>
+
   <div class="player-chrome">
-    <div class="player-status">
+    <div class="player-status" data-state="connecting">
       <span class="live-dot"></span>
-      <span class="live-text mono">LIVE</span>
+      <span class="live-text mono">CONNECTING</span>
     </div>
     <div class="player-controls">
       <button class="player-btn mute-btn" title="Toggle sound" aria-label="Toggle sound">
@@ -32,21 +36,13 @@ const { hlsUrl, cameraName } = Astro.props;
       </button>
     </div>
   </div>
-  <video
-    class="hls-video"
-    playsinline
-    muted
-    autoplay
-    poster=""
-  >
-  </video>
-  <div class="player-loading">
-    <div class="loading-spinner"></div>
-    <span class="mono">Connecting to stream...</span>
-  </div>
-  <div class="player-error" style="display:none">
-    <span class="mono">Stream offline or unavailable</span>
-    <button class="retry-btn">Retry</button>
+
+  <!-- Resilient status overlay — the poster (the view) stays visible behind it, never a dead grey box. -->
+  <div class="player-overlay" hidden>
+    <div class="overlay-pill">
+      <span class="overlay-spinner"></span>
+      <span class="mono overlay-text">Connecting to the live feed…</span>
+    </div>
   </div>
 </div>
 
@@ -66,158 +62,95 @@ const { hlsUrl, cameraName } = Astro.props;
     height: 100%;
     object-fit: cover;
     display: block;
+    background: var(--deep);
   }
 
   .player-chrome {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, transparent 100%);
     z-index: 10;
-    opacity: 1;
-    transition: opacity 0.3s;
   }
 
-  .hls-player-wrap:hover .player-chrome {
-    opacity: 1;
-  }
+  .player-status { display: flex; align-items: center; gap: 8px; }
+  .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #e53e3e; }
+  .live-text { font-size: 11px; letter-spacing: 0.15em; font-weight: 500; color: #e53e3e; }
 
-  .player-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .live-dot {
-    width: 8px;
-    height: 8px;
-    background: #e53e3e;
-    border-radius: 50%;
-    animation: pulse-live 2s infinite;
-  }
+  /* Status colour by state */
+  .player-status[data-state="live"] .live-dot { background: #e53e3e; animation: pulse-live 2s infinite; }
+  .player-status[data-state="live"] .live-text { color: #e53e3e; }
+  .player-status[data-state="connecting"] .live-dot,
+  .player-status[data-state="reconnecting"] .live-dot { background: var(--gold); animation: pulse-amber 1.4s infinite; }
+  .player-status[data-state="connecting"] .live-text,
+  .player-status[data-state="reconnecting"] .live-text { color: var(--gold-light); }
 
   @keyframes pulse-live {
-    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.6); }
-    50% { opacity: 0.8; box-shadow: 0 0 0 4px rgba(229, 62, 62, 0); }
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(229,62,62,0.6); }
+    50% { opacity: 0.8; box-shadow: 0 0 0 4px rgba(229,62,62,0); }
   }
+  @keyframes pulse-amber { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
-  .live-text {
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    color: #e53e3e;
-    font-weight: 500;
-  }
-
-  .player-controls {
-    display: flex;
-    gap: 8px;
-  }
-
+  .player-controls { display: flex; gap: 8px; }
   .player-btn {
     background: rgba(255,255,255,0.1);
     border: 1px solid rgba(255,255,255,0.15);
     color: var(--white);
-    width: 36px;
-    height: 36px;
-    border-radius: 2px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 36px; height: 36px; border-radius: 2px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
     transition: all 0.2s;
   }
+  .player-btn:hover { background: rgba(255,255,255,0.2); border-color: var(--gold); color: var(--gold); }
 
-  .player-btn:hover {
-    background: rgba(255,255,255,0.2);
-    border-color: var(--gold);
-    color: var(--gold);
+  /* Overlay pill over a soft bottom scrim; poster/view stays visible behind it. */
+  .player-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 18px;
+    background: linear-gradient(0deg, rgba(8,8,8,0.5) 0%, transparent 45%);
+    z-index: 6;
+    pointer-events: none;
   }
+  .player-overlay[hidden] { display: none; }
 
-  .player-loading {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    background: var(--surface);
-    z-index: 5;
+  .overlay-pill {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(8,8,8,0.72);
+    border: 1px solid var(--border);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    padding: 8px 14px; border-radius: 999px;
   }
-
-  .player-loading span {
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  .loading-spinner {
-    width: 32px;
-    height: 32px;
-    border: 2px solid var(--border);
+  .overlay-text { font-size: 11.5px; letter-spacing: 0.06em; color: var(--white); }
+  .overlay-spinner {
+    width: 13px; height: 13px; border-radius: 50%; flex: none;
+    border: 2px solid rgba(245,240,232,0.25);
     border-top-color: var(--gold);
-    border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .player-error {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    background: var(--surface);
-    z-index: 5;
-  }
-
-  .player-error span {
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  .retry-btn {
-    background: var(--gold-dim);
-    border: 1px solid rgba(201,168,76,0.3);
-    color: var(--gold);
-    padding: 8px 20px;
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-family: 'DM Mono', monospace;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.2s;
-  }
-
-  .retry-btn:hover {
-    background: rgba(201,168,76,0.25);
-    border-color: var(--gold);
+  @media (prefers-reduced-motion: reduce) {
+    .live-dot, .overlay-spinner { animation: none !important; }
   }
 </style>
 
 <script>
   function initPlayers() {
     document.querySelectorAll<HTMLDivElement>('.hls-player-wrap').forEach((wrap) => {
+      if (wrap.dataset.hlsInit) return;
+      wrap.dataset.hlsInit = '1';
+
       const video = wrap.querySelector<HTMLVideoElement>('.hls-video');
-      const loading = wrap.querySelector<HTMLDivElement>('.player-loading');
-      const errorEl = wrap.querySelector<HTMLDivElement>('.player-error');
+      const statusEl = wrap.querySelector<HTMLDivElement>('.player-status');
+      const statusText = wrap.querySelector<HTMLSpanElement>('.live-text');
+      const overlay = wrap.querySelector<HTMLDivElement>('.player-overlay');
+      const overlayText = wrap.querySelector<HTMLSpanElement>('.overlay-text');
       const muteBtn = wrap.querySelector<HTMLButtonElement>('.mute-btn');
       const fullscreenBtn = wrap.querySelector<HTMLButtonElement>('.fullscreen-btn');
-      const retryBtn = wrap.querySelector<HTMLButtonElement>('.retry-btn');
       const iconMuted = wrap.querySelector<SVGElement>('.icon-muted');
       const iconUnmuted = wrap.querySelector<SVGElement>('.icon-unmuted');
       const hlsUrl = wrap.dataset.hlsUrl;
@@ -226,70 +159,90 @@ const { hlsUrl, cameraName } = Astro.props;
 
       const streamUrl = hlsUrl.endsWith('/') ? hlsUrl + 'index.m3u8' : hlsUrl;
 
-      function showError() {
-        if (loading) loading.style.display = 'none';
-        if (errorEl) errorEl.style.display = 'flex';
+      const MIN_DELAY = 4000;
+      const MAX_DELAY = 15000;
+      let hls: any = null;
+      let retryTimer: number | undefined;
+      let retryDelay = MIN_DELAY;
+      let mediaRecoverTried = false;
+      let destroyed = false;
+
+      function setState(state: string, label: string) {
+        if (statusEl) statusEl.dataset.state = state;
+        if (statusText) statusText.textContent = label;
+      }
+      function showOverlay(msg: string) {
+        if (overlayText) overlayText.textContent = msg;
+        if (overlay) overlay.hidden = false;
+      }
+      function hideOverlay() { if (overlay) overlay.hidden = true; }
+
+      function goLive() {
+        retryDelay = MIN_DELAY;
+        mediaRecoverTried = false;
+        setState('live', 'LIVE');
+        hideOverlay();
       }
 
-      function hideLoading() {
-        if (loading) loading.style.display = 'none';
-        if (errorEl) errorEl.style.display = 'none';
+      function teardownHls() {
+        if (hls) { try { hls.destroy(); } catch (e) {} hls = null; }
+      }
+
+      // Keep the poster/view on screen with a soft "reconnecting" pill, and
+      // retry with backoff so the player self-heals when the feed returns.
+      function scheduleReconnect() {
+        if (destroyed) return;
+        setState('reconnecting', 'RECONNECTING');
+        showOverlay('Live feed reconnecting…');
+        clearTimeout(retryTimer);
+        retryTimer = window.setTimeout(() => {
+          if (destroyed || !document.contains(wrap)) return;
+          teardownHls();
+          try { video.removeAttribute('src'); video.load(); } catch (e) {}
+          retryDelay = Math.min(Math.round(retryDelay * 1.5), MAX_DELAY);
+          loadStream();
+        }, retryDelay);
       }
 
       function tryHlsJs(): boolean {
         const Hls = (window as any).Hls;
         if (!Hls || !Hls.isSupported()) return false;
-        const hls = new Hls({
-          enableWorker: true,
-          lowLatencyMode: true,
-          maxBufferLength: 10,
-          maxMaxBufferLength: 20,
-        });
+        teardownHls();
+        hls = new Hls({ enableWorker: true, lowLatencyMode: true, maxBufferLength: 10, maxMaxBufferLength: 20 });
         hls.loadSource(streamUrl);
         hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          hideLoading();
-          video.play().catch(() => {});
-        });
+        hls.on(Hls.Events.MANIFEST_PARSED, () => { goLive(); video.play().catch(() => {}); });
         hls.on(Hls.Events.ERROR, (_: any, data: any) => {
-          if (data.fatal) {
-            showError();
+          if (!data || !data.fatal) return;
+          if (data.type === Hls.ErrorTypes.MEDIA_ERROR && !mediaRecoverTried) {
+            mediaRecoverTried = true;
+            try { hls.recoverMediaError(); return; } catch (e) {}
           }
+          scheduleReconnect();
         });
         return true;
       }
 
       function loadStream() {
-        if (loading) loading.style.display = 'flex';
-        if (errorEl) errorEl.style.display = 'none';
-
+        if (destroyed) return;
         if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          // Native HLS (Safari) — but some WebKit views claim support and
-          // fail to play; fall back to hls.js before surfacing an error.
+          // Native HLS (Safari) — fall back to hls.js if it fails.
           video.src = streamUrl;
-          video.addEventListener('loadeddata', hideLoading, { once: true });
+          video.addEventListener('loadeddata', goLive, { once: true });
           video.addEventListener('error', () => {
-            video.removeAttribute('src');
-            video.load();
-            if (!tryHlsJs()) showError();
+            try { video.removeAttribute('src'); video.load(); } catch (e) {}
+            if (!tryHlsJs()) scheduleReconnect();
           }, { once: true });
           video.play().catch(() => {});
         } else if ((window as any).Hls) {
-          if (!tryHlsJs()) {
-            showError();
-          }
+          if (!tryHlsJs()) scheduleReconnect();
         } else {
-          // HLS.js not loaded yet — wait and retry
           const script = document.querySelector('script[src*="hls.js"]');
-          if (script) {
-            script.addEventListener('load', () => loadStream(), { once: true });
-          } else {
-            showError();
-          }
+          if (script) script.addEventListener('load', () => loadStream(), { once: true });
+          else scheduleReconnect();
         }
       }
 
-      // Toggle mute
       muteBtn?.addEventListener('click', () => {
         video.muted = !video.muted;
         if (iconMuted && iconUnmuted) {
@@ -298,23 +251,24 @@ const { hlsUrl, cameraName } = Astro.props;
         }
       });
 
-      // Fullscreen
       fullscreenBtn?.addEventListener('click', () => {
-        if (document.fullscreenElement) {
-          document.exitFullscreen();
-        } else {
-          wrap.requestFullscreen?.();
-        }
+        if (document.fullscreenElement) document.exitFullscreen();
+        else wrap.requestFullscreen?.();
       });
 
-      // Retry
-      retryBtn?.addEventListener('click', () => loadStream());
+      // Stop retrying when Astro swaps the page out.
+      document.addEventListener('astro:before-swap', () => {
+        destroyed = true;
+        clearTimeout(retryTimer);
+        teardownHls();
+      }, { once: true });
 
+      setState('connecting', 'CONNECTING');
+      showOverlay('Connecting to the live feed…');
       loadStream();
     });
   }
 
-  // Run on initial load and on Astro page transitions
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initPlayers);
   } else {
