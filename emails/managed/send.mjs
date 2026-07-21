@@ -31,7 +31,7 @@ const TEST = val('--test', null);
 const ONLY = val('--only', null);
 const LIMIT = parseInt(val('--limit', '0'), 10) || 0;
 const FILE = val('--file', join(here, 'recipients.json'));
-const FROM = process.env.MAIL_FROM || 'Port of Cams <onboarding@resend.dev>';
+const FROM = process.env.MAIL_FROM || 'John — Port of Cams <john@portofcams.com>';
 const REPLY_TO = process.env.REPLY_TO || 'portofcams@gmail.com';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

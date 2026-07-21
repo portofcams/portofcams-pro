@@ -26,7 +26,7 @@ open emails/managed/preview/index.html
 ## 2. Send yourself a test
 ```bash
 export RESEND_API_KEY=...                                   # your Resend key
-export MAIL_FROM="John — Port of Cams <john@mg.portofcams.com>"   # a Resend-verified domain
+export MAIL_FROM="John — Port of Cams <john@portofcams.com>"   # portofcams.com is verified in Resend (default)
 npm i resend                                                # one-time; not a site dependency
 node emails/managed/send.mjs --test you@example.com         # one of each archetype
 node emails/managed/send.mjs --test you@example.com --only hotel
