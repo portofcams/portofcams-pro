@@ -1,6 +1,5 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import HLSPlayer from '../../../components/HLSPlayer.astro';
 
 // Pitch-aid demo pages for the Managed Marketing Cam tier — one per venue archetype.
 // noindex: these are walk-in / warm-email leave-behinds, not SEO surface.
@@ -35,7 +34,7 @@ const CONTENT: Record<string, {
       ['Fresh social, zero effort', 'Every month we cut branded sunset and golden-hour clips from your feed — ready for your Instagram, no content team required.'],
       ['Handled end to end', 'We mount it, aim it, host it, watch it, and swap it if the salt wins. Your staff never touches a cable.'],
     ],
-    caption: 'Live right now from our camera at Lewers Street, Waikīkī — two blocks from the sand. Your beachfront drops into your website exactly like this, co-branded.',
+    caption: 'From our own camera at Lewers Street, Waikīkī — two blocks from the sand. Your beachfront drops into your website exactly like this, co-branded.',
   },
   'marina': {
     eyebrow: 'Prepared for Oʻahu marinas & harbors',
@@ -46,7 +45,7 @@ const CONTENT: Record<string, {
       ['Transient moorage marketing', 'Visiting boaters watch the harbor before they commit. A live view answers the question every one of them has: what does it actually look like in there?'],
       ['Office sees what members see', 'The same feed works as a casual eye on the docks after hours — not a security system, but a public view that never blinks.'],
     ],
-    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your fairway, fuel dock, or mooring field streams exactly like this, co-branded on your own site.',
+    caption: 'From our own camera at Lewers Street, Waikīkī. Your fairway, fuel dock, or mooring field streams exactly like this, co-branded on your own site.',
   },
   'surf-shop': {
     eyebrow: 'Prepared for Oʻahu surf & dive shops',
@@ -57,7 +56,7 @@ const CONTENT: Record<string, {
       ['Traffic that converts', 'The cam page cross-sells rentals, lessons, and wax — to exactly the person about to paddle out in front of your door.'],
       ['Clips your followers share', 'When it’s firing, we cut the timelapse. Your shop’s name rides every share of that swell.'],
     ],
-    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your break streams exactly like this — co-branded, on your own site, working before sunrise.',
+    caption: 'From our own camera at Lewers Street, Waikīkī. Your break streams exactly like this — co-branded, on your own site, working before sunrise.',
   },
   'dive': {
     eyebrow: 'Prepared for Oʻahu dive & charter operations',
@@ -68,7 +67,7 @@ const CONTENT: Record<string, {
       ['Conditions build trust', 'Showing the real water, live, says more than any brochure photo. Confident divers book; nervous students show up already reassured.'],
       ['Clips of every departure', 'We cut monthly branded clips from your feed — boats heading out at golden hour is exactly the content your Instagram wants.'],
     ],
-    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your dock, your harbor, or your reef-front streams exactly like this — co-branded, on your own site.',
+    caption: 'From our own camera at Lewers Street, Waikīkī. Your dock, your harbor, or your reef-front streams exactly like this — co-branded, on your own site.',
   },
   'club': {
     eyebrow: 'Prepared for Oʻahu ocean & yacht clubs',
@@ -79,7 +78,7 @@ const CONTENT: Record<string, {
       ['Race days, witnessed', 'Regattas and races stream live — family on the beach lawn, mainland members, and reciprocal-club friends all watching your water.'],
       ['Clips for the newsletter', 'Every month we cut branded timelapses from your feed — golden-hour water, canoes going out — ready for the club newsletter and social pages.'],
     ],
-    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your club\'s water streams exactly like this — co-branded, on your own site. Public ocean view only: the camera sees the water, never the clubhouse, deck, or members.',
+    caption: 'From our own camera at Lewers Street, Waikīkī. Your club\'s water streams exactly like this — co-branded, on your own site. Public ocean view only: the camera sees the water, never the clubhouse, deck, or members.',
   },
   'venue': {
     eyebrow: 'Prepared for Hawaiʻi wedding, luau & event venues',
@@ -90,7 +89,7 @@ const CONTENT: Record<string, {
       ['Sell tomorrow tonight', 'A live sunset feed the evening before is the best advertisement your next event will ever get — the exact experience, streaming, before anyone commits.'],
       ['A portfolio that builds itself', 'Every month we cut branded clips from the feed — golden hour on the grounds, guests arriving — ready for your own marketing, no photographer on retainer.'],
     ],
-    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your grounds stream exactly like this — co-branded, on your own site. The exact frame is approved by your team before anything is mounted.',
+    caption: 'From our own camera at Lewers Street, Waikīkī. Your grounds stream exactly like this — co-branded, on your own site. The exact frame is approved by your team before anything is mounted.',
   },
   'rental': {
     eyebrow: 'Prepared for Hawaiʻi vacation rental & villa portfolios',
@@ -101,24 +100,25 @@ const CONTENT: Record<string, {
       ['It scales with the portfolio', 'The deal isn\'t one camera — it\'s a program. As many of your listings as you want carrying a live view, one relationship, one invoice, one point of contact for install and service across every property.'],
       ['Fewer "is this really it" messages', 'Guests who watch the feed before check-in arrive already sold. That\'s fewer anxious pre-arrival questions for your reservations team and fewer surprised guests at the door.'],
     ],
-    caption: 'Live right now from our camera at Lewers Street, Waikīkī. One of your properties\' lanai, pool, or beach access streams exactly like this — co-branded, on that listing\'s own page.',
+    caption: 'From our own camera at Lewers Street, Waikīkī. One of your properties\' lanai, pool, or beach access streams exactly like this — co-branded, on that listing\'s own page.',
   },
   'fb': {
     eyebrow: 'Prepared for Hawaiʻi beachfront restaurants & bars',
-    h1: ['Sunset over your lanai —', 'the table books itself.'],
-    lede: 'People choose the restaurant with the view they can already see. A live feed of your oceanfront — the lanai at golden hour, the surf off the deck — on your own site turns a hungry browser into a reservation, and turns your sunset into content that keeps filling tables long after it sets.',
+    h1: ['Sunset over the deck —', 'the table books itself.'],
+    lede: 'People choose the restaurant with the view they can already see. A live feed of your oceanfront — the tables at golden hour, the surf off the deck — on your own site turns a hungry browser into a reservation, and turns your sunset into content that keeps filling tables long after it sets.',
     points: [
       ['The view books the table', 'Diners deciding where to eat pick the place whose sunset they just watched. A live oceanfront feed on your site answers "where should we go" before they finish scrolling.'],
       ['Golden hour, on repeat', 'Every month we cut branded sunset and golden-hour clips from your feed — exactly the content your Instagram wants, ready to post, no photographer on the deck.'],
       ['Handled end to end', 'We mount it, aim it at the water, host it, watch it, and swap it if the salt wins. Your staff pours drinks, not cable.'],
     ],
-    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your oceanfront, lanai, or deck streams exactly like this — co-branded, on your own site.',
+    caption: 'From our own camera at Lewers Street, Waikīkī. Your oceanfront, patio, or deck streams exactly like this — co-branded, on your own site.',
   },
 };
 
 const c = CONTENT[archetype!];
 const refSlug = `demo-${archetype}`;
 const CLIP_BASE = 'https://ai.portofcams.com/static/clips';
+const LIVE_CLIP = `${CLIP_BASE}/demo-lewers-live.mp4`;
 const clips = [
   { src: `${CLIP_BASE}/demo-lewers-showcase.mp4`, label: 'Branded showcase clip — cut by the same pipeline that would serve your venue' },
   { src: `${CLIP_BASE}/gallery-lewers-golden-hour.mp4`, label: 'Golden hour, same view — a fresh mood we’d cut from your feed each month' },
@@ -136,7 +136,7 @@ const titles: Record<string, string> = {
 };
 ---
 
-<Layout title={titles[archetype!]} description="A live demonstration of the Managed Marketing Cam — what your venue's view looks like on your own website." noindex={true} includeHls={true} activeNav="">
+<Layout title={titles[archetype!]} description="A live demonstration of the Managed Marketing Cam — what your venue's view looks like on your own website." noindex={true} includeHls={false} activeNav="">
   <main class="demo">
 
     <section class="d-hero">
@@ -146,8 +146,8 @@ const titles: Record<string, string> = {
     </section>
 
     <section class="d-live">
-      <div class="d-live-tag mono">Live demonstration</div>
-      <HLSPlayer hlsUrl="https://cams.portofcams.com/east-lewers-st/" cameraName="East Lewers Street, Waikīkī" poster="/clips/lewers-waikiki.jpg" />
+      <div class="d-live-tag mono">Live-cam demonstration</div>
+      <video class="d-live-video" src={LIVE_CLIP} poster="/clips/lewers-waikiki.jpg" autoplay loop muted playsinline preload="auto"></video>
       <p class="d-caption">{c.caption}</p>
     </section>
 
@@ -215,6 +215,7 @@ const titles: Record<string, string> = {
 
   .d-live { max-width: 860px; margin: 0 auto; padding-top: 54px; }
   .d-live-tag { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; text-align: center; }
+  .d-live-video { width: 100%; aspect-ratio: 16/9; border-radius: 14px; border: 1px solid var(--border); background: #000; display: block; object-fit: cover; }
   .d-caption { font-size: 13.5px; line-height: 1.6; color: rgba(245,240,232,0.6); max-width: 68ch; margin: 14px auto 0; text-align: center; }
 
   .d-points { max-width: 1000px; margin: 0 auto; padding-top: 72px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }

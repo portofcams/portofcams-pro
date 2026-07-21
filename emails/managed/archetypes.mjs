@@ -119,12 +119,26 @@ export const ARCHETYPES = {
     eyebrow: 'Prepared for Hawaiʻi beachfront restaurants & bars',
     subject: (c) => `${c.venueName ? c.venueName + ': ' : ''}your sunset, live on your own site`,
     preview: 'A live view of your oceanfront on your own site — the sunset that turns a hungry browser into a reservation.',
-    headline: 'Sunset over your lanai —<br/>' + g('the table books itself.'),
-    lede: 'People choose the restaurant with the view they can already see. A live feed of your oceanfront — the lanai at golden hour, the surf off the deck — on your own site turns a hungry browser into a reservation, and turns your sunset into content that keeps filling tables long after it sets.',
+    headline: 'Sunset over the deck —<br/>' + g('the table books itself.'),
+    lede: 'People choose the restaurant with the view they can already see. A live feed of your oceanfront — the tables at golden hour, the surf off the deck — on your own site turns a hungry browser into a reservation, and turns your sunset into content that keeps filling tables long after it sets.',
     points: [
       { h: 'The view books the table', b: 'Diners deciding where to eat pick the place whose sunset they just watched. A live oceanfront feed on your site answers “where should we go” before they finish scrolling.' },
       { h: 'Golden hour, on repeat', b: 'Every month we cut branded sunset and golden-hour clips from your feed — exactly the content your Instagram wants, ready to post, no photographer on the deck.' },
       { h: 'Handled end to end', b: 'We mount it, aim it at the water, host it, watch it, and swap it if the salt wins. Your staff pours drinks, not cable.' },
+    ],
+  },
+
+  scenic: {
+    label: 'Scenic restaurants, wineries & waterfronts',
+    eyebrow: 'Prepared for restaurants, wineries & waterfront venues',
+    subject: (c) => `${c.venueName ? c.venueName + ': ' : ''}your view, live on your own site`,
+    preview: 'A live view of your setting on your own site — the reason a browser becomes a booking.',
+    headline: 'Your view,<br/>' + g('live on your own site.'),
+    lede: 'People choose the place with the view they can already see. A live feed of your setting — on your own site, under your own brand — turns a browser into a booking, and turns your view into content that keeps working long after the light changes.',
+    points: [
+      { h: 'The view sells the visit', b: 'Guests deciding where to go pick the place whose view they just watched. A live feed on your site answers the question before they finish scrolling.' },
+      { h: 'Fresh social, zero effort', b: 'Every month we cut a branded golden-hour clip from your feed — ready for your Instagram, no content team required.' },
+      { h: 'Yours to run, simply', b: 'Self-serve and plug-and-play: we ship the camera, you mount it, we host and brand it. No crew, no contract.' },
     ],
   },
 };
@@ -181,7 +195,11 @@ const TEXT_HOOKS = {
 // Self-serve ($50/mo) hooks — the /host tier: ship-and-mount, any coast, no install trip.
 const TEXT_HOOKS_SELFSERVE = {
   fb: "The idea: a live feed of that view on your own site, so people can see your sunset before they pick where to eat — plus a branded golden-hour clip each month for your socials. It's self-serve: we ship a plug-and-play camera, you (or a local) mount it, and we host and brand it. $50/mo, no install visit, cancel anytime.",
+  scenic: "The idea: a live feed of that view on your own site, so people can see it before they decide where to go — plus a branded golden-hour clip each month for your socials. It's self-serve: we ship a plug-and-play camera, you (or a local) mount it, and we host and brand it. $50/mo, no install visit, cancel anytime.",
 };
+
+// Archetypes describing non-Hawaiʻi / mixed-view venues → use a coast-neutral intro line.
+const GENERIC_ARCHETYPES = new Set(['scenic']);
 
 /**
  * Short, personal, text-only version — reads like a 1:1 note from John, so Gmail
@@ -209,10 +227,13 @@ export function buildArchetypeTextEmail(archetype, ctx = {}) {
   const eyecatch = ctx.venueName
     ? `${ctx.venueName}${ctx.viewLine ? ` — with that view of ${ctx.viewLine} —` : ''} caught my eye`
     : 'your waterfront view caught my eye';
+  const introClause = GENERIC_ARCHETYPES.has(archetype)
+    ? 'we set up live cameras at restaurants, wineries, and waterfront spots with a view worth watching'
+    : 'we set up live cameras on Hawaiʻi waterfront spots';
 
   const text = `Hi ${name},
 
-I run Port of Cams — we set up live cameras on Hawaiʻi waterfront spots, and ${eyecatch}.
+I run Port of Cams — ${introClause}, and ${eyecatch}.
 
 ${hook}
 
