@@ -1,0 +1,30 @@
+[
+  {
+    "email": "gm@example-hotel.com",
+    "archetype": "hotel",
+    "venueName": "Kai Lani Resort",
+    "firstName": "Maria",
+    "refSlug": "kai-lani",
+    "viewLine": "the beach off your south lawn"
+  },
+  {
+    "email": "harbormaster@example-marina.com",
+    "archetype": "marina",
+    "venueName": "Ala Wai Small Boat Harbor",
+    "refSlug": "ala-wai"
+  },
+  {
+    "email": "shop@example-surf.com",
+    "archetype": "surf-shop",
+    "venueName": "North Shore Surf Co",
+    "refSlug": "ns-surf",
+    "viewLine": "the break out front"
+  },
+  {
+    "email": "events@example-venue.com",
+    "archetype": "venue",
+    "venueName": "Lanikuhonua",
+    "firstName": "Keoni",
+    "refSlug": "lanikuhonua"
+  }
+]
