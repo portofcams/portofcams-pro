@@ -113,6 +113,20 @@ export const ARCHETYPES = {
       { h: 'Fewer “is this really it” messages', b: 'Guests who watch the feed before check-in arrive already sold — fewer anxious pre-arrival questions for your reservations team.' },
     ],
   },
+
+  fb: {
+    label: 'Beachfront restaurants & bars',
+    eyebrow: 'Prepared for Hawaiʻi beachfront restaurants & bars',
+    subject: (c) => `${c.venueName ? c.venueName + ': ' : ''}your sunset, live on your own site`,
+    preview: 'A live view of your oceanfront on your own site — the sunset that turns a hungry browser into a reservation.',
+    headline: 'Sunset over your lanai —<br/>' + g('the table books itself.'),
+    lede: 'People choose the restaurant with the view they can already see. A live feed of your oceanfront — the lanai at golden hour, the surf off the deck — on your own site turns a hungry browser into a reservation, and turns your sunset into content that keeps filling tables long after it sets.',
+    points: [
+      { h: 'The view books the table', b: 'Diners deciding where to eat pick the place whose sunset they just watched. A live oceanfront feed on your site answers “where should we go” before they finish scrolling.' },
+      { h: 'Golden hour, on repeat', b: 'Every month we cut branded sunset and golden-hour clips from your feed — exactly the content your Instagram wants, ready to post, no photographer on the deck.' },
+      { h: 'Handled end to end', b: 'We mount it, aim it at the water, host it, watch it, and swap it if the salt wins. Your staff pours drinks, not cable.' },
+    ],
+  },
 };
 
 export const ARCHETYPE_KEYS = Object.keys(ARCHETYPES);

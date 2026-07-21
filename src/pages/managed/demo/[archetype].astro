@@ -16,6 +16,7 @@ export function getStaticPaths() {
     { params: { archetype: 'club' } },
     { params: { archetype: 'venue' } },
     { params: { archetype: 'rental' } },
+    { params: { archetype: 'fb' } },
   ];
 }
 
@@ -102,6 +103,17 @@ const CONTENT: Record<string, {
     ],
     caption: 'Live right now from our camera at Lewers Street, Waikīkī. One of your properties\' lanai, pool, or beach access streams exactly like this — co-branded, on that listing\'s own page.',
   },
+  'fb': {
+    eyebrow: 'Prepared for Hawaiʻi beachfront restaurants & bars',
+    h1: ['Sunset over your lanai —', 'the table books itself.'],
+    lede: 'People choose the restaurant with the view they can already see. A live feed of your oceanfront — the lanai at golden hour, the surf off the deck — on your own site turns a hungry browser into a reservation, and turns your sunset into content that keeps filling tables long after it sets.',
+    points: [
+      ['The view books the table', 'Diners deciding where to eat pick the place whose sunset they just watched. A live oceanfront feed on your site answers "where should we go" before they finish scrolling.'],
+      ['Golden hour, on repeat', 'Every month we cut branded sunset and golden-hour clips from your feed — exactly the content your Instagram wants, ready to post, no photographer on the deck.'],
+      ['Handled end to end', 'We mount it, aim it at the water, host it, watch it, and swap it if the salt wins. Your staff pours drinks, not cable.'],
+    ],
+    caption: 'Live right now from our camera at Lewers Street, Waikīkī. Your oceanfront, lanai, or deck streams exactly like this — co-branded, on your own site.',
+  },
 };
 
 const c = CONTENT[archetype!];
@@ -120,6 +132,7 @@ const titles: Record<string, string> = {
   'club': 'Live Cam Demo for Ocean & Yacht Clubs — Port of Cams Pro',
   'venue': 'Live Cam Demo for Wedding, Luau & Event Venues — Port of Cams Pro',
   'rental': 'Live Cam Demo for Vacation Rental & Villa Portfolios — Port of Cams Pro',
+  'fb': 'Live Cam Demo for Beachfront Restaurants & Bars — Port of Cams Pro',
 };
 ---
 
