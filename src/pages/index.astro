@@ -11,9 +11,28 @@ const featuredFeeds = [
   { name: 'Jackson Hole Town Square', location: 'Jackson, WY', region: 'US Mainland', type: 'youtube' as const, url: 'https://www.youtube.com/embed/1EiC9bvVGnk', link: '/camera/jackson-hole-town-square' },
   { name: 'Monterey Bay Sea Otters', location: 'Monterey, CA', region: 'California', type: 'youtube' as const, url: 'https://www.youtube.com/embed/abbR-Ttd-cA', link: '/camera/monterey-sea-otters' },
 ];
+
+const faqs: [string, string][] = [
+  ['What is Port of Cams?', 'A live streaming platform for venues, events, and destinations. We install and host professional live cameras for businesses, and every camera joins a free, browsable directory of live views from Hawaii, Alaska, and the American West.'],
+  ['Is it free to watch the live cameras?', 'Yes — every camera on Port of Cams is free to watch. Premium ($9.99/mo) is an optional upgrade for ad-free HD and 4K streams, every camera unlocked, and access to the timelapse archive.'],
+  ['What’s the difference between Premium and hosting a camera?', 'Premium is for viewers — it unlocks more cameras, higher quality, and no ads. Hosting a camera is for businesses — it puts your own venue live on a camera we install, embedded on your own website.'],
+  ['How do I get my venue live-streamed?', 'Two ways: Host is self-serve — we ship a plug-and-play camera for $50/mo and you mount it. Managed is fully done-for-you, with professional install and monthly social clips, from $149/mo.'],
+  ['Do I have to be in Hawaii to host a camera?', 'No — Host works on any coast, not just Hawaii, since there’s no install crew to fly out. Managed, our fully-installed option, is Hawaii-only for now.'],
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([q, a]) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: { "@type": "Answer", text: a },
+  })),
+};
 ---
 
 <Layout title="PortOfCams — Live Streaming for Venues & Destinations" activeNav="home" includeHls={true}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <!-- Hero -->
   <section class="hero">
@@ -211,6 +230,24 @@ const featuredFeeds = [
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="section-inner">
+      <p class="eyebrow mono">FAQ</p>
+      <h2 class="display" style="font-size: clamp(40px,5vw,72px); max-width: 700px;">
+        Common <em class="display-italic" style="color: var(--gold)">questions</em>
+      </h2>
+      <div class="faq-list">
+        {faqs.map(([q, a]) => (
+          <details class="faq-item">
+            <summary>{q}</summary>
+            <p>{a}</p>
+          </details>
+        ))}
       </div>
     </div>
   </section>
@@ -714,6 +751,62 @@ const featuredFeeds = [
     background: rgba(0,0,0,0.6);
     padding: 4px 10px;
     border-radius: 2px;
+  }
+
+  /* FAQ */
+  .faq {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .faq-list {
+    max-width: 720px;
+    display: grid;
+    gap: 10px;
+    margin-top: 48px;
+  }
+
+  .faq-item {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    padding: 0 24px;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    list-style: none;
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--white);
+    padding: 20px 28px 20px 0;
+    position: relative;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: "+";
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    font-size: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .faq-item[open] summary::after {
+    content: "\2013";
+  }
+
+  .faq-item p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0;
+    padding: 0 0 20px;
   }
 
   /* Big Statement */
