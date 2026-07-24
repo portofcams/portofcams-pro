@@ -1,15 +1,11 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getBlogPostBySlug } from '../../data/blog-posts';
+
+const post = getBlogPostBySlug('live-streaming-for-bars-restaurants');
 ---
 
-<BlogLayout
-  title="How Bars and Restaurants Use Live Cameras to Fill Tables"
-  description="Live cameras solve the slow-night problem — showing real-time crowd energy that no promotion or discount can replicate. Here's how top venues use live streaming to drive weeknight covers."
-  category="Venues & Bars"
-  slug="live-streaming-for-bars-restaurants"
-  publishDate="2026-07-16"
-  readingTime={3}
->
+<BlogLayout {...post}>
 
 <p>Every bar and restaurant has the same problem: weeknights are slow, and discounts don't fix the underlying issue. People don't stay home on Tuesdays because drinks cost $2 more — they stay home because they don't know if the place will be worth the trip. A live camera solves that uncertainty directly.</p>
 

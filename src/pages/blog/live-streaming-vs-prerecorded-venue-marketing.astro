@@ -1,15 +1,11 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getBlogPostBySlug } from '../../data/blog-posts';
+
+const post = getBlogPostBySlug('live-streaming-vs-prerecorded-venue-marketing');
 ---
 
-<BlogLayout
-  title="Live Streaming vs. Pre-Recorded Video for Venue Marketing"
-  description="A practical comparison of live streaming and pre-recorded video for bars, restaurants, and hospitality venues — when each works and how to combine them."
-  category="Strategy"
-  slug="live-streaming-vs-prerecorded-venue-marketing"
-  publishDate="2026-07-16"
-  readingTime={3}
->
+<BlogLayout {...post}>
 
 <p>Marketing directors and venue owners often ask whether they should invest in live streaming or produce high-quality pre-recorded video content. The honest answer is that they serve different purposes, attract different audiences at different stages, and the best strategy uses both.</p>
 

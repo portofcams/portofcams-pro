@@ -1,15 +1,11 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getBlogPostBySlug } from '../../data/blog-posts';
+
+const post = getBlogPostBySlug('why-your-venue-needs-a-live-camera');
 ---
 
-<BlogLayout
-  title="Why Every Bar and Venue Needs a Live Camera in 2026"
-  description="A live camera is the one marketing channel that never sleeps. See how venues use 24/7 streaming to fill seats, build FOMO, and grow an audience."
-  category="Strategy"
-  slug="why-your-venue-needs-a-live-camera"
-  publishDate="2026-07-16"
-  readingTime={3}
->
+<BlogLayout {...post}>
 
 <p>The best marketing your venue can do is show people what they're missing. Not a polished Instagram post shot three weeks ago. Not a five-star review written by someone's cousin. The real thing, live, right now — the crowd energy, the music, the sunset over the water, the happy hour buzz.</p>
 

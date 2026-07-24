@@ -1,15 +1,11 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getBlogPostBySlug } from '../../data/blog-posts';
+
+const post = getBlogPostBySlug('timelapse-social-media-strategy');
 ---
 
-<BlogLayout
-  title="How Automated Timelapse Replaces Your Venue's Social Media Team"
-  description="PortOfCams generates daily timelapse clips from your live camera and posts them automatically to YouTube, Instagram, and TikTok. Here's how venues build followings without a content team."
-  category="Marketing"
-  slug="timelapse-social-media-strategy"
-  publishDate="2026-07-16"
-  readingTime={3}
->
+<BlogLayout {...post}>
 
 <p>Social media for venues has a content problem: producing authentic, engaging content consistently requires time, skill, and ongoing effort. Most venues either under-invest (posting once a week with inconsistent quality) or over-invest (paying a social media agency thousands per month for content that performs worse than authentic posts). Automated timelapse solves both problems.</p>
 

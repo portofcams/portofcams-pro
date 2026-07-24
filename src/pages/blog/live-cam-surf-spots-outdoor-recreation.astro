@@ -1,15 +1,11 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getBlogPostBySlug } from '../../data/blog-posts';
+
+const post = getBlogPostBySlug('live-cam-surf-spots-outdoor-recreation');
 ---
 
-<BlogLayout
-  title="How Surf Spots and Outdoor Recreation Areas Use Live Webcams"
-  description="Live cameras at surf breaks, ski areas, parks, and trails give visitors real-time conditions — turning casual visitors into committed trip-planners."
-  category="Outdoor & Recreation"
-  slug="live-cam-surf-spots-outdoor-recreation"
-  publishDate="2026-07-16"
-  readingTime={3}
->
+<BlogLayout {...post}>
 
 <p>Outdoor recreation decisions are conditions-dependent. A surfer won't drive 90 minutes to a break they can't verify is working. A hiker won't start a trail they can't see is passable. A kayaker wants to know what the water looks like before they load up the truck. Live cameras solve the conditions question definitively — and every solved conditions question is a confirmed visit.</p>
 

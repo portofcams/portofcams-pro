@@ -1,15 +1,11 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getBlogPostBySlug } from '../../data/blog-posts';
+
+const post = getBlogPostBySlug('live-streaming-for-events-festivals');
 ---
 
-<BlogLayout
-  title="Using Live Streaming to Sell Out Your Next Event or Festival"
-  description="How event organizers use live cameras to build FOMO, boost ticket sales, and create a permanent content archive from every event."
-  category="Events"
-  slug="live-streaming-for-events-festivals"
-  publishDate="2026-07-16"
-  readingTime={2}
->
+<BlogLayout {...post}>
 
 <p>The biggest driver of event ticket sales is social proof — the visible evidence that other people are going and having a great time. Live streaming creates that social proof in real time, and its effects persist long after the event ends in the form of timelapse content and footage archives that drive sales for future events.</p>
 

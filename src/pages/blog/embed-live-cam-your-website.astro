@@ -1,15 +1,11 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getBlogPostBySlug } from '../../data/blog-posts';
+
+const post = getBlogPostBySlug('embed-live-cam-your-website');
 ---
 
-<BlogLayout
-  title="How to Embed a Live Camera on Your Website"
-  description="Step-by-step guide to embedding a live camera player on your website, plus how live streams improve dwell time, search rankings, and direct booking conversion."
-  category="Technical"
-  slug="embed-live-cam-your-website"
-  publishDate="2026-07-16"
-  readingTime={3}
->
+<BlogLayout {...post}>
 
 <p>Embedding a live camera on your website is one of the highest-leverage technical improvements a venue, resort, or destination can make. It simultaneously improves user experience, increases the time visitors spend on your site, and creates a page type that earns organic search traffic over time.</p>
 

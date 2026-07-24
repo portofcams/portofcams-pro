@@ -1,15 +1,11 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getBlogPostBySlug } from '../../data/blog-posts';
+
+const post = getBlogPostBySlug('live-streaming-for-hotels-resorts');
 ---
 
-<BlogLayout
-  title="Live Streaming for Hotels: How Webcams Influence Bookings"
-  description="Hotels that embed live cameras on their booking pages see higher direct booking conversion and lower OTA dependence. Here's how hospitality properties use live streaming effectively."
-  category="Hospitality"
-  slug="live-streaming-for-hotels-resorts"
-  publishDate="2026-07-16"
-  readingTime={3}
->
+<BlogLayout {...post}>
 
 <p>Hotel booking decisions are made on trust. A traveler choosing between three similarly priced properties on similar dates is deciding based on which one they believe will deliver the experience they want. Live cameras reduce that uncertainty more directly than any other marketing element, and they do it at the moment of highest booking intent.</p>
 
