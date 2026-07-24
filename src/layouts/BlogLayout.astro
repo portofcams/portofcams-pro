@@ -6,13 +6,61 @@ interface Props {
   description: string;
   category: string;
   slug: string;
+  publishDate: string;
+  readingTime: number;
 }
 
-const { title, description, category, slug } = Astro.props;
+const { title, description, category, slug, publishDate, readingTime } = Astro.props;
+const displayDate = new Date(`${publishDate}T00:00:00Z`).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+
+const siteUrl = (Astro.site ?? new URL('https://pro.portofcams.com/')).href;
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://pro.portofcams.com').href;
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description,
+  image: new URL('/clips/lewers-waikiki.jpg', Astro.site ?? 'https://pro.portofcams.com').href,
+  datePublished: publishDate,
+  dateModified: publishDate,
+  mainEntityOfPage: pageUrl,
+  author: {
+    "@type": "Organization",
+    name: "Port of Cams",
+    url: siteUrl,
+  },
+  publisher: {
+    "@type": "Organization",
+    "@id": `${siteUrl}#organization`,
+    name: "Port of Cams",
+    url: siteUrl,
+  },
+};
 ---
 
 <Layout title={`${title} | PortOfCams Pro`} description={description} activeNav="">
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
   <style>
+    .blog-back {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+      transition: color 0.3s;
+    }
+
+    .blog-back:hover {
+      color: var(--gold);
+    }
+
     .blog-hero {
       padding: 160px 48px 80px;
       max-width: 900px;
@@ -170,9 +218,12 @@ const { title, description, category, slug } = Astro.props;
   </style>
 
   <div class="blog-hero">
+    <a href="/blog" class="blog-back mono">&larr; All Guides</a>
     <div class="blog-label">{category}</div>
     <h1>{title}</h1>
-    <p class="blog-meta">PortOfCams Pro &nbsp;&middot;&nbsp; June 2026 &nbsp;&middot;&nbsp; 6 min read</p>
+    <p class="blog-meta">
+      PortOfCams Pro &nbsp;&middot;&nbsp; <time datetime={publishDate}>{displayDate}</time> &nbsp;&middot;&nbsp; {readingTime} min read
+    </p>
   </div>
 
   <hr class="blog-divider" />

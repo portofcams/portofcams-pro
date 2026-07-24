@@ -1,11 +1,47 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const faqs: [string, string][] = [
+  ['Can I cancel my subscription anytime?', 'Yes. You can cancel at any time from your account settings. Your premium access continues until the end of your current billing period, and you will not be charged again.'],
+  ['What payment methods do you accept?', 'We accept all major credit and debit cards (Visa, Mastercard, American Express) through our secure Stripe payment processor. Apple Pay and Google Pay are also supported.'],
+  ['What does "all cameras unlocked" mean?', 'Free users have access to our featured camera selection. Premium members can view every camera on the platform, including exclusive locations and newly added cameras 48 hours before everyone else.'],
+  ['How does the timelapse archive work?', 'We continuously record snapshots from all cameras. Premium members can browse timelapse videos of any camera going back up to 90 days, perfect for watching sunrises, weather events, or seasonal changes.'],
+  ['Is there a yearly discount?', 'Yes. The yearly plan is $89.99/year, which saves you $29.89 compared to paying monthly. That works out to about $7.50 per month.'],
+  ['Can I switch between monthly and yearly billing?', 'Absolutely. You can switch plans at any time. When upgrading to yearly, you receive a prorated credit for the remainder of your monthly period. When switching to monthly, the change takes effect at the end of your annual term.'],
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([q, a]) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: { "@type": "Answer", text: a },
+  })),
+};
+
+const siteUrl = (Astro.site ?? new URL('https://pro.portofcams.com/')).href;
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Live camera streaming subscription",
+  name: "Port of Cams Premium",
+  description: "Ad-free HD and 4K streams, every camera unlocked, and timelapse archive access.",
+  provider: { "@type": "Organization", name: "Port of Cams", url: siteUrl },
+  offers: [
+    { "@type": "Offer", name: "Monthly", price: "9.99", priceCurrency: "USD", url: `${siteUrl}premium` },
+    { "@type": "Offer", name: "Yearly", price: "89.99", priceCurrency: "USD", url: `${siteUrl}premium` },
+  ],
+};
 ---
 
 <Layout
   title="Go Premium — Port of Cams"
   description="Upgrade to Port of Cams Premium for ad-free HD streams, access to every camera, timelapse archives, and more. Plans start at $9.99/month."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
 
   <!-- Hero -->
   <section class="premium-hero">
@@ -166,47 +202,14 @@ import Layout from '../layouts/Layout.astro';
       </h2>
 
       <div class="faq-list">
-        <details class="faq-item">
-          <summary class="faq-question">Can I cancel my subscription anytime?</summary>
-          <div class="faq-answer">
-            <p>Yes. You can cancel at any time from your account settings. Your premium access continues until the end of your current billing period, and you will not be charged again.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-question">What payment methods do you accept?</summary>
-          <div class="faq-answer">
-            <p>We accept all major credit and debit cards (Visa, Mastercard, American Express) through our secure Stripe payment processor. Apple Pay and Google Pay are also supported.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-question">What does "all cameras unlocked" mean?</summary>
-          <div class="faq-answer">
-            <p>Free users have access to our featured camera selection. Premium members can view every camera on the platform, including exclusive locations and newly added cameras 48 hours before everyone else.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-question">How does the timelapse archive work?</summary>
-          <div class="faq-answer">
-            <p>We continuously record snapshots from all cameras. Premium members can browse timelapse videos of any camera going back up to 90 days, perfect for watching sunrises, weather events, or seasonal changes.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-question">Is there a yearly discount?</summary>
-          <div class="faq-answer">
-            <p>Yes. The yearly plan is $89.99/year, which saves you $29.89 compared to paying monthly. That works out to about $7.50 per month.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-question">Can I switch between monthly and yearly billing?</summary>
-          <div class="faq-answer">
-            <p>Absolutely. You can switch plans at any time. When upgrading to yearly, you receive a prorated credit for the remainder of your monthly period. When switching to monthly, the change takes effect at the end of your annual term.</p>
-          </div>
-        </details>
+        {faqs.map(([q, a]) => (
+          <details class="faq-item">
+            <summary class="faq-question">{q}</summary>
+            <div class="faq-answer">
+              <p>{a}</p>
+            </div>
+          </details>
+        ))}
       </div>
     </div>
   </section>

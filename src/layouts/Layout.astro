@@ -4,12 +4,45 @@ interface Props {
   description?: string;
   activeNav?: string;
   ogImage?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
   includeHls?: boolean;
   noindex?: boolean;
 }
 
-const { title, description = "Live cameras across Hawaii, Alaska, and the American West. Watch street views, beaches, surf, wildlife, and traffic — all free.", activeNav = "", ogImage = "", includeHls = false, noindex = false } = Astro.props;
+const {
+  title,
+  description = "Live cameras across Hawaii, Alaska, and the American West. Watch street views, beaches, surf, wildlife, and traffic — all free.",
+  activeNav = "",
+  ogImage = "/clips/lewers-waikiki.jpg",
+  ogImageWidth = 1280,
+  ogImageHeight = 720,
+  includeHls = false,
+  noindex = false,
+} = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://pro.portofcams.com').href;
+const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://pro.portofcams.com').href;
+const siteUrl = (Astro.site ?? new URL('https://pro.portofcams.com/')).href;
+
+const siteSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${siteUrl}#organization`,
+      name: "Port of Cams",
+      url: siteUrl,
+      description: "Live camera installation and streaming for venues, events, and destinations.",
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}#website`,
+      name: "Port of Cams",
+      url: siteUrl,
+      publisher: { "@id": `${siteUrl}#organization` },
+    },
+  ],
+};
 ---
 
 <!DOCTYPE html>
@@ -21,6 +54,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://pro.port
   <meta name="description" content={description} />
   {noindex && <meta name="robots" content="noindex, nofollow" />}
   <link rel="canonical" href={canonicalUrl} />
+  <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -28,13 +62,16 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://pro.port
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:site_name" content="Port of Cams" />
-  {ogImage && <meta property="og:image" content={ogImage} />}
+  <meta property="og:image" content={ogImageUrl} />
+  <meta property="og:image:width" content={String(ogImageWidth)} />
+  <meta property="og:image:height" content={String(ogImageHeight)} />
+  <meta property="og:image:alt" content={title} />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  {ogImage && <meta name="twitter:image" content={ogImage} />}
+  <meta name="twitter:image" content={ogImageUrl} />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" href="/favicon.ico" />
@@ -86,16 +123,18 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://pro.port
       <ul class="footer-links">
         <li><a href="/">Home</a></li>
         <li><a href="/browse">Browse</a></li>
+        <li><a href="/regions">Regions</a></li>
         <li><a href="/timelapse">Timelapse</a></li>
         <li><a href="/embed">Embed</a></li>
         <li><a href="/host">Host</a></li>
         <li><a href="/managed">Managed</a></li>
         <li><a href="/premium">Premium</a></li>
+        <li><a href="/blog">Blog</a></li>
         <li><a href="/status">Status</a></li>
       </ul>
       <div class="footer-sister-sites">
         <span class="footer-sister-label mono">Our Products</span>
-        <a href="https://pro.portofcams.com" target="_blank" rel="noopener noreferrer">Pro <span class="mono">HD Streams</span></a>
+        <a href="https://portofcams.com" target="_blank" rel="noopener noreferrer">Port of Cams <span class="mono">14,400+ Live Cams</span></a>
         <a href="https://camdrop.portofcams.com" target="_blank" rel="noopener noreferrer">CamDrop <span class="mono">Construction Timelapse</span></a>
       </div>
       <div class="footer-sister-sites">

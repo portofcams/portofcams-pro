@@ -372,6 +372,25 @@ export const cameras: Camera[] = [
 export const regions = [...new Set(cameras.map((c) => c.region))].sort();
 export const allTags = [...new Set(cameras.flatMap((c) => c.tags))].sort();
 
+export const tagLabels: Record<string, string> = {
+  urban: 'Urban',
+  scenic: 'Scenic',
+  ocean: 'Ocean',
+  beach: 'Beach',
+  landmark: 'Landmark',
+  traffic: 'Traffic',
+  highway: 'Highway',
+  mountain: 'Mountain',
+  resort: 'Resort',
+  water: 'Waterfront',
+  street: 'Street',
+  surf: 'Surf',
+  town: 'Small-Town',
+  wildlife: 'Wildlife',
+  nightlife: 'Nightlife',
+  volcano: 'Volcano',
+};
+
 export function getCameraById(id: string): Camera | undefined {
   return cameras.find((c) => c.id === id);
 }

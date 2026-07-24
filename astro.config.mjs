@@ -5,8 +5,19 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://pro.portofcams.com',
-  // Per-venue /business/{slug} outreach landing pages (direct-link, noindex) and
-  // /embed/{slug} bare iframe players (noindex) don't belong in the sitemap.
-  // Their parents /business/ and /embed/ stay.
-  integrations: [sitemap({ filter: (page) => !/\/(business|embed)\/[^/]+/.test(page) })],
+  // Per-venue /business/{slug} outreach landing pages (direct-link, noindex),
+  // /embed/{slug} bare iframe players (noindex), and /managed/demo/{archetype}
+  // walk-in/warm-email leave-behinds (noindex) don't belong in the sitemap.
+  // Their parent /embed/ stays; bare /business, /checkout, and /livestream-pass
+  // are noindexed pages too (single-prospect page, transactional page, dev demo).
+  integrations: [
+    sitemap({
+      filter: (page) =>
+        !/\/(business|embed)\/[^/]+\/?$/.test(page) &&
+        !/\/managed\/demo\/[^/]+\/?$/.test(page) &&
+        !/\/business\/?$/.test(page) &&
+        !/\/checkout\/?$/.test(page) &&
+        !/\/livestream-pass\/?$/.test(page),
+    }),
+  ],
 });

@@ -13,7 +13,7 @@ const featuredFeeds = [
 ];
 ---
 
-<Layout title="PortOfCams Pro — Live Streaming for Venues, Events & Destinations" activeNav="home" includeHls={true}>
+<Layout title="PortOfCams — Live Streaming for Venues & Destinations" activeNav="home" includeHls={true}>
 
   <!-- Hero -->
   <section class="hero">
@@ -159,6 +159,57 @@ const featuredFeeds = [
           <div class="how-number">03</div>
           <h3>You Grow</h3>
           <p>AI-generated timelapse clips auto-post to YouTube, Instagram, and TikTok — free social content, daily.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Port of Cams Platform -->
+  <section class="platform">
+    <div class="section-inner">
+      <div class="platform-grid">
+        <div class="platform-copy">
+          <p class="eyebrow mono fade-up">The Platform</p>
+          <h2 class="display fade-up" style="font-size: clamp(36px, 4.5vw, 60px);">
+            This is<br/>
+            <em class="display-italic" style="color: var(--gold)">Port of Cams</em>
+          </h2>
+          <p class="platform-body fade-up">
+            Not a demo — a real destination. Every camera we install joins the largest indexed live webcam platform on the internet, browsable by region, category, and map. That's the audience your camera reaches.
+          </p>
+          <div class="platform-stats fade-up">
+            <div class="platform-stat">
+              <div class="platform-stat-val display">14,400+</div>
+              <div class="platform-stat-label mono">Live Cameras</div>
+            </div>
+            <div class="platform-stat">
+              <div class="platform-stat-val display">50</div>
+              <div class="platform-stat-label mono">States</div>
+            </div>
+            <div class="platform-stat">
+              <div class="platform-stat-val display">20+</div>
+              <div class="platform-stat-label mono">Countries</div>
+            </div>
+          </div>
+          <a href="https://portofcams.com" target="_blank" rel="noopener noreferrer" class="btn-primary fade-up">Visit Port of Cams</a>
+        </div>
+        <div class="platform-visual fade-up">
+          <div class="browser-mock">
+            <div class="browser-bar">
+              <span class="browser-dot"></span>
+              <span class="browser-dot"></span>
+              <span class="browser-dot"></span>
+              <span class="browser-url mono">portofcams.com</span>
+            </div>
+            <div class="browser-body" data-stream="https://cams.portofcams.com/east-lewers-st/index.m3u8">
+              <video class="featured-video" muted playsinline></video>
+              <div class="browser-live">
+                <span class="featured-live-dot"></span>
+                <span class="mono">LIVE</span>
+              </div>
+              <div class="browser-caption mono">Lewers St, Waikiki — live now</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -541,6 +592,130 @@ const featuredFeeds = [
     line-height: 1.7;
   }
 
+  /* Port of Cams Platform */
+  .platform {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .platform::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 80% 30%, rgba(201,168,76,0.05) 0%, transparent 70%);
+  }
+
+  .platform-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .platform-copy h2 { margin-bottom: 24px; }
+
+  .platform-body {
+    font-size: 17px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 460px;
+    margin-bottom: 40px;
+  }
+
+  .platform-stats {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+
+  .platform-stat-val {
+    font-size: clamp(26px, 3vw, 38px);
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .platform-stat-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .browser-mock {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.6);
+  }
+
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    background: var(--black);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .browser-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--faint);
+  }
+
+  .browser-url {
+    margin-left: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--deep);
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+
+  .browser-body {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: #000;
+    overflow: hidden;
+  }
+
+  .browser-live {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(0,0,0,0.6);
+    padding: 4px 10px;
+    border-radius: 2px;
+    border: 1px solid rgba(229,62,62,0.3);
+  }
+
+  .browser-live span:last-child {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: #e53e3e;
+  }
+
+  .browser-caption {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    background: rgba(0,0,0,0.6);
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
   /* Big Statement */
   .statement {
     border-top: 1px solid var(--border);
@@ -573,6 +748,8 @@ const featuredFeeds = [
     .usecase-card { padding: 40px 28px; }
     .featured-grid { grid-template-columns: 1fr; }
     .how-grid { grid-template-columns: 1fr; }
+    .platform-grid { grid-template-columns: 1fr; gap: 40px; }
+    .platform-stats { gap: 28px; }
     .section-body { font-size: 17px; }
     .statement .section-inner { padding-top: 100px; padding-bottom: 100px; }
   }
@@ -581,7 +758,7 @@ const featuredFeeds = [
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
     // Only lazy-load HLS cards (Windy embeds load themselves via iframe)
-    const hlsCards = document.querySelectorAll('.featured-card[data-stream]');
+    const hlsCards = document.querySelectorAll('[data-stream]');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;

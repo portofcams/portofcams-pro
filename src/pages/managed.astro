@@ -44,13 +44,45 @@ const faqs = [
   ['What if our IT locks down the network?', 'The camera can run fully off your network on its own cellular or Starlink connection — nothing to route, nothing for your IT to approve. Add-on at hardware cost plus $49/mo.'],
   ['Already have a camera on the property?', 'If a working RTSP-capable camera is already mounted — many venues have one left over from an AV project — we can ingest, brand, host, and monitor that feed for $99/mo with no install at all. Mention the model when you reach out and we will confirm compatibility.'],
 ];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([q, a]) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: { "@type": "Answer", text: a },
+  })),
+};
+
+const siteUrl = (Astro.site ?? new URL('https://pro.portofcams.com/')).href;
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Managed live camera installation and hosting",
+  name: "Managed Marketing Cam",
+  description: "A broadcast-grade live camera installed, hosted, and maintained for Hawaii hotels, marinas, and resorts, with monthly social clips.",
+  provider: { "@type": "Organization", name: "Port of Cams", url: siteUrl },
+  areaServed: "Hawaii",
+  offers: tiers.map((t) => ({
+    "@type": "Offer",
+    name: t.name,
+    price: t.price,
+    priceCurrency: "USD",
+    url: `${siteUrl}managed`,
+    availability: "https://schema.org/InStock",
+  })),
+};
 ---
 
 <Layout
   title="Managed Marketing Cam — Port of Cams Pro"
-  description="A broadcast-grade live camera on your Hawaii waterfront, installed and maintained for you, with monthly social clips. For hotels, marinas, and resorts. From $149/mo."
+  description="A broadcast-grade live camera on your Hawaii waterfront, installed and maintained for you, with monthly social clips. Hotels, marinas & resorts, from $149/mo."
   activeNav=""
 >
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
   <main class="mgd">
 
     <!-- Hero -->

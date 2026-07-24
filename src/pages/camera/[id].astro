@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import HLSPlayer from '../../components/HLSPlayer.astro';
 import ViatorTours from '../../components/ViatorTours.astro';
 import HotelCards from '../../components/HotelCards.astro';
-import { cameras, getCameraById, getRelatedCameras } from '../../data/cameras';
+import { cameras, getCameraById, getRelatedCameras, getCamerasByTag } from '../../data/cameras';
 
 export function getStaticPaths() {
   return cameras.map((cam) => ({
@@ -11,9 +11,56 @@ export function getStaticPaths() {
   }));
 }
 
+function slugify(name: string) {
+  return name.toLowerCase().replace(/\s+/g, '-');
+}
+
 const { id } = Astro.params;
 const camera = getCameraById(id!)!;
 const related = getRelatedCameras(id!, 4);
+
+const siteUrl = (Astro.site ?? new URL('https://pro.portofcams.com/')).href;
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://pro.portofcams.com').href;
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "Browse", item: `${siteUrl}browse` },
+    { "@type": "ListItem", position: 3, name: camera.name, item: pageUrl },
+  ],
+};
+
+// Only the native HLS stream and the credited YouTube live embeds are actually
+// live broadcasts — Windy embeds are auto-updating day-loop timelapses
+// (isLive: false in the data), so we don't claim BroadcastEvent for those.
+function getYouTubeId(embedUrl: string): string | null {
+  const match = embedUrl.match(/embed\/([^?]+)/);
+  return match ? match[1] : null;
+}
+
+const isBroadcast = camera.source === 'native' || camera.source === 'youtube';
+const youtubeId = camera.source === 'youtube' && camera.embedUrl ? getYouTubeId(camera.embedUrl) : null;
+
+const videoSchema = isBroadcast
+  ? {
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      name: `${camera.name} — Live Camera`,
+      description: camera.description,
+      thumbnailUrl: youtubeId
+        ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
+        : new URL('/clips/lewers-waikiki.jpg', Astro.site ?? 'https://pro.portofcams.com').href,
+      uploadDate: '2026-07-17',
+      embedUrl: camera.embedUrl ?? camera.hlsUrl,
+      publication: {
+        "@type": "BroadcastEvent",
+        isLiveBroadcast: true,
+        startDate: '2026-07-17T00:00:00-10:00',
+      },
+    }
+  : null;
 ---
 
 <Layout
@@ -21,6 +68,8 @@ const related = getRelatedCameras(id!, 4);
   description={camera.description}
   includeHls={camera.source !== 'windy' && camera.source !== 'youtube'}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  {videoSchema && <script type="application/ld+json" set:html={JSON.stringify(videoSchema)} />}
 
   <!-- Breadcrumb + Camera Header -->
   <section class="cam-header">
@@ -94,14 +143,16 @@ const related = getRelatedCameras(id!, 4);
           <p class="cam-description">{camera.description}</p>
           <div class="cam-tags">
             {camera.tags.map((tag) => (
-              <span class="cam-tag mono">{tag}</span>
+              getCamerasByTag(tag).length >= 2
+                ? <a href={`/tag/${tag}`} class="cam-tag mono">{tag}</a>
+                : <span class="cam-tag mono">{tag}</span>
             ))}
           </div>
         </div>
         <div class="cam-info-meta">
           <div class="meta-card">
             <div class="meta-label mono">Region</div>
-            <div class="meta-value">{camera.region}</div>
+            <div class="meta-value"><a href={`/regions/${slugify(camera.region)}`} class="meta-region-link">{camera.region}</a></div>
           </div>
           <div class="meta-card">
             <div class="meta-label mono">Coordinates</div>
@@ -304,6 +355,12 @@ const related = getRelatedCameras(id!, 4);
     border: 1px solid var(--border);
     padding: 5px 12px;
     border-radius: 1px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+
+  a.cam-tag:hover {
+    color: var(--gold);
+    border-color: rgba(201,168,76,0.3);
   }
 
   /* Meta sidebar */
@@ -331,6 +388,14 @@ const related = getRelatedCameras(id!, 4);
   .meta-value {
     font-size: 15px;
     font-weight: 400;
+  }
+
+  .meta-region-link {
+    transition: color 0.3s;
+  }
+
+  .meta-region-link:hover {
+    color: var(--gold);
   }
 
   /* Related */

@@ -1,13 +1,52 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import HostWizard from '../components/HostWizard.astro';
+
+const faqs = [
+  ['How much does it cost?', "$50/month for the co-branded plan — the camera ships plug-and-play and is included. There's no long-term contract; cancel anytime."],
+  ['Do I need a professional install crew?', "No. We ship a plug-and-play streaming camera that you (or a local handyman) mount in about 20 minutes. There's no install crew to schedule or fly out, which is how we cover any coast, not just Hawaiʻi."],
+  ['Can I use a camera I already have?', 'Yes. If you already have a security camera, an old AV rig, or something like a Reolink, we can ingest, brand, and host that feed instead — no new hardware required.'],
+  ['Is the stream secure?', "Yes. Every camera gets a unique, rotatable stream key, video travels over TLS-encrypted RTMP, and viewers get signed, time-limited HLS segment URLs so the stream can't be hotlinked."],
+  ['How long does approval take?', "We review every application and you'll hear back within 48 hours."],
+  ['What if I want it fully installed and maintained instead?', "That's the Managed plan — professional install, marine-grade hardware, and monthly social clips, built for Hawaiʻi hotels, marinas, and resorts. See Managed for pricing."],
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([q, a]) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: { "@type": "Answer", text: a },
+  })),
+};
+
+const siteUrl = (Astro.site ?? new URL('https://pro.portofcams.com/')).href;
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Live camera hosting and streaming",
+  name: "Co-branded Live Camera Host",
+  description: "A plug-and-play streaming camera, hosted and branded on your own website — camera included, ship-and-mount, no install crew required.",
+  provider: { "@type": "Organization", name: "Port of Cams", url: siteUrl },
+  offers: {
+    "@type": "Offer",
+    price: "50",
+    priceCurrency: "USD",
+    url: `${siteUrl}host`,
+    availability: "https://schema.org/InStock",
+  },
+};
 ---
 
 <Layout
   title="Host a Live Cam, Anywhere — Port of Cams"
-  description="Put a live camera on your waterfront — anywhere on the coast, no install trip needed. Ship-and-mount a plug-and-play camera (included) or bring your own; we host it and embed a co-branded player on your site for $50/mo. Want it fully handled with pro install? See Managed."
+  description="Put a live camera on your waterfront, anywhere on the coast — no install trip needed. Ship-and-mount, plug-and-play, co-branded player for $50/mo."
   activeNav="host"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
 
   <!-- Hero -->
   <section class="host-hero">
@@ -167,6 +206,24 @@ import HostWizard from '../components/HostWizard.astro';
           Your camera's live view becomes a branded experience. We facilitate introductions and handle ad placement logistics.</p>
         </div>
         <a href="#apply" class="btn-secondary" style="flex-shrink:0; white-space:nowrap;" data-prefill-tier="sponsorship" data-prefill-adv="yes">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="host-faq">
+    <div class="section-inner">
+      <div class="section-label">Questions</div>
+      <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 48px;">
+        Fair questions, <em class="display-italic" style="color: var(--gold)">straight answers.</em>
+      </h2>
+      <div class="faq-list">
+        {faqs.map(([q, a]) => (
+          <details class="faq-item">
+            <summary>{q}</summary>
+            <p>{a}</p>
+          </details>
+        ))}
       </div>
     </div>
   </section>
@@ -462,6 +519,61 @@ import HostWizard from '../components/HostWizard.astro';
     font-size: 14px;
     color: var(--muted);
     line-height: 1.8;
+  }
+
+  /* FAQ */
+  .host-faq {
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+
+  .faq-list {
+    max-width: 720px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .faq-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0 24px;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    list-style: none;
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--white);
+    padding: 20px 28px 20px 0;
+    position: relative;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: "+";
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    font-size: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .faq-item[open] summary::after {
+    content: "\2013";
+  }
+
+  .faq-item p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0;
+    padding: 0 0 20px;
   }
 
   /* Form */

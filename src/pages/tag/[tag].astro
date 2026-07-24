@@ -1,0 +1,126 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CameraCard from '../../components/CameraCard.astro';
+import { allTags, getCamerasByTag, tagLabels } from '../../data/cameras';
+
+export function getStaticPaths() {
+  // Tags with only one camera would produce a near-duplicate of that single
+  // camera page, so we only generate a dedicated page above this threshold.
+  return allTags
+    .filter((tag) => getCamerasByTag(tag).length >= 2)
+    .map((tag) => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params;
+const tagCameras = getCamerasByTag(tag!);
+const label = tagLabels[tag!] ?? tag![0].toUpperCase() + tag!.slice(1);
+
+function listJoin(items: string[]) {
+  if (items.length <= 1) return items.join('');
+  if (items.length === 2) return items.join(' and ');
+  return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
+}
+
+const regionsCovered = [...new Set(tagCameras.map((c) => c.region))];
+const exampleNames = tagCameras.slice(0, 3).map((c) => c.name);
+
+const intro = `${tagCameras.length} live camera${tagCameras.length !== 1 ? 's' : ''} across ${listJoin(regionsCovered)} — including ${listJoin(exampleNames)}${tagCameras.length > 3 ? ', and more' : ''}.`;
+const description = `Watch ${tagCameras.length} live ${label.toLowerCase()} cameras across ${listJoin(regionsCovered)}, streaming now on PortOfCams.`;
+
+const siteUrl = (Astro.site ?? new URL('https://pro.portofcams.com/')).href;
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://pro.portofcams.com').href;
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "Browse", item: `${siteUrl}browse` },
+    { "@type": "ListItem", position: 3, name: label, item: pageUrl },
+  ],
+};
+---
+
+<Layout title={`Live ${label} Cams — PortOfCams`} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <section class="tag-hero">
+    <div class="section-inner" style="padding-top: 100px; padding-bottom: 40px;">
+      <nav class="breadcrumb mono fade-up">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/browse">Browse</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{label}</span>
+      </nav>
+      <h1 class="display" style="font-size: clamp(36px, 5vw, 64px); margin: 20px 0 20px;">Live {label} Cams</h1>
+      <p class="tag-intro">{intro}</p>
+    </div>
+  </section>
+
+  <section class="tag-cameras">
+    <div class="section-inner" style="padding-top: 0; padding-bottom: 100px;">
+      <div class="tag-grid">
+        {tagCameras.map((cam) => (
+          <CameraCard
+            id={cam.id}
+            name={cam.name}
+            location={cam.location}
+            streamType={cam.source === 'windy' ? 'embed' : cam.source === 'youtube' ? 'youtube' : 'hls'}
+            tags={cam.tags}
+            isLive={cam.isLive}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .breadcrumb {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--gold);
+  }
+
+  .breadcrumb-sep {
+    color: var(--faint);
+  }
+
+  .breadcrumb-current {
+    color: var(--white);
+  }
+
+  .tag-intro {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 640px;
+    line-height: 1.8;
+  }
+
+  .tag-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .tag-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

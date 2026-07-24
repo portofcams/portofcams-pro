@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { cameras, regions, allTags } from '../data/cameras';
+import { cameras, regions, allTags, getCamerasByTag, tagLabels } from '../data/cameras';
+
+const tagPages = allTags.filter((tag) => getCamerasByTag(tag).length >= 2);
 ---
 
 <Layout title="Browse Live Cameras — PortOfCams" activeNav="browse">
@@ -82,6 +84,18 @@ import { cameras, regions, allTags } from '../data/cameras';
       </div>
       <div class="no-results" id="no-results" style="display:none;">
         <p class="mono">No cameras match your filters</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category links (SEO/discovery — separate from the interactive filters above) -->
+  <section class="category-links-section">
+    <div class="section-inner" style="padding-top: 0; padding-bottom: 80px;">
+      <p class="category-links-label mono">Browse by category</p>
+      <div class="category-links-row">
+        {tagPages.map((tag) => (
+          <a href={`/tag/${tag}`} class="category-link">{tagLabels[tag] ?? tag}</a>
+        ))}
       </div>
     </div>
   </section>
@@ -348,6 +362,40 @@ import { cameras, regions, allTags } from '../data/cameras';
     letter-spacing: 0.12em;
     color: var(--muted);
     text-transform: uppercase;
+  }
+
+  /* Category links */
+  .category-links-section {
+    border-top: 1px solid var(--border);
+  }
+
+  .category-links-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 40px 0 16px;
+  }
+
+  .category-links-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .category-link {
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .category-link:hover {
+    border-color: rgba(201,168,76,0.3);
+    color: var(--gold);
   }
 
   /* Responsive */

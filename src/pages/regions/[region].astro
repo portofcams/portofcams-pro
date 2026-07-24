@@ -1,0 +1,144 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CameraCard from '../../components/CameraCard.astro';
+import { getAllRegions, getCamerasByRegion } from '../../data/cameras';
+
+export function getStaticPaths() {
+  return getAllRegions().map((r) => ({
+    params: { region: r.name.toLowerCase().replace(/\s+/g, '-') },
+    props: { regionName: r.name },
+  }));
+}
+
+const { regionName } = Astro.props;
+const cameras = getCamerasByRegion(regionName);
+
+const regionCopy: Record<string, { description: string; intro: string }> = {
+  Hawaii: {
+    description: "Live cameras across Oʻahu, Maui, and the Big Island — Waikiki, the North Shore, resort beaches, and volcanic landscapes. 8 cameras.",
+    intro: "Eight cameras across Oʻahu, Maui, and the Big Island — from the nightlife of Waikīkī's Lewers Street and the world-famous break at Banzai Pipeline, to resort beaches in Kāʻanapali and Wailea, and the volcanic drama of Kīlauea and Maunakea's summit above the clouds.",
+  },
+  Alaska: {
+    description: "Live cameras across Anchorage, Juneau, and Fairbanks — salmon runs, harbors, and small-town life above the 60th parallel. 5 cameras.",
+    intro: "Five cameras from Anchorage, Juneau, and Fairbanks — Ship Creek's urban salmon run and boat launch, downtown Anchorage's Town Square, Juneau's harbor wedged between mountains and channel, and Fairbanks conditions ranging from -40°F winters to midnight-sun summers.",
+  },
+  California: {
+    description: "Live cameras across California — Venice Beach, Monterey Bay, San Diego, LA, and San Francisco. Beaches, wildlife, and highway traffic. 6 cameras.",
+    intro: "Six cameras spanning the state — Venice Beach's boardwalk scene, Monterey Bay's wild sea otters, San Diego's downtown bayfront, and live traffic on LA's I-110 and I-10 and San Francisco's US-101.",
+  },
+  'Pacific NW': {
+    description: "Live cameras from Seattle and Portland — city skylines and highway traffic across Washington and Oregon. 2 cameras.",
+    intro: "Two cameras from Washington and Oregon — the Seattle skyline near the Columbia Center with views toward Puget Sound and Mount Rainier, and traffic flow through downtown Portland.",
+  },
+  'US Mainland': {
+    description: "Live cameras from Jackson Hole, Wyoming — Town Square and the Teton Range at Grand Teton National Park. 2 cameras.",
+    intro: "Two cameras from Wyoming's Jackson Hole valley — the elk-antler arches of Jackson's Town Square, and the Teton Range towering over Dornan's in Grand Teton National Park.",
+  },
+};
+
+const copy = regionCopy[regionName];
+
+const siteUrl = (Astro.site ?? new URL('https://pro.portofcams.com/')).href;
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://pro.portofcams.com').href;
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "Regions", item: `${siteUrl}regions` },
+    { "@type": "ListItem", position: 3, name: regionName, item: pageUrl },
+  ],
+};
+---
+
+<Layout title={`${regionName} Live Cameras — PortOfCams`} description={copy.description}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <section class="region-hero">
+    <div class="section-inner" style="padding-top: 100px; padding-bottom: 40px;">
+      <nav class="breadcrumb mono fade-up">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/regions">Regions</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{regionName}</span>
+      </nav>
+      <h1 class="display" style="font-size: clamp(36px, 5vw, 64px); margin: 20px 0 20px;">{regionName}</h1>
+      <p class="region-intro">{copy.intro}</p>
+      <p class="region-count mono">{cameras.length} camera{cameras.length !== 1 ? 's' : ''}</p>
+    </div>
+  </section>
+
+  <section class="region-cameras">
+    <div class="section-inner" style="padding-top: 0; padding-bottom: 100px;">
+      <div class="region-grid">
+        {cameras.map((cam) => (
+          <CameraCard
+            id={cam.id}
+            name={cam.name}
+            location={cam.location}
+            streamType={cam.source === 'windy' ? 'embed' : cam.source === 'youtube' ? 'youtube' : 'hls'}
+            tags={cam.tags}
+            isLive={cam.isLive}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .breadcrumb {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--gold);
+  }
+
+  .breadcrumb-sep {
+    color: var(--faint);
+  }
+
+  .breadcrumb-current {
+    color: var(--white);
+  }
+
+  .region-intro {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 640px;
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .region-count {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .region-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .region-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
