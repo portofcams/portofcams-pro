@@ -190,6 +190,9 @@ export function buildArchetypeEmail(archetype, ctx = {}) {
 // ---- Plain-text variant (cold first-touch → lands in Primary, not Promotions) ----
 const TEXT_HOOKS = {
   fb: 'The idea: a live feed of that view on your own site, so people can see your sunset before they pick where to eat — plus a branded golden-hour clip each month for your socials. We mount it, host it, and handle everything. Runs about $149/mo, month to month.',
+  hotel: 'The idea: a live feed of that view on your own site — the booking-page hero that never needs a photographer, so guests can watch your ocean before they book direct. Plus a branded golden-hour clip each month for your socials. We mount it, host it, and handle everything. Runs about $149/mo, month to month.',
+  venue: 'The idea: a live feed of that view on your own site, so couples and planners comparing venues see the real place at the hour they are picturing it — not a staged photo. Plus a branded clip each month for your own marketing. We mount it, host it, and handle everything. Runs about $149/mo, month to month.',
+  club: 'The idea: a live feed of the water on your own site, so members can check conditions before they leave the house — and it doubles as coverage for race days. Plus a branded clip each month for the newsletter and socials. We mount it, host it, and handle everything. Runs about $149/mo, month to month.',
 };
 
 // Self-serve ($50/mo) hooks — the /host tier: ship-and-mount, any coast, no install trip.
@@ -247,4 +250,35 @@ Port of Cams
 portofcams@gmail.com`;
 
   return { subject: `quick idea for ${venue}`, text };
+}
+
+/**
+ * Short "bump" follow-up for non-repliers — same subject prefixed "Re:" so it
+ * reads as a continuation, much shorter body, no re-pitch, low-pressure close.
+ * Returns { subject, text }.
+ */
+export function buildFollowUpTextEmail(archetype, ctx = {}) {
+  if (!ARCHETYPES[archetype]) throw new Error(`Unknown archetype "${archetype}". Valid: ${ARCHETYPE_KEYS.join(', ')}`);
+  const selfServe = !!ctx.selfServe;
+  const ref = ctx.refSlug || `demo-${archetype}`;
+  const ctaUrl = selfServe
+    ? `${SITE}/host?ref=${encodeURIComponent(ref)}`
+    : `${SITE}/managed/demo/${archetype}?ref=${encodeURIComponent(ref)}`;
+  const name = ctx.firstName || 'there';
+  const venue = ctx.venueName || 'your place';
+  const viewClause = ctx.viewLine ? ` of ${ctx.viewLine}` : '';
+
+  const text = `Hi ${name},
+
+Following up in case my last note got buried — still happy to set up a live feed${viewClause} on your own site, whenever it's useful.
+
+${ctaUrl}
+
+No worries either way — just didn't want it to slip through the cracks.
+
+John
+Port of Cams
+portofcams@gmail.com`;
+
+  return { subject: `Re: quick idea for ${venue}`, text };
 }

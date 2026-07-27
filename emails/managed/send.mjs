@@ -18,7 +18,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { ARCHETYPE_KEYS, buildArchetypeEmail, buildArchetypeTextEmail } from './archetypes.mjs';
+import { ARCHETYPE_KEYS, buildArchetypeEmail, buildArchetypeTextEmail, buildFollowUpTextEmail } from './archetypes.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -29,6 +29,7 @@ const val = (f, d) => { const i = args.indexOf(f); return i >= 0 && args[i + 1] 
 const DRY = has('--dry-run');
 const TEXT_MODE = has('--text');
 const SELF_SERVE = has('--selfserve');
+const FOLLOWUP = has('--followup');
 const TEST = val('--test', null);
 const ONLY = val('--only', null);
 const LIMIT = parseInt(val('--limit', '0'), 10) || 0;
@@ -62,7 +63,10 @@ const jobs = [];
 for (const r of recipients) {
   if (!r.email || !r.archetype) { console.warn('skip (missing email/archetype):', JSON.stringify(r)); continue; }
   if (!ARCHETYPE_KEYS.includes(r.archetype)) { console.warn(`skip (unknown archetype "${r.archetype}"):`, r.email); continue; }
-  if (TEXT_MODE) {
+  if (FOLLOWUP) {
+    const { subject, text } = buildFollowUpTextEmail(r.archetype, { ...r, selfServe: SELF_SERVE });
+    jobs.push({ email: r.email, archetype: r.archetype, subject, text });
+  } else if (TEXT_MODE) {
     const { subject, text } = buildArchetypeTextEmail(r.archetype, { ...r, selfServe: SELF_SERVE });
     jobs.push({ email: r.email, archetype: r.archetype, subject, text });
   } else {
