@@ -139,6 +139,7 @@ const faqSchema = {
               ) : (
                 <iframe class="featured-embed" src={`${feed.url}?autoplay=1&mute=1&controls=0&loop=1&modestbranding=1&playsinline=1&rel=0&showinfo=0`} allow="accelerometer; autoplay; encrypted-media; gyroscope" loading="lazy"></iframe>
               )}
+              {feed.type === 'hls' && <div class="feed-offline-placeholder mono">Camera Offline</div>}
               <div class="featured-overlay"></div>
               <div class="featured-live">
                 <span class="featured-live-dot"></span>
@@ -222,6 +223,7 @@ const faqSchema = {
             </div>
             <div class="browser-body" data-stream="https://cams.portofcams.com/east-lewers-st/index.m3u8">
               <video class="featured-video" muted playsinline></video>
+              <div class="feed-offline-placeholder mono">Camera Offline</div>
               <div class="browser-live">
                 <span class="featured-live-dot"></span>
                 <span class="mono">LIVE</span>
@@ -552,6 +554,37 @@ const faqSchema = {
     color: #e53e3e;
   }
 
+  /* Hidden by default; shown by JS (via .is-offline on the card) once the feed has failed enough times in a row to call it down. Opaque so a frozen last-good frame doesn't linger underneath. */
+  .feed-offline-placeholder {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--deep);
+    z-index: 1;
+  }
+
+  .featured-card.is-offline .feed-offline-placeholder,
+  .browser-body.is-offline .feed-offline-placeholder {
+    display: flex;
+  }
+
+  .featured-card.is-offline .featured-live-dot,
+  .browser-body.is-offline .featured-live-dot {
+    background: var(--muted);
+    animation: none;
+  }
+
+  .featured-card.is-offline .featured-live span:last-child,
+  .browser-body.is-offline .browser-live span:last-child {
+    color: var(--muted);
+  }
+
   .featured-region {
     position: absolute;
     bottom: 10px;
@@ -852,28 +885,93 @@ const faqSchema = {
   document.addEventListener('DOMContentLoaded', () => {
     // Only lazy-load HLS cards (Windy embeds load themselves via iframe)
     const hlsCards = document.querySelectorAll('[data-stream]');
+    const MIN_DELAY = 4000;
+    const MAX_DELAY = 15000;
+    const OFFLINE_AFTER = 3;
+
+    // Retries with backoff; after enough failures in a row it hides the video
+    // behind the "Camera Offline" placeholder and flips the badge to OFFLINE,
+    // then auto-clears both the instant the stream loads again.
+    function initCard(card) {
+      const video = card.querySelector('.featured-video');
+      const url = card.dataset.stream;
+      if (!url || !video) return;
+
+      const badgeDot = card.querySelector('.featured-live-dot');
+      const badgeText = badgeDot ? badgeDot.nextElementSibling : null;
+
+      let hls = null;
+      let retryTimer;
+      let retryDelay = MIN_DELAY;
+      let failCount = 0;
+      let destroyed = false;
+
+      function setLive() {
+        failCount = 0;
+        retryDelay = MIN_DELAY;
+        card.classList.remove('is-offline');
+        if (badgeText) badgeText.textContent = 'LIVE';
+      }
+
+      function setOffline() {
+        card.classList.add('is-offline');
+        if (badgeText) badgeText.textContent = 'OFFLINE';
+      }
+
+      function teardown() {
+        if (hls) { try { hls.destroy(); } catch (e) {} hls = null; }
+      }
+
+      function scheduleRetry() {
+        if (destroyed) return;
+        failCount++;
+        if (failCount >= OFFLINE_AFTER) setOffline();
+        clearTimeout(retryTimer);
+        retryTimer = window.setTimeout(() => {
+          if (destroyed) return;
+          teardown();
+          try { video.removeAttribute('src'); video.load(); } catch (e) {}
+          retryDelay = Math.min(Math.round(retryDelay * 1.5), MAX_DELAY);
+          load();
+        }, retryDelay);
+      }
+
+      function load() {
+        if (destroyed) return;
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = url;
+          video.addEventListener('loadeddata', setLive, { once: true });
+          video.addEventListener('error', scheduleRetry, { once: true });
+          video.play().catch(() => {});
+        } else if (window.Hls && Hls.isSupported()) {
+          teardown();
+          hls = new Hls({ startLevel: 0, capLevelToPlayerSize: true, maxBufferLength: 5 });
+          hls.loadSource(url);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => { setLive(); video.play().catch(() => {}); });
+          hls.on(Hls.Events.ERROR, (_, data) => {
+            if (data.fatal) scheduleRetry();
+          });
+        }
+      }
+
+      document.addEventListener('astro:before-swap', () => {
+        destroyed = true;
+        clearTimeout(retryTimer);
+        teardown();
+      }, { once: true });
+
+      load();
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const card = entry.target;
-        const video = card.querySelector('.featured-video');
-        const url = card.dataset.stream;
-        if (!url || !video || card.dataset.loaded) return;
+        if (card.dataset.loaded) return;
         card.dataset.loaded = 'true';
         observer.unobserve(card);
-
-        if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = url;
-          video.play().catch(() => {});
-        } else if (window.Hls && Hls.isSupported()) {
-          const hls = new Hls({ startLevel: 0, capLevelToPlayerSize: true, maxBufferLength: 5 });
-          hls.loadSource(url);
-          hls.attachMedia(video);
-          hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
-          hls.on(Hls.Events.ERROR, (_, data) => {
-            if (data.fatal) hls.destroy();
-          });
-        }
+        initCard(card);
       });
     }, { rootMargin: '300px' });
     hlsCards.forEach(card => {

@@ -44,6 +44,13 @@ const { hlsUrl, cameraName, poster = '' } = Astro.props;
       <span class="mono overlay-text">Connecting to the live feed…</span>
     </div>
   </div>
+
+  <!-- Shown once the feed has been down long enough to call it — takes the view down cleanly instead of spinning forever. Retries keep running behind it, and this hides itself the moment the feed answers again. -->
+  <div class="offline-card" hidden>
+    <div class="offline-dot"></div>
+    <div class="offline-title">Camera Currently Offline</div>
+    <div class="offline-sub mono">Reconnecting automatically — check back shortly.</div>
+  </div>
 </div>
 
 <style>
@@ -87,6 +94,8 @@ const { hlsUrl, cameraName, poster = '' } = Astro.props;
   .player-status[data-state="reconnecting"] .live-dot { background: var(--gold); animation: pulse-amber 1.4s infinite; }
   .player-status[data-state="connecting"] .live-text,
   .player-status[data-state="reconnecting"] .live-text { color: var(--gold-light); }
+  .player-status[data-state="offline"] .live-dot { background: var(--muted); animation: none; }
+  .player-status[data-state="offline"] .live-text { color: var(--muted); }
 
   @keyframes pulse-live {
     0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(229,62,62,0.6); }
@@ -95,6 +104,7 @@ const { hlsUrl, cameraName, poster = '' } = Astro.props;
   @keyframes pulse-amber { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
   .player-controls { display: flex; gap: 8px; }
+  .player-controls[hidden] { display: none; }
   .player-btn {
     background: rgba(255,255,255,0.1);
     border: 1px solid rgba(255,255,255,0.15);
@@ -133,6 +143,26 @@ const { hlsUrl, cameraName, poster = '' } = Astro.props;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* Replaces the video entirely once the feed is confirmed down — no lingering frozen frame or endless spinner. */
+  .offline-card {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px;
+    background: var(--deep);
+    z-index: 7;
+    text-align: center;
+    padding: 24px;
+  }
+  .offline-card[hidden] { display: none; }
+
+  .offline-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--muted);
+    margin-bottom: 4px;
+  }
+  .offline-title { font-size: 15px; font-weight: 600; color: var(--white); }
+  .offline-sub { font-size: 11.5px; letter-spacing: 0.04em; color: var(--muted); max-width: 320px; line-height: 1.6; }
+
   @media (prefers-reduced-motion: reduce) {
     .live-dot, .overlay-spinner { animation: none !important; }
   }
@@ -149,6 +179,8 @@ const { hlsUrl, cameraName, poster = '' } = Astro.props;
       const statusText = wrap.querySelector<HTMLSpanElement>('.live-text');
       const overlay = wrap.querySelector<HTMLDivElement>('.player-overlay');
       const overlayText = wrap.querySelector<HTMLSpanElement>('.overlay-text');
+      const offlineCard = wrap.querySelector<HTMLDivElement>('.offline-card');
+      const controls = wrap.querySelector<HTMLDivElement>('.player-controls');
       const muteBtn = wrap.querySelector<HTMLButtonElement>('.mute-btn');
       const fullscreenBtn = wrap.querySelector<HTMLButtonElement>('.fullscreen-btn');
       const iconMuted = wrap.querySelector<SVGElement>('.icon-muted');
@@ -161,10 +193,12 @@ const { hlsUrl, cameraName, poster = '' } = Astro.props;
 
       const MIN_DELAY = 4000;
       const MAX_DELAY = 15000;
+      const OFFLINE_AFTER = 3;
       let hls: any = null;
       let retryTimer: number | undefined;
       let retryDelay = MIN_DELAY;
       let mediaRecoverTried = false;
+      let failCount = 0;
       let destroyed = false;
 
       function setState(state: string, label: string) {
@@ -180,20 +214,34 @@ const { hlsUrl, cameraName, poster = '' } = Astro.props;
       function goLive() {
         retryDelay = MIN_DELAY;
         mediaRecoverTried = false;
+        failCount = 0;
         setState('live', 'LIVE');
         hideOverlay();
+        if (offlineCard) offlineCard.hidden = true;
+        if (controls) controls.hidden = false;
       }
 
       function teardownHls() {
         if (hls) { try { hls.destroy(); } catch (e) {} hls = null; }
       }
 
-      // Keep the poster/view on screen with a soft "reconnecting" pill, and
-      // retry with backoff so the player self-heals when the feed returns.
+      // First couple of failures just show a soft "reconnecting" pill over the
+      // poster (rides out a brief blip). Once it's failed enough in a row to
+      // call it genuinely down, take the feed down behind a clear offline
+      // card instead of spinning forever — retries keep running underneath,
+      // so it flips back to normal the instant the stream answers again.
       function scheduleReconnect() {
         if (destroyed) return;
-        setState('reconnecting', 'RECONNECTING');
-        showOverlay('Live feed reconnecting…');
+        failCount++;
+        if (failCount >= OFFLINE_AFTER) {
+          setState('offline', 'OFFLINE');
+          hideOverlay();
+          if (controls) controls.hidden = true;
+          if (offlineCard) offlineCard.hidden = false;
+        } else {
+          setState('reconnecting', 'RECONNECTING');
+          showOverlay('Live feed reconnecting…');
+        }
         clearTimeout(retryTimer);
         retryTimer = window.setTimeout(() => {
           if (destroyed || !document.contains(wrap)) return;
