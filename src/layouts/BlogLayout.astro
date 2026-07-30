@@ -27,12 +27,21 @@ const articleSchema = {
   headline: title,
   description,
   image: new URL('/clips/lewers-waikiki.jpg', Astro.site ?? 'https://pro.portofcams.com').href,
-  datePublished: publishDate,
-  dateModified: publishDate,
+  // Full ISO 8601 with the HST offset. Google's Rich Results Test flags a bare
+  // date as an invalid datetime missing a timezone — same non-critical issue that
+  // was caught on the camera pages' VideoObject uploadDate.
+  datePublished: `${publishDate}T00:00:00-10:00`,
+  dateModified: `${publishDate}T00:00:00-10:00`,
   mainEntityOfPage: pageUrl,
+  // "Team", not the bare brand name, and matching the visible byline below.
+  // Google's March 2026 core update explicitly downweights content attributed to
+  // generic profiles with no track record; this is the same fix already shipped on
+  // the sister site portofcams.com (PR #30). Still Organization rather than Person
+  // — "Port of Cams Team" is not an individual, and typing it as one would be a
+  // fabrication. A real named author with credentials remains the deeper fix.
   author: {
     "@type": "Organization",
-    name: "Port of Cams",
+    name: "Port of Cams Team",
     url: siteUrl,
   },
   publisher: {
@@ -222,7 +231,7 @@ const articleSchema = {
     <div class="blog-label">{category}</div>
     <h1>{title}</h1>
     <p class="blog-meta">
-      PortOfCams Pro &nbsp;&middot;&nbsp; <time datetime={publishDate}>{displayDate}</time> &nbsp;&middot;&nbsp; {readingTime} min read
+      Port of Cams Team &nbsp;&middot;&nbsp; <time datetime={publishDate}>{displayDate}</time> &nbsp;&middot;&nbsp; {readingTime} min read
     </p>
   </div>
 
