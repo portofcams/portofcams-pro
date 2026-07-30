@@ -20,9 +20,9 @@
 # Where a genuinely comparable page exists, point at it; where it doesn't, point at
 # the camera directory rather than invent a match:
 #   ala-moana-beach / i-h1-east -> Honolulu-area intent, /regions/hawaii has 8 cams
-#   south-beach-miami -> no Florida camera in the roster at all, so /browse (the
-#     full directory) is the honest target. Google may still soft-404 it; the win
-#     there is user experience, not rankings.
+#   south-beach-miami / santorini-caldera -> no working camera for either, so
+#     /browse (the full directory) is the honest target. Google may still
+#     soft-404 these; the win there is user experience, not rankings.
 /camera/ala-moana-beach     /regions/hawaii  301
 /camera/ala-moana-beach/    /regions/hawaii  301
 /camera/i-h1-east           /regions/hawaii  301
@@ -30,15 +30,20 @@
 /camera/south-beach-miami   /browse          301
 /camera/south-beach-miami/  /browse          301
 
-# Santorini + Bourbon Street go cross-domain to portofcams.com, which genuinely
-# has both cameras live (verified 2026-07-30: HTTP 200, `index, follow`, and their
-# YouTube sources confirmed alive via oembed — SkylineWebcams and EarthCam
-# respectively). Someone searching "santorini caldera cam" lands on a real live
-# Santorini feed instead of a generic directory page, which /browse could not do.
-# World cameras belong on the consumer site; this site's curated roster is the
-# venue-acquisition demo. Trade-off accepted knowingly: the equity goes to
-# portofcams.com rather than here.
-/camera/santorini-caldera   https://portofcams.com/cameras/santorini/           301
-/camera/santorini-caldera/  https://portofcams.com/cameras/santorini/           301
+# santorini-caldera was briefly cross-domain to portofcams.com/cameras/santorini/
+# (2026-07-29 to 2026-07-30). Reverted: that camera's YouTube source turned out to
+# have ended 2025-02-04 — "verified alive via oembed" at the time was an
+# insufficient check (oembed only proves a video is public, not that it is
+# currently broadcasting; the actual watch-page liveBroadcastDetails showed
+# isLiveNow:false with a real end timestamp). No replacement live single-camera
+# Santorini stream was found on re-check. Back to /browse until a real source
+# exists — see seo-overhaul memory before re-adding this redirect.
+/camera/santorini-caldera   /browse  301
+/camera/santorini-caldera/  /browse  301
+
+# Bourbon Street stays cross-domain — re-verified 2026-07-30 with the same
+# rigorous method (actual watch-page liveBroadcastDetails, not just oembed):
+# genuinely isLiveNow:true, running continuously since 2026-02-28, no end
+# timestamp. This one is real.
 /camera/bourbon-street      https://portofcams.com/cameras/bourbon-street-nola/ 301
 /camera/bourbon-street/     https://portofcams.com/cameras/bourbon-street-nola/ 301
