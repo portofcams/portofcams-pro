@@ -8,6 +8,15 @@ interface Props {
   ogImageHeight?: number;
   includeHls?: boolean;
   noindex?: boolean;
+  /**
+   * Absolute URL to canonicalise this page to, for cross-domain duplicates.
+   * Only set this where the SAME camera feed is published on portofcams.com —
+   * it tells Google to consolidate ranking signal there instead of splitting it
+   * between two of our own domains. Deliberately does NOT change og:url, which
+   * must stay self-referential so shares/embeds of a pro page still resolve to
+   * pro. Leave unset for every page pro genuinely owns.
+   */
+  canonical?: string;
 }
 
 const {
@@ -19,8 +28,12 @@ const {
   ogImageHeight = 720,
   includeHls = false,
   noindex = false,
+  canonical,
 } = Astro.props;
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://pro.portofcams.com').href;
+// Self-referential URL — used for og:url and as the default canonical.
+const selfUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://pro.portofcams.com').href;
+// canonical prop wins when set (cross-domain duplicate); otherwise self.
+const canonicalUrl = canonical ?? selfUrl;
 const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://pro.portofcams.com').href;
 const siteUrl = (Astro.site ?? new URL('https://pro.portofcams.com/')).href;
 
@@ -71,7 +84,7 @@ const siteSchema = {
   <meta property="og:type" content="website" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:url" content={selfUrl} />
   <meta property="og:site_name" content="Port of Cams" />
   <meta property="og:image" content={ogImageUrl} />
   <meta property="og:image:width" content={String(ogImageWidth)} />

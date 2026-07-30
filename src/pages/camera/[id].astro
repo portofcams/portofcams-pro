@@ -19,6 +19,36 @@ const { id } = Astro.params;
 const camera = getCameraById(id!)!;
 const related = getRelatedCameras(id!, 4);
 
+/**
+ * Cross-domain canonicals — cameras whose EXACT SAME feed is also published on
+ * portofcams.com. Verified 2026-07-30 by comparing stream sources (YouTube video
+ * id / HLS path), not slug names: `venice-beach-boardwalk` here is filed as
+ * `venice-beach-north` there, so a slug-only comparison misses it.
+ *
+ * Why point at the consumer site: portofcams.com serves the consumer "watch a
+ * webcam" intent, carries the AdSense inventory, and has ~140x this site's
+ * organic authority (991 vs 7 clicks/3mo). Two of our own domains competing for
+ * "jackson hole town square webcam" split the signal and send unqualified
+ * consumer traffic to a B2B sales site. These pages stay fully live here as
+ * sales demos — the canonical only tells search engines which copy to rank.
+ *
+ * DELIBERATELY EXCLUDED: `banzai-pipeline`. Both sites have that slug, but they
+ * are genuinely DIFFERENT cameras (ours VI8Wj5EwoRM vs theirs Fp7l8XASb9Y), so a
+ * canonical would be a false duplicate claim. They compete on topic; that's fine.
+ *
+ * All five targets verified 200 + `index, follow` + self-canonical before use.
+ * Re-verify before adding any entry — canonicalising to a dead or noindexed page
+ * actively destroys the signal instead of consolidating it.
+ */
+const CROSS_DOMAIN_CANONICAL: Record<string, string> = {
+  'east-lewers-st': 'https://portofcams.com/cameras/east-lewers-st/',
+  'jackson-hole-town-square': 'https://portofcams.com/cameras/jackson-hole-town-square/',
+  'grand-teton-dornans': 'https://portofcams.com/cameras/grand-teton-dornans/',
+  'monterey-sea-otters': 'https://portofcams.com/cameras/monterey-sea-otters/',
+  'venice-beach-boardwalk': 'https://portofcams.com/cameras/venice-beach-north/',
+};
+const crossCanonical = CROSS_DOMAIN_CANONICAL[id!];
+
 const siteUrl = (Astro.site ?? new URL('https://pro.portofcams.com/')).href;
 const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://pro.portofcams.com').href;
 
@@ -70,6 +100,7 @@ const videoSchema = isBroadcast
   title={`${camera.name} — Live Camera | PortOfCams`}
   description={camera.description}
   includeHls={camera.source !== 'windy' && camera.source !== 'youtube'}
+  canonical={crossCanonical}
 >
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   {videoSchema && <script type="application/ld+json" set:html={JSON.stringify(videoSchema)} />}

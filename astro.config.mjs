@@ -36,6 +36,24 @@ for (const cam of cameras) {
   });
 }
 
+/**
+ * Camera pages that rel=canonical cross-domain to portofcams.com (see the
+ * CROSS_DOMAIN_CANONICAL map in src/pages/camera/[id].astro — keep the two in
+ * sync). Google's guidance is that a sitemap should list only canonical URLs, so
+ * submitting these would contradict the canonical we just set. They stay live and
+ * crawlable as sales demos; they're simply not put forward for indexing here.
+ * Their video-sitemap entries go with them, which is fine — portofcams.com's
+ * equivalents were verified to already carry their own VideoObject schema, so no
+ * video rich-result capability is lost by consolidating.
+ */
+const CROSS_CANONICAL_PATHS = new Set([
+  '/camera/east-lewers-st/',
+  '/camera/jackson-hole-town-square/',
+  '/camera/grand-teton-dornans/',
+  '/camera/monterey-sea-otters/',
+  '/camera/venice-beach-boardwalk/',
+]);
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE,
@@ -51,7 +69,8 @@ export default defineConfig({
         !/\/managed\/demo\/[^/]+\/?$/.test(page) &&
         !/\/business\/?$/.test(page) &&
         !/\/checkout\/?$/.test(page) &&
-        !/\/livestream-pass\/?$/.test(page),
+        !/\/livestream-pass\/?$/.test(page) &&
+        !CROSS_CANONICAL_PATHS.has(new URL(page).pathname),
       serialize: (item) => {
         let path;
         try {
