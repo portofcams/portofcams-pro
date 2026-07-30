@@ -40,6 +40,16 @@ const siteSchema = {
       name: "Port of Cams",
       url: siteUrl,
       publisher: { "@id": `${siteUrl}#organization` },
+      // Only declared because /search is a real, working endpoint that reads ?q=
+      // on load. Don't keep this if that page ever goes away.
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${siteUrl}search?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
     },
   ],
 };
@@ -124,6 +134,7 @@ const siteSchema = {
       <ul class="footer-links">
         <li><a href="/">Home</a></li>
         <li><a href="/browse">Browse</a></li>
+        <li><a href="/search">Search</a></li>
         <li><a href="/regions">Regions</a></li>
         <li><a href="/timelapse">Timelapse</a></li>
         <li><a href="/embed">Embed</a></li>

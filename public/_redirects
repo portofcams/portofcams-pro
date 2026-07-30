@@ -8,3 +8,29 @@
 # before the token was minted) lands on /host instead of a dead 404.
 /welcome/           https://pro.portofcams.com/host  302
 /welcome            https://pro.portofcams.com/host  302
+
+# --- Retired camera slugs (added 2026-07-30) ---
+# Google Search Console still ranks these five camera URLs from an earlier version
+# of the camera roster; they are not in src/data/cameras.ts anymore and were
+# returning hard 404s. Over the trailing 3 months they took 5 of the site's 7 total
+# organic clicks and 64 of 286 impressions — i.e. most real search traffic was
+# landing on a dead end. Both slash forms are listed because GSC has each indexed
+# separately. 301 (not 302) because the old pages are permanently gone.
+#
+# Where a genuinely comparable page exists, point at it; where it doesn't, point at
+# the camera directory rather than invent a match:
+#   ala-moana-beach / i-h1-east -> Honolulu-area intent, /regions/hawaii has 8 cams
+#   south-beach-miami, santorini-caldera, bourbon-street -> no FL/Greece/LA camera
+#     in the roster at all, so /browse (the full directory) is the honest target.
+#     Expect Google may still soft-404 these three; the win there is user experience,
+#     not rankings. If a matching camera is ever added, retarget the slug to it.
+/camera/ala-moana-beach     /regions/hawaii  301
+/camera/ala-moana-beach/    /regions/hawaii  301
+/camera/i-h1-east           /regions/hawaii  301
+/camera/i-h1-east/          /regions/hawaii  301
+/camera/south-beach-miami   /browse          301
+/camera/south-beach-miami/  /browse          301
+/camera/santorini-caldera   /browse          301
+/camera/santorini-caldera/  /browse          301
+/camera/bourbon-street      /browse          301
+/camera/bourbon-street/     /browse          301

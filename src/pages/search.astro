@@ -1,0 +1,267 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { cameras } from '../data/cameras';
+import { blogPosts } from '../data/blog-posts';
+
+// The whole searchable corpus is 23 cameras + 15 guides, so the index ships inline
+// as JSON rather than pulling in a search library or a fetch round-trip. Keep it
+// derived from the same data modules the rest of the site uses — no second copy.
+const index = [
+  ...cameras.map((cam) => ({
+    kind: 'camera' as const,
+    title: cam.name,
+    url: `/camera/${cam.id}`,
+    meta: cam.location,
+    body: `${cam.description} ${cam.region} ${cam.tags.join(' ')}`,
+    live: cam.isLive,
+  })),
+  ...blogPosts.map((post) => ({
+    kind: 'guide' as const,
+    title: post.title,
+    url: `/blog/${post.slug}`,
+    meta: post.category,
+    body: post.description,
+    live: false,
+  })),
+];
+---
+
+<Layout
+  title="Search — PortOfCams"
+  description="Search live cameras by name, place, or category, plus every guide in the PortOfCams library."
+>
+  <section class="search-page">
+    <div class="section-inner" style="padding-top: 100px; padding-bottom: 100px;">
+      <p class="eyebrow mono">Search</p>
+      <h1 class="display" style="font-size: clamp(36px, 5vw, 64px); margin: 12px 0 28px;">
+        Find a <em class="display-italic" style="color: var(--gold)">camera or guide</em>
+      </h1>
+
+      <label class="search-label mono" for="q">Search {cameras.length} cameras and {blogPosts.length} guides</label>
+      <input
+        id="q"
+        type="search"
+        class="search-input"
+        placeholder="Try “Waikiki”, “surf”, “Alaska”, “ROI”…"
+        autocomplete="off"
+        spellcheck="false"
+      />
+
+      <p class="search-status mono" id="status" aria-live="polite">
+        Showing all {index.length} cameras and guides
+      </p>
+
+      {/*
+        Every row is server-rendered rather than built in JS. Two reasons: Astro's
+        scoped styles only attach to elements that exist in the template at build
+        time (createElement rows silently lose the layout), and this way the page is
+        real crawlable content instead of an empty shell that needs JS to say
+        anything. Filtering just toggles a class.
+      */}
+      <ul class="search-results" id="results">
+        {index.map((item) => (
+          <li
+            class="search-hit"
+            data-title={item.title.toLowerCase()}
+            data-meta={(item.meta ?? '').toLowerCase()}
+            data-body={item.body.toLowerCase()}
+          >
+            <a href={item.url}>
+              <span class="hit-kind mono">
+                {item.kind === 'camera' ? (item.live ? 'Live cam' : 'Camera') : 'Guide'}
+              </span>
+              <span class="hit-title">{item.title}</span>
+              <span class="hit-meta mono">{item.meta}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="search-empty mono" id="empty" hidden></p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var input = document.getElementById('q');
+      var results = document.getElementById('results');
+      var status = document.getElementById('status');
+      var empty = document.getElementById('empty');
+      var rows = [].slice.call(results.querySelectorAll('.search-hit'));
+      var total = rows.length;
+
+      function score(row, terms) {
+        var title = row.dataset.title || '';
+        var meta = row.dataset.meta || '';
+        var body = row.dataset.body || '';
+        var sum = 0;
+        for (var i = 0; i < terms.length; i++) {
+          var t = terms[i];
+          // Every term has to appear somewhere, otherwise this isn't a match.
+          if (title.indexOf(t) === -1 && meta.indexOf(t) === -1 && body.indexOf(t) === -1) return 0;
+          if (title.indexOf(t) === 0) sum += 8;
+          else if (title.indexOf(t) !== -1) sum += 5;
+          if (meta.indexOf(t) !== -1) sum += 3;
+          if (body.indexOf(t) !== -1) sum += 1;
+        }
+        return sum;
+      }
+
+      function render(q) {
+        var terms = q.toLowerCase().trim().split(/\s+/).filter(Boolean);
+
+        if (!terms.length) {
+          rows.forEach(function (r) { r.hidden = false; r.style.order = ''; });
+          status.textContent = 'Showing all ' + total + ' cameras and guides';
+          empty.hidden = true;
+          return;
+        }
+
+        var shown = 0;
+        rows.forEach(function (r) {
+          var s = score(r, terms);
+          r.hidden = s === 0;
+          // Higher score first; CSS `order` avoids re-parenting the nodes.
+          r.style.order = String(-s);
+          if (s > 0) shown++;
+        });
+
+        status.textContent = shown
+          ? shown + (shown === 1 ? ' result' : ' results')
+          : '';
+        empty.textContent = shown ? '' : 'No cameras or guides match “' + q + '”';
+        empty.hidden = shown > 0;
+      }
+
+      // Support /search?q=… so the URL is shareable and the SearchAction schema in
+      // Layout.astro points at something that genuinely works on first paint.
+      var initial = new URLSearchParams(window.location.search).get('q') || '';
+      if (initial) {
+        input.value = initial;
+        render(initial);
+      }
+      input.focus();
+
+      var timer;
+      input.addEventListener('input', function () {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          var q = input.value;
+          render(q);
+          var url = q ? '?q=' + encodeURIComponent(q) : window.location.pathname;
+          window.history.replaceState(null, '', url);
+        }, 120);
+      });
+    })();
+  </script>
+</Layout>
+
+<style>
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .search-label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 640px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 17px;
+    padding: 16px 18px;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  .search-input::placeholder {
+    color: rgba(245, 240, 232, 0.3);
+  }
+
+  .search-status {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 16px;
+    min-height: 18px;
+  }
+
+  .search-results {
+    list-style: none;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-top: 8px;
+    background: var(--border);
+  }
+
+  .search-hit[hidden] {
+    display: none;
+  }
+
+  .search-empty {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 20px;
+  }
+
+  .search-hit a {
+    display: grid;
+    grid-template-columns: 88px 1fr auto;
+    gap: 16px;
+    align-items: baseline;
+    background: var(--surface);
+    padding: 16px 18px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .search-hit a:hover {
+    background: var(--deep);
+  }
+
+  .hit-kind {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .hit-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .hit-meta {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .search-hit a {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+    .hit-meta {
+      white-space: normal;
+    }
+  }
+</style>
