@@ -20,17 +20,25 @@
 # Where a genuinely comparable page exists, point at it; where it doesn't, point at
 # the camera directory rather than invent a match:
 #   ala-moana-beach / i-h1-east -> Honolulu-area intent, /regions/hawaii has 8 cams
-#   south-beach-miami, santorini-caldera, bourbon-street -> no FL/Greece/LA camera
-#     in the roster at all, so /browse (the full directory) is the honest target.
-#     Expect Google may still soft-404 these three; the win there is user experience,
-#     not rankings. If a matching camera is ever added, retarget the slug to it.
+#   south-beach-miami -> no Florida camera in the roster at all, so /browse (the
+#     full directory) is the honest target. Google may still soft-404 it; the win
+#     there is user experience, not rankings.
 /camera/ala-moana-beach     /regions/hawaii  301
 /camera/ala-moana-beach/    /regions/hawaii  301
 /camera/i-h1-east           /regions/hawaii  301
 /camera/i-h1-east/          /regions/hawaii  301
 /camera/south-beach-miami   /browse          301
 /camera/south-beach-miami/  /browse          301
-/camera/santorini-caldera   /browse          301
-/camera/santorini-caldera/  /browse          301
-/camera/bourbon-street      /browse          301
-/camera/bourbon-street/     /browse          301
+
+# Santorini + Bourbon Street go cross-domain to portofcams.com, which genuinely
+# has both cameras live (verified 2026-07-30: HTTP 200, `index, follow`, and their
+# YouTube sources confirmed alive via oembed — SkylineWebcams and EarthCam
+# respectively). Someone searching "santorini caldera cam" lands on a real live
+# Santorini feed instead of a generic directory page, which /browse could not do.
+# World cameras belong on the consumer site; this site's curated roster is the
+# venue-acquisition demo. Trade-off accepted knowingly: the equity goes to
+# portofcams.com rather than here.
+/camera/santorini-caldera   https://portofcams.com/cameras/santorini/           301
+/camera/santorini-caldera/  https://portofcams.com/cameras/santorini/           301
+/camera/bourbon-street      https://portofcams.com/cameras/bourbon-street-nola/ 301
+/camera/bourbon-street/     https://portofcams.com/cameras/bourbon-street-nola/ 301
