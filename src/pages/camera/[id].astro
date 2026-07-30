@@ -52,7 +52,10 @@ const videoSchema = isBroadcast
       thumbnailUrl: youtubeId
         ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
         : new URL('/clips/lewers-waikiki.jpg', Astro.site ?? 'https://pro.portofcams.com').href,
-      uploadDate: '2026-07-17',
+      // Full ISO 8601 with the HST offset — Google's Rich Results Test flags a bare
+      // date here as an invalid datetime missing a timezone (non-critical, but it's
+      // a free fix and it matches the startDate below).
+      uploadDate: '2026-07-17T00:00:00-10:00',
       embedUrl: camera.embedUrl ?? camera.hlsUrl,
       publication: {
         "@type": "BroadcastEvent",
