@@ -1,4 +1,29 @@
+# robots.txt — pro.portofcams.com
+
+# --- AI crawlers: explicitly welcome (deliberate policy, 2026-07-30) ---
+# Live venue cameras + a managed live-camera service. A text model can't
+# reproduce a live feed — useful answers link the camera or service page.
+# Curated site map for AI agents: /llms.txt
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Meta-ExternalAgent
+User-agent: Amazonbot
+User-agent: CCBot
+User-agent: DuckAssistBot
+User-agent: MistralAI-User
+Allow: /
+
 User-agent: *
 Allow: /
 
-Sitemap: https://pro.portofcams.com/sitemap.xml
+Sitemap: https://pro.portofcams.com/sitemap-index.xml
+
+# llms.txt: https://pro.portofcams.com/llms.txt
