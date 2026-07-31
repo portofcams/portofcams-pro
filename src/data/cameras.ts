@@ -429,3 +429,32 @@ export function getRelatedCameras(id: string, limit = 4): Camera[] {
     .slice(0, limit)
     .map((r) => r.camera);
 }
+
+/**
+ * Per-camera still image for og:image and the sitemap's image namespace.
+ * Added 2026-07-30 — until then every page shared /clips/lewers-waikiki.jpg,
+ * which misrepresents 22 of the 23 cameras on social cards and left the
+ * sitemap's xmlns:image declared-but-empty.
+ *
+ * Sources, each verified live for EVERY camera before shipping (not assumed
+ * from the URL pattern):
+ *  - YouTube cams  -> img.youtube.com maxresdefault (1280x720; all 5 confirmed
+ *    to have a maxres variant — some videos don't, so re-verify if cams change)
+ *  - Windy cams    -> images-webcams.windy.com "full" variant (1920x1080,
+ *    public, keyed by {last-2-digits}/{id}; all 17 confirmed 200)
+ *  - native HLS    -> the local Lewers still, which IS that camera's frame
+ * Third-party hosted og:image / sitemap image URLs are fine for both Google
+ * and social scrapers; if a Windy cam is ever removed upstream its image 404s,
+ * so re-run the verification when editing the roster.
+ */
+export function cameraImage(cam: Camera): { url: string; width: number; height: number } {
+  if (cam.source === 'youtube' && cam.embedUrl) {
+    const m = cam.embedUrl.match(/embed\/([A-Za-z0-9_-]{11})/);
+    if (m) return { url: `https://img.youtube.com/vi/${m[1]}/maxresdefault.jpg`, width: 1280, height: 720 };
+  }
+  if (cam.source === 'windy' && cam.windyId) {
+    const id = String(cam.windyId);
+    return { url: `https://images-webcams.windy.com/${id.slice(-2)}/${id}/current/full/${id}.jpg`, width: 1920, height: 1080 };
+  }
+  return { url: '/clips/lewers-waikiki.jpg', width: 1280, height: 720 };
+}

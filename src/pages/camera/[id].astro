@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import HLSPlayer from '../../components/HLSPlayer.astro';
 import ViatorTours from '../../components/ViatorTours.astro';
 import HotelCards from '../../components/HotelCards.astro';
-import { cameras, getCameraById, getRelatedCameras, getCamerasByTag } from '../../data/cameras';
+import { cameras, getCameraById, getRelatedCameras, getCamerasByTag, cameraImage } from '../../data/cameras';
 
 export function getStaticPaths() {
   return cameras.map((cam) => ({
@@ -18,6 +18,8 @@ function slugify(name: string) {
 const { id } = Astro.params;
 const camera = getCameraById(id!)!;
 const related = getRelatedCameras(id!, 4);
+// Per-camera still for social cards + image sitemap (see cameraImage docs).
+const camImage = cameraImage(camera);
 
 /**
  * Cross-domain canonicals — cameras whose EXACT SAME feed is also published on
@@ -101,6 +103,9 @@ const videoSchema = isBroadcast
   description={camera.description}
   includeHls={camera.source !== 'windy' && camera.source !== 'youtube'}
   canonical={crossCanonical}
+  ogImage={camImage.url}
+  ogImageWidth={camImage.width}
+  ogImageHeight={camImage.height}
 >
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   {videoSchema && <script type="application/ld+json" set:html={JSON.stringify(videoSchema)} />}

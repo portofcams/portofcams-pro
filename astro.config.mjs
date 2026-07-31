@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import { cameras } from './src/data/cameras.ts';
+import { cameras, cameraImage } from './src/data/cameras.ts';
 
 const SITE = 'https://pro.portofcams.com';
 
@@ -20,6 +20,21 @@ const SITE = 'https://pro.portofcams.com';
  * and that package does support video/image entries (hence the xmlns:video the
  * generated sitemap has always declared but never used).
  */
+// Per-camera stills for the sitemap's image namespace (xmlns:image has been
+// declared-but-empty since launch; populated 2026-07-30 now that genuinely
+// per-page images exist via cameraImage()). The `sitemap` npm package's item
+// field is `img` — like `video`, it passes through @astrojs/sitemap's
+// serialize() untouched (the SitemapItem type omits it, but write-sitemap.js
+// streams items into the underlying package with no runtime filtering).
+const imageByPath = new Map();
+for (const cam of cameras) {
+  const img = cameraImage(cam);
+  imageByPath.set(`/camera/${cam.id}/`, [{
+    url: img.url.startsWith('http') ? img.url : `${SITE}${img.url}`,
+    title: `${cam.name} — live camera view`,
+  }]);
+}
+
 const videoByPath = new Map();
 for (const cam of cameras) {
   if (cam.source !== 'native' && cam.source !== 'youtube') continue;
@@ -79,7 +94,11 @@ export default defineConfig({
           return item;
         }
         const video = videoByPath.get(path);
-        return video ? { ...item, video: [video] } : item;
+        const img = imageByPath.get(path);
+        let out = item;
+        if (video) out = { ...out, video: [video] };
+        if (img) out = { ...out, img };
+        return out;
       },
     }),
   ],
