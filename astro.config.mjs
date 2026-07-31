@@ -2,8 +2,37 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { cameras, cameraImage } from './src/data/cameras.ts';
+import { gitLastModifiedMap, laterDate } from './src/lib/git-dates.mjs';
 
 const SITE = 'https://pro.portofcams.com';
+
+// Per-URL <lastmod> from real git history (freshness work, 2026-07-30). This
+// repo builds locally via deploy.sh with full history, so dates are complete —
+// but the helper still omits unknowable paths rather than guessing (see the
+// shallow-clone note in git-dates.mjs). Blog posts are individual .astro files
+// so they get true per-post dates; camera/region/tag pages are all generated
+// from cameras.ts, so its last change is honestly theirs too.
+const GIT_DATES = gitLastModifiedMap();
+
+function lastmodFor(pathname) {
+  const p = pathname.replace(/^\//, '').replace(/\/$/, '');
+  if (p === '') return GIT_DATES.get('src/pages/index.astro');
+  const exact =
+    GIT_DATES.get(`src/pages/${p}.astro`) ?? GIT_DATES.get(`src/pages/${p}/index.astro`);
+  if (exact) return exact;
+  if (/^camera\/[^/]+$/.test(p)) return GIT_DATES.get('src/data/cameras.ts');
+  if (/^regions\/[^/]+$/.test(p))
+    return laterDate(
+      GIT_DATES.get('src/pages/regions/[region].astro'),
+      GIT_DATES.get('src/data/cameras.ts'),
+    );
+  if (/^tag\/[^/]+$/.test(p))
+    return laterDate(
+      GIT_DATES.get('src/pages/tag/[tag].astro'),
+      GIT_DATES.get('src/data/cameras.ts'),
+    );
+  return undefined;
+}
 
 /**
  * Video sitemap entries, keyed by the camera page's path.
@@ -95,9 +124,11 @@ export default defineConfig({
         }
         const video = videoByPath.get(path);
         const img = imageByPath.get(path);
+        const lastmod = lastmodFor(path);
         let out = item;
         if (video) out = { ...out, video: [video] };
         if (img) out = { ...out, img };
+        if (lastmod) out = { ...out, lastmod };
         return out;
       },
     }),

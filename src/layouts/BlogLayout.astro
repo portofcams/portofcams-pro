@@ -16,7 +16,17 @@ const { title, description, category, slug, publishDate, readingTime } = Astro.p
 // Resolved here so individual post files need no changes.
 import { blogPosts } from '../data/blog-posts';
 import { getCameraById } from '../data/cameras';
+import { gitLastModifiedMap } from '../lib/git-dates.mjs';
 const _post = blogPosts.find((p) => p.slug === slug);
+
+// Real dateModified from the post file's own git history (each post is its own
+// .astro file, so this is genuinely per-post). Clamped to never precede the
+// stated publish date; falls back to publishDate — the previous placeholder
+// value — when history can't see the file, so this only ever improves.
+const _gitModified = gitLastModifiedMap().get(`src/pages/blog/${slug}.astro`);
+const _published = `${publishDate}T00:00:00-10:00`;
+const dateModified =
+  _gitModified && new Date(_gitModified) > new Date(_published) ? _gitModified : _published;
 const seeItLive = (_post?.relatedCameraIds || [])
   .map((id) => getCameraById(id))
   .filter((c): c is NonNullable<typeof c> => Boolean(c));
@@ -40,7 +50,7 @@ const articleSchema = {
   // date as an invalid datetime missing a timezone — same non-critical issue that
   // was caught on the camera pages' VideoObject uploadDate.
   datePublished: `${publishDate}T00:00:00-10:00`,
-  dateModified: `${publishDate}T00:00:00-10:00`,
+  dateModified,
   mainEntityOfPage: pageUrl,
   // "Team", not the bare brand name, and matching the visible byline below.
   // Google's March 2026 core update explicitly downweights content attributed to
