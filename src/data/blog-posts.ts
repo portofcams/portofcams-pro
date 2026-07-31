@@ -5,6 +5,13 @@ export interface BlogPost {
   category: string;
   publishDate: string;
   readingTime: number;
+  /** Hand-picked demo cameras rendered as a "See it live" block after the
+   *  article (BlogLayout). Hand-picked rather than scored on purpose: 15 B2B
+   *  posts against 23 cameras — a human mapping has zero bad matches, and each
+   *  choice doubles as a sales argument (the HLS explainer links the native
+   *  HLS demo cam; the marina post links the harbor cams). Ids must exist in
+   *  src/data/cameras.ts. Added 2026-07-30. */
+  relatedCameraIds?: string[];
 }
 
 // Single source of truth for blog post metadata, consumed by each
@@ -19,6 +26,7 @@ export const blogPosts: BlogPost[] = [
     category: "Strategy",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["east-lewers-st", "anchorage-town-square"],
   },
   {
     slug: "live-streaming-for-bars-restaurants",
@@ -28,6 +36,7 @@ export const blogPosts: BlogPost[] = [
     category: "Venues & Bars",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["east-lewers-st"],
   },
   {
     slug: "beach-resort-live-cam-marketing",
@@ -37,6 +46,7 @@ export const blogPosts: BlogPost[] = [
     category: "Hospitality",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["kahala-resort", "royal-lahaina-resort", "wailea-beach"],
   },
   {
     slug: "live-streaming-for-events-festivals",
@@ -46,6 +56,7 @@ export const blogPosts: BlogPost[] = [
     category: "Events",
     publishDate: "2026-07-16",
     readingTime: 2,
+    relatedCameraIds: ["anchorage-town-square", "jackson-hole-town-square"],
   },
   {
     slug: "tourism-destination-live-cam-guide",
@@ -55,6 +66,7 @@ export const blogPosts: BlogPost[] = [
     category: "Tourism",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["jackson-hole-town-square", "juneau-harbor", "monterey-sea-otters"],
   },
   {
     slug: "live-camera-fomo-foot-traffic",
@@ -64,6 +76,7 @@ export const blogPosts: BlogPost[] = [
     category: "Strategy",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["east-lewers-st", "venice-beach-boardwalk"],
   },
   {
     slug: "embed-live-cam-your-website",
@@ -73,6 +86,7 @@ export const blogPosts: BlogPost[] = [
     category: "Technical",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["east-lewers-st"],
   },
   {
     slug: "live-streaming-vs-prerecorded-venue-marketing",
@@ -82,6 +96,7 @@ export const blogPosts: BlogPost[] = [
     category: "Strategy",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["east-lewers-st", "banzai-pipeline"],
   },
   {
     slug: "live-cam-surf-spots-outdoor-recreation",
@@ -91,6 +106,7 @@ export const blogPosts: BlogPost[] = [
     category: "Outdoor & Recreation",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["banzai-pipeline", "venice-beach-boardwalk", "charley-young-beach"],
   },
   {
     slug: "live-camera-roi-for-venues",
@@ -100,6 +116,7 @@ export const blogPosts: BlogPost[] = [
     category: "Strategy",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["east-lewers-st", "kahala-resort"],
   },
   {
     slug: "live-cameras-for-marinas-harbors",
@@ -109,6 +126,7 @@ export const blogPosts: BlogPost[] = [
     category: "Marine",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["juneau-harbor", "san-diego-bay", "ship-creek-boat-launch"],
   },
   {
     slug: "live-streaming-for-ski-resorts",
@@ -118,6 +136,7 @@ export const blogPosts: BlogPost[] = [
     category: "Outdoor & Recreation",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["jackson-hole-town-square", "grand-teton-dornans"],
   },
   {
     slug: "timelapse-social-media-strategy",
@@ -127,6 +146,7 @@ export const blogPosts: BlogPost[] = [
     category: "Marketing",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["kilauea-volcano", "mauna-kea-observatory"],
   },
   {
     slug: "live-streaming-for-hotels-resorts",
@@ -136,6 +156,7 @@ export const blogPosts: BlogPost[] = [
     category: "Hospitality",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["kahala-resort", "royal-lahaina-resort", "wailea-beach"],
   },
   {
     slug: "how-hls-live-streaming-works",
@@ -145,6 +166,7 @@ export const blogPosts: BlogPost[] = [
     category: "Technical",
     publishDate: "2026-07-16",
     readingTime: 3,
+    relatedCameraIds: ["east-lewers-st"],
   },
 ];
 

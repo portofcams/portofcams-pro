@@ -11,6 +11,15 @@ interface Props {
 }
 
 const { title, description, category, slug, publishDate, readingTime } = Astro.props;
+
+// "See it live" — hand-picked demo cameras per post (see blog-posts.ts).
+// Resolved here so individual post files need no changes.
+import { blogPosts } from '../data/blog-posts';
+import { getCameraById } from '../data/cameras';
+const _post = blogPosts.find((p) => p.slug === slug);
+const seeItLive = (_post?.relatedCameraIds || [])
+  .map((id) => getCameraById(id))
+  .filter((c): c is NonNullable<typeof c> => Boolean(c));
 const displayDate = new Date(`${publishDate}T00:00:00Z`).toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
@@ -240,6 +249,22 @@ const articleSchema = {
   <div class="blog-body">
     <slot />
   </div>
+
+  {seeItLive.length > 0 && (
+    <div class="blog-body" style="margin-top:2rem;">
+      <div style="padding:1.25rem 1.5rem;border:1px solid rgba(201,168,76,0.25);border-radius:12px;background:rgba(201,168,76,0.04);">
+        <div class="eyebrow" style="margin-bottom:.75rem;">See it live</div>
+        <div style="display:grid;gap:.5rem;">
+          {seeItLive.map((c) => (
+            <a href={`/camera/${c.id}`} style="display:flex;justify-content:space-between;gap:.75rem;align-items:baseline;padding:.6rem .8rem;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);text-decoration:none;color:inherit;">
+              <span style="font-weight:500;">{c.name}</span>
+              <span style="font-size:.8rem;color:var(--muted, #8a8a8e);white-space:nowrap;">{c.location}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  )}
 
   <div class="blog-cta">
     <div class="blog-cta-inner">
