@@ -380,6 +380,16 @@ const closingStepBody = venue.closingStepBody || `The view does the selling. Can
     .price-wrap { grid-template-columns: 1fr; }
     .embed-grid { grid-template-columns: 1fr; }
   }
+  /* Below 440px the co-brand overlay is a nowrap flex row: [venue name + LIVE]
+     against a white-space:nowrap "+ Sponsor slot" chip that refuses to shrink.
+     At 320px that squeezed the venue name to 49px and wrapped it over three
+     lines. Wrapping the row drops the sponsor chip to its own line and gives the
+     name the full width; nothing is hidden. Measured 2026-08-04. */
+  @media (max-width: 439px) {
+    .cobrand-top { flex-wrap: wrap; row-gap: 6px; }
+    .cb-sponsor-slot { order: 2; }
+  }
+
   @media (max-width: 560px) {
     .how-grid { grid-template-columns: 1fr; }
     .cb-logo-venue { font-size: 18px; }
