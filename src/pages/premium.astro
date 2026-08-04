@@ -448,6 +448,19 @@ const serviceSchema = {
     overflow-x: auto;
   }
 
+  /* The wrapper already scrolls, but width:100% means the table never exceeds
+     it — instead the three columns crush until cell text wraps 3 lines deep
+     ("Weather & event alerts" measured 95px on a 375px viewport). A min-width
+     floor makes the existing scroller engage; on desktop the wrapper is wider
+     than the floor so width:100% still wins and nothing moves. The cell padding
+     is 24px a side, which is most of a mobile column, so it tightens too.
+     Measured 2026-08-04. */
+  @media (max-width: 768px) {
+    .compare-table { min-width: 520px; }
+    .compare-table th,
+    .compare-table td { padding: 12px 14px; }
+  }
+
   .compare-table {
     width: 100%;
     max-width: 800px;

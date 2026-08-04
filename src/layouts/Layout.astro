@@ -460,6 +460,8 @@ const siteSchema = {
 
   .footer-links {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 32px;
     list-style: none;
   }
@@ -524,6 +526,12 @@ const siteSchema = {
       flex-direction: column;
       gap: 12px;
     }
+    /* 11 links at a 32px gap measured 835px on a 375px viewport, which dragged
+       the whole document to 859px wide — the entire site scrolled sideways on
+       every page, since this footer is in the global layout. Wrapping is set
+       unconditionally above; this just tightens the gap so the wrapped rows
+       don't read as sparse. Measured 2026-08-04. */
+    .footer-links { gap: 14px 20px; }
   }
 </style>
 
